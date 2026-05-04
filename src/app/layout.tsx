@@ -50,9 +50,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${cormorant.variable} ${dmMono.variable} ${dmSans.variable} ${notoDeva.variable}`}>
-      <head>
-        <script defer data-domain="antahkarana.sanctuary" src="https://plausible.io/js/script.js"></script>
-      </head>
       <body>{children}</body>
     </html>
   );

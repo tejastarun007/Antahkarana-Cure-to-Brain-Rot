@@ -15,6 +15,7 @@ export default function Gateway() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [mode, setMode] = useState<'login' | 'signup'>('login');
+  const [signupSuccess, setSignupSuccess] = useState(false);
 
   useEffect(() => {
     const t = setTimeout(() => setMounted(true), 100);
@@ -45,7 +46,7 @@ export default function Gateway() {
     const supabase = createClient();
 
     if (mode === 'signup') {
-      const { error: signUpError } = await supabase.auth.signUp({
+      const { data, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -57,9 +58,14 @@ export default function Gateway() {
         setLoading(false);
         return;
       }
-      // Show success — Supabase sends a confirmation email
-      setError('');
-      showTransition();
+      // If email confirmation is required, show message
+      // If user is auto-confirmed (Supabase setting), redirect
+      if (data.session) {
+        showTransition();
+      } else {
+        setSignupSuccess(true);
+        setLoading(false);
+      }
     } else {
       const { error: signInError } = await supabase.auth.signInWithPassword({
         email,
@@ -164,6 +170,22 @@ export default function Gateway() {
                 borderRadius:'10px',padding:'10px 14px',marginBottom:'14px',
                 fontSize:'12px',color:'#e08080',fontFamily:'var(--mono)',textAlign:'center'
               }}>{error}</div>
+            )}
+
+            {signupSuccess && (
+              <div style={{
+                background:'rgba(82,168,120,.1)',border:'1px solid rgba(82,168,120,.3)',
+                borderRadius:'14px',padding:'20px 18px',marginBottom:'14px',textAlign:'center'
+              }}>
+                <div style={{fontSize:'28px',marginBottom:'8px'}}>✉️</div>
+                <div style={{fontFamily:'var(--serif)',fontSize:'18px',color:'var(--gold2)',marginBottom:'6px'}}>Check Your Email</div>
+                <div style={{fontSize:'13px',color:'var(--t2)',lineHeight:1.6,marginBottom:'12px'}}>
+                  We sent a confirmation link to <strong style={{color:'var(--t1)'}}>{email}</strong>. Click it to activate your account, then return here to sign in.
+                </div>
+                <button className="btn btn-o btn-sm" onClick={() => { setSignupSuccess(false); setMode('login'); }}>
+                  ← Back to Sign In
+                </button>
+              </div>
             )}
 
             <div className="field">
