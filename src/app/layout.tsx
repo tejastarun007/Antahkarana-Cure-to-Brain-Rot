@@ -31,7 +31,7 @@ const notoDeva = Noto_Serif_Devanagari({
 export const metadata: Metadata = {
   title: 'Antahkarana',
   description: 'A sanctuary for cognitive restoration.',
-  manifest: '/manifest.json',
+  manifest: '/manifest.json?v=2',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
