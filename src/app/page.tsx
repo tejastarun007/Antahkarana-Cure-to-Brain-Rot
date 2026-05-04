@@ -158,7 +158,7 @@ export default function Gateway() {
 
           {/* ═══ FORM SECTION ═══ */}
           <div className={`gw-form ${mounted ? 'in' : ''}`}>
-            <div className="gw-h">{mode === 'signup' ? 'Begin Your' : 'Enter Your'}<br/>Sanctuary</div>
+            <div className="gw-h">{mode === 'signup' ? 'Begin Your Sanctuary' : 'Enter Your Sanctuary'}</div>
             <div className="gw-sub">
               <div className="gw-deva">तमसो मा ज्योतिर्गमय</div>
               <div className="gw-tr">Lead me from darkness to light</div>
