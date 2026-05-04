@@ -1,0 +1,16 @@
+{
+  "name": "Antahkarana",
+  "short_name": "Antahkarana",
+  "description": "Your mind is a sacred space.",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#0a0a0b",
+  "theme_color": "#c8902a",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ]
+}
