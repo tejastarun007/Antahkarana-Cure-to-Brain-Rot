@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { SCI_SECS, ERAS, TRADEOFFS, TIERS } from '@/data/content';
 import Link from 'next/link';
 import { TopBar } from '@/components/TopBar';
-import Image from 'next/image';
 
 const BRAIN_REGIONS = [
   {id:'pfc', name:'Prefrontal Cortex', aka:'dlPFC — Buddhi', impact:'Thinned by 35% in heavy digital users. Governs deep reasoning, impulse control, and long-term planning.', fix:'Silent Meditation · Deep Reading · Unreachable Hour', color:'#e8b84b', cite:'Loh & Kanai (2014) PLoS ONE'},
@@ -42,45 +41,210 @@ export default function Science() {
             <div className="sci-h">Neural Impact Map</div>
             <div className="sci-sub">Tap a brain region to explore how digital habits have physically altered it — and how ancient practices reverse the damage.</div>
             
-            <div style={{position:'relative', margin:'0 auto 16px', maxWidth:'320px'}}>
-              <Image 
-                src="/brain-regions.png" 
-                alt="Brain regions affected by digital habits" 
-                width={320} 
-                height={320} 
-                style={{width:'100%', height:'auto', borderRadius:'16px', border:'1px solid var(--bdr)'}}
-                priority
-              />
+            {/* Interactive SVG Brain */}
+            <div style={{position:'relative', margin:'0 auto 16px', maxWidth:'340px', userSelect:'none'}}>
+              {/* Aura glow behind brain */}
+              <div style={{
+                position:'absolute', top:'50%', left:'50%', width:'280px', height:'280px',
+                transform:'translate(-50%,-50%)', borderRadius:'50%',
+                background:'radial-gradient(circle, rgba(200,144,42,.08) 0%, transparent 70%)',
+                animation:'aura 7s ease-in-out infinite', pointerEvents:'none', zIndex:0
+              }}/>
+              
+              <svg viewBox="0 0 400 380" style={{width:'100%', height:'auto', position:'relative', zIndex:1}}>
+                <defs>
+                  {BRAIN_REGIONS.map(r => (
+                    <filter key={`glow-${r.id}`} id={`glow-${r.id}`} x="-50%" y="-50%" width="200%" height="200%">
+                      <feGaussianBlur stdDeviation={selectedRegion === r.id ? '8' : '4'} result="blur"/>
+                      <feFlood floodColor={r.color} floodOpacity={selectedRegion === r.id ? '0.6' : '0.25'}/>
+                      <feComposite in2="blur" operator="in"/>
+                      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                  ))}
+                  <radialGradient id="brainBase" cx="50%" cy="50%">
+                    <stop offset="0%" stopColor="rgba(30,25,55,0.9)"/>
+                    <stop offset="100%" stopColor="rgba(12,10,28,0.3)"/>
+                  </radialGradient>
+                  {/* Vignette mask for smooth edge blending */}
+                  <radialGradient id="vignette" cx="50%" cy="48%" r="50%">
+                    <stop offset="0%" stopColor="white" stopOpacity="1"/>
+                    <stop offset="70%" stopColor="white" stopOpacity="0.9"/>
+                    <stop offset="100%" stopColor="white" stopOpacity="0"/>
+                  </radialGradient>
+                  <mask id="vignetteMask">
+                    <rect width="400" height="380" fill="url(#vignette)"/>
+                  </mask>
+                </defs>
+
+                {/* Real brain image as base layer */}
+                <image
+                  href="/brain-regions.png"
+                  x="40" y="10" width="310" height="310"
+                  opacity="0.55"
+                  mask="url(#vignetteMask)"
+                  style={{mixBlendMode:'screen'}}
+                />
+
+                {/* ═══ TAPPABLE BRAIN REGIONS ═══ */}
+                
+                {/* Prefrontal Cortex — front-top of brain */}
+                <g onClick={() => setSelectedRegion(selectedRegion === 'pfc' ? null : 'pfc')} style={{cursor:'pointer'}}>
+                  <ellipse cx="110" cy="105" rx="38" ry="50" fill={selectedRegion === 'pfc' ? '#e8b84b28' : '#e8b84b0a'} 
+                    filter={`url(#glow-pfc)`} stroke={selectedRegion === 'pfc' ? '#e8b84b' : '#e8b84b33'} strokeWidth={selectedRegion === 'pfc' ? '1.5' : '0.5'}
+                    style={{transition:'all 0.4s ease'}}>
+                    {selectedRegion === 'pfc' && <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/>}
+                  </ellipse>
+                  <line x1="85" y1="60" x2="35" y2="25" stroke="#e8b84b" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7"/>
+                  <circle cx="35" cy="25" r="3" fill="#e8b84b" opacity="0.9"/>
+                  <text x="3" y="19" fill="#e8b84b" fontSize="11" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="500">PREFRONTAL</text>
+                  <text x="3" y="31" fill="#e8b84b" fontSize="9" fontFamily="var(--mono)" opacity="0.75">dlPFC · Buddhi</text>
+                </g>
+
+                {/* Anterior Cingulate Cortex — top center-deep */}
+                <g onClick={() => setSelectedRegion(selectedRegion === 'acc' ? null : 'acc')} style={{cursor:'pointer'}}>
+                  <ellipse cx="175" cy="75" rx="32" ry="25" fill={selectedRegion === 'acc' ? '#c45a0a33' : '#c45a0a0a'} 
+                    filter={`url(#glow-acc)`} stroke={selectedRegion === 'acc' ? '#c45a0a' : '#c45a0a33'} strokeWidth={selectedRegion === 'acc' ? '1.5' : '0.5'}
+                    style={{transition:'all 0.4s ease'}}>
+                    {selectedRegion === 'acc' && <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/>}
+                  </ellipse>
+                  <line x1="185" y1="52" x2="200" y2="15" stroke="#c45a0a" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7"/>
+                  <circle cx="200" cy="15" r="3" fill="#c45a0a" opacity="0.9"/>
+                  <text x="206" y="9" fill="#e07820" fontSize="11" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="500">ACC</text>
+                  <text x="206" y="21" fill="#e07820" fontSize="9" fontFamily="var(--mono)" opacity="0.75">Manas</text>
+                </g>
+
+                {/* Default Mode Network — posterior/parietal */}
+                <g onClick={() => setSelectedRegion(selectedRegion === 'dmn' ? null : 'dmn')} style={{cursor:'pointer'}}>
+                  <ellipse cx="260" cy="100" rx="42" ry="48" fill={selectedRegion === 'dmn' ? '#7060c028' : '#7060c008'} 
+                    filter={`url(#glow-dmn)`} stroke={selectedRegion === 'dmn' ? '#7060c0' : '#7060c033'} strokeWidth={selectedRegion === 'dmn' ? '1.5' : '0.5'}
+                    style={{transition:'all 0.4s ease'}}>
+                    {selectedRegion === 'dmn' && <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/>}
+                  </ellipse>
+                  <line x1="290" y1="65" x2="345" y2="25" stroke="#9080e0" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7"/>
+                  <circle cx="345" cy="25" r="3" fill="#9080e0" opacity="0.9"/>
+                  <text x="350" y="19" fill="#a090f0" fontSize="11" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="500">DMN</text>
+                  <text x="350" y="31" fill="#a090f0" fontSize="9" fontFamily="var(--mono)" opacity="0.75">Ahamkara</text>
+                </g>
+
+                {/* Hippocampus — medial temporal deep */}
+                <g onClick={() => setSelectedRegion(selectedRegion === 'hpc' ? null : 'hpc')} style={{cursor:'pointer'}}>
+                  <ellipse cx="175" cy="185" rx="30" ry="15" fill={selectedRegion === 'hpc' ? '#52a87833' : '#52a87810'} 
+                    filter={`url(#glow-hpc)`} stroke={selectedRegion === 'hpc' ? '#52a878' : '#52a87833'} strokeWidth={selectedRegion === 'hpc' ? '1.5' : '0.5'}
+                    transform="rotate(-10,175,185)" style={{transition:'all 0.4s ease'}}>
+                    {selectedRegion === 'hpc' && <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/>}
+                  </ellipse>
+                  <line x1="148" y1="195" x2="55" y2="295" stroke="#80c89a" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7"/>
+                  <circle cx="55" cy="295" r="3" fill="#80c89a" opacity="0.9"/>
+                  <text x="3" y="289" fill="#80c89a" fontSize="11" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="500">HIPPOCAMPUS</text>
+                  <text x="3" y="301" fill="#80c89a" fontSize="9" fontFamily="var(--mono)" opacity="0.75">Chitta · Memory</text>
+                </g>
+
+                {/* Amygdala — deep temporal, near hippocampus */}
+                <g onClick={() => setSelectedRegion(selectedRegion === 'amg' ? null : 'amg')} style={{cursor:'pointer'}}>
+                  <ellipse cx="155" cy="210" rx="18" ry="14" fill={selectedRegion === 'amg' ? '#c0404044' : '#c0404012'} 
+                    filter={`url(#glow-amg)`} stroke={selectedRegion === 'amg' ? '#c04040' : '#c0404033'} strokeWidth={selectedRegion === 'amg' ? '1.5' : '0.5'}
+                    style={{transition:'all 0.4s ease'}}>
+                    {selectedRegion === 'amg' && <animate attributeName="opacity" values="0.6;1;0.6" dur="1.8s" repeatCount="indefinite"/>}
+                  </ellipse>
+                  <line x1="145" y1="224" x2="155" y2="340" stroke="#e06060" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7"/>
+                  <circle cx="155" cy="340" r="3" fill="#e06060" opacity="0.9"/>
+                  <text x="162" y="334" fill="#e06060" fontSize="11" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="500">AMYGDALA</text>
+                  <text x="162" y="346" fill="#e06060" fontSize="9" fontFamily="var(--mono)" opacity="0.75">Bhaya · Fear</text>
+                </g>
+
+                {/* Broca's Area — lower frontal */}
+                <g onClick={() => setSelectedRegion(selectedRegion === 'bca' ? null : 'bca')} style={{cursor:'pointer'}}>
+                  <ellipse cx="110" cy="175" rx="22" ry="20" fill={selectedRegion === 'bca' ? '#38bdf833' : '#38bdf80a'} 
+                    filter={`url(#glow-bca)`} stroke={selectedRegion === 'bca' ? '#38bdf8' : '#38bdf833'} strokeWidth={selectedRegion === 'bca' ? '1.5' : '0.5'}
+                    style={{transition:'all 0.4s ease'}}>
+                    {selectedRegion === 'bca' && <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/>}
+                  </ellipse>
+                  <line x1="90" y1="192" x2="28" y2="250" stroke="#60d0ff" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7"/>
+                  <circle cx="28" cy="250" r="3" fill="#60d0ff" opacity="0.9"/>
+                  <text x="3" y="244" fill="#60d0ff" fontSize="11" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="500">BROCA&apos;S</text>
+                  <text x="3" y="256" fill="#60d0ff" fontSize="9" fontFamily="var(--mono)" opacity="0.75">Vak-shakti</text>
+                </g>
+
+                {/* Cerebellum — posterior bottom */}
+                <g onClick={() => setSelectedRegion(selectedRegion === 'cbl' ? null : 'cbl')} style={{cursor:'pointer'}}>
+                  <ellipse cx="280" cy="240" rx="32" ry="30" fill={selectedRegion === 'cbl' ? '#f0903028' : '#f0903008'} 
+                    filter={`url(#glow-cbl)`} stroke={selectedRegion === 'cbl' ? '#f09030' : '#f0903033'} strokeWidth={selectedRegion === 'cbl' ? '1.5' : '0.5'}
+                    style={{transition:'all 0.4s ease'}}>
+                    {selectedRegion === 'cbl' && <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/>}
+                  </ellipse>
+                  <line x1="308" y1="252" x2="355" y2="300" stroke="#f0a050" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7"/>
+                  <circle cx="355" cy="300" r="3" fill="#f0a050" opacity="0.9"/>
+                  <text x="360" y="294" fill="#f0a050" fontSize="11" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="500">CEREBELLUM</text>
+                  <text x="360" y="306" fill="#f0a050" fontSize="9" fontFamily="var(--mono)" opacity="0.75">Karma Yoga</text>
+                </g>
+
+                {/* Brain stem */}
+                <path d="M200,260 C195,275 190,290 185,310 C183,318 180,325 175,330" 
+                  stroke="rgba(200,144,42,0.12)" strokeWidth="8" fill="none" strokeLinecap="round"/>
+              </svg>
             </div>
 
-            <div style={{display:'flex', flexDirection:'column', gap:'8px'}}>
-              {BRAIN_REGIONS.map(r => (
-                <div 
-                  key={r.id} 
-                  onClick={() => setSelectedRegion(selectedRegion === r.id ? null : r.id)}
-                  style={{
-                    background: selectedRegion === r.id ? 'rgba(255,255,255,.06)' : 'rgba(255,255,255,.03)',
-                    border: `1px solid ${selectedRegion === r.id ? r.color+'66' : 'var(--bdr)'}`,
-                    borderRadius:'14px', padding:'14px', cursor:'pointer', transition:'.2s'
-                  }}
-                >
-                  <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom: selectedRegion === r.id ? '8px' : 0}}>
+            {/* Selected Region Detail Card */}
+            {selectedRegion && (() => {
+              const r = BRAIN_REGIONS.find(b => b.id === selectedRegion);
+              if (!r) return null;
+              return (
+                <div style={{
+                  background:`linear-gradient(145deg, ${r.color}11, rgba(12,10,28,0.95))`,
+                  border:`1px solid ${r.color}44`,
+                  borderRadius:'20px', padding:'20px', marginBottom:'12px',
+                  animation:'sIn .4s ease forwards',
+                  position:'relative', overflow:'hidden'
+                }}>
+                  {/* Glow accent */}
+                  <div style={{
+                    position:'absolute', top:'-20px', right:'-20px', width:'100px', height:'100px',
+                    borderRadius:'50%', background:`radial-gradient(circle, ${r.color}22, transparent 70%)`,
+                    pointerEvents:'none'
+                  }}/>
+                  
+                  <div style={{display:'flex', alignItems:'center', gap:'10px', marginBottom:'12px'}}>
+                    <div style={{
+                      width:'40px', height:'40px', borderRadius:'12px',
+                      background:`${r.color}20`, border:`1px solid ${r.color}44`,
+                      display:'flex', alignItems:'center', justifyContent:'center', fontSize:'18px', flexShrink:0
+                    }}>🧠</div>
                     <div>
-                      <div style={{fontSize:'14px', fontWeight:500, color:r.color}}>{r.name}</div>
-                      <div style={{fontFamily:'var(--mono)', fontSize:'10px', color:'var(--t3)', letterSpacing:'1px'}}>{r.aka}</div>
+                      <div style={{fontSize:'16px', fontWeight:600, color:r.color}}>{r.name}</div>
+                      <div style={{fontFamily:'var(--mono)', fontSize:'10px', color:'var(--t3)', letterSpacing:'1.5px', textTransform:'uppercase'}}>{r.aka}</div>
                     </div>
-                    <div style={{fontSize:'12px', color:'var(--t4)', transition:'.2s', transform: selectedRegion === r.id ? 'rotate(90deg)' : 'none'}}>▸</div>
                   </div>
-                  {selectedRegion === r.id && (
-                    <div style={{animation:'sIn .4s ease forwards'}}>
-                      <div style={{fontSize:'13px', color:'var(--t2)', lineHeight:1.6, marginBottom:'8px'}}>{r.impact}</div>
-                      <div style={{fontSize:'11px', color:'var(--jade)', fontFamily:'var(--mono)', marginBottom:'4px'}}>Practice: {r.fix}</div>
-                      <div className="cite">{r.cite}</div>
-                    </div>
-                  )}
+
+                  <div style={{fontFamily:'var(--mono)', fontSize:'9px', letterSpacing:'2px', textTransform:'uppercase', color:'var(--t3)', marginBottom:'6px'}}>━━ DIGITAL IMPACT</div>
+                  <div style={{fontSize:'13px', color:'var(--t1)', lineHeight:1.65, marginBottom:'14px'}}>{r.impact}</div>
+
+                  <div style={{
+                    background:'rgba(82,168,120,0.08)', border:'1px solid rgba(82,168,120,0.2)',
+                    borderRadius:'12px', padding:'12px', marginBottom:'12px'
+                  }}>
+                    <div style={{fontFamily:'var(--mono)', fontSize:'9px', letterSpacing:'2px', textTransform:'uppercase', color:'var(--jade)', marginBottom:'5px'}}>━━ ANCIENT PRACTICE FIX</div>
+                    <div style={{fontSize:'13px', color:'var(--jade)', fontWeight:500}}>{r.fix}</div>
+                  </div>
+
+                  <div style={{fontSize:'10px', color:'var(--t4)', fontFamily:'var(--mono)', borderTop:'1px solid rgba(255,255,255,0.05)', paddingTop:'8px'}}>
+                    📄 {r.cite}
+                  </div>
                 </div>
-              ))}
-            </div>
+              );
+            })()}
+
+            {!selectedRegion && (
+              <div style={{
+                textAlign:'center', padding:'14px', 
+                border:'1px dashed rgba(200,144,42,0.2)', borderRadius:'14px',
+                background:'rgba(200,144,42,0.03)'
+              }}>
+                <div style={{fontSize:'20px', marginBottom:'6px'}}>👆</div>
+                <div style={{fontFamily:'var(--mono)', fontSize:'10px', color:'var(--t3)', letterSpacing:'1.5px', textTransform:'uppercase'}}>
+                  Tap any glowing region to explore
+                </div>
+              </div>
+            )}
           </div>
         )}
 
