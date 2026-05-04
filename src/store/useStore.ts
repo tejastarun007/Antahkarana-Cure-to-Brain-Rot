@@ -20,12 +20,13 @@ interface AppState extends UserState {
   removeHabitDone: (id: string, mins: number, tradeoff: number) => void;
   toggleFav: (id: string) => void;
   logTimerSession: (mins: number) => void;
+  checkAndUpdateStreak: () => void;
   syncFromServer: (state: Partial<UserState>) => void;
 }
 
 export const useStore = create<AppState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       done: [],
       streak: 0,
       totalTasks: 0,
@@ -41,7 +42,7 @@ export const useStore = create<AppState>()(
       addHabitDone: (id, mins, tradeoff) =>
         set((state) => {
           const newRestored = [...state.restored];
-          newRestored[tradeoff] = Math.min(100, (newRestored[tradeoff] || 0) + 7); // Simplified logic
+          newRestored[tradeoff] = Math.min(100, (newRestored[tradeoff] || 0) + 7);
           
           const today = new Date().toDateString();
           const newHist = [...state.hist];
@@ -52,15 +53,36 @@ export const useStore = create<AppState>()(
           }
           h.count += 1;
 
+          // Streak logic: if this is the first completion today, update streak
+          let newStreak = state.streak;
+          if (state.lastDay !== today) {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayStr = yesterday.toDateString();
+            
+            if (state.lastDay === yesterdayStr) {
+              // Consecutive day — increment streak
+              newStreak = state.streak + 1;
+            } else if (state.lastDay === null) {
+              // First ever practice
+              newStreak = 1;
+            } else {
+              // Streak broken — start fresh
+              newStreak = 1;
+            }
+          }
+
           return {
             done: [...state.done, id],
             totalTasks: state.totalTasks + 1,
             totalMins: state.totalMins + mins,
             restored: newRestored,
             hist: newHist,
-            readMins: id === 'read' ? state.readMins + 60 : state.readMins,
-            medMins: id === 'meditation' ? state.medMins + 20 : state.medMins,
-            pranaMins: id === 'pranayama' ? state.pranaMins + 15 : state.pranaMins,
+            streak: newStreak,
+            lastDay: today,
+            readMins: id === 'read' ? state.readMins + mins : state.readMins,
+            medMins: id === 'meditation' ? state.medMins + mins : state.medMins,
+            pranaMins: id === 'pranayama' ? state.pranaMins + mins : state.pranaMins,
           };
         }),
 
@@ -73,9 +95,9 @@ export const useStore = create<AppState>()(
             totalTasks: Math.max(0, state.totalTasks - 1),
             totalMins: Math.max(0, state.totalMins - mins),
             restored: newRestored,
-            readMins: id === 'read' ? Math.max(0, state.readMins - 60) : state.readMins,
-            medMins: id === 'meditation' ? Math.max(0, state.medMins - 20) : state.medMins,
-            pranaMins: id === 'pranayama' ? Math.max(0, state.pranaMins - 15) : state.pranaMins,
+            readMins: id === 'read' ? Math.max(0, state.readMins - mins) : state.readMins,
+            medMins: id === 'meditation' ? Math.max(0, state.medMins - mins) : state.medMins,
+            pranaMins: id === 'pranayama' ? Math.max(0, state.pranaMins - mins) : state.pranaMins,
           };
         }),
 
@@ -96,14 +118,45 @@ export const useStore = create<AppState>()(
             h = { date: today, count: 0 };
             newHist.push(h);
           }
-          h.count += 3;
+          h.count += 1;
+
+          // Streak logic for timer sessions too
+          let newStreak = state.streak;
+          if (state.lastDay !== today) {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayStr = yesterday.toDateString();
+            
+            if (state.lastDay === yesterdayStr) {
+              newStreak = state.streak + 1;
+            } else if (state.lastDay === null) {
+              newStreak = 1;
+            } else {
+              newStreak = 1;
+            }
+          }
 
           return {
             totalMins: state.totalMins + mins,
-            streak: state.streak + 1,
+            medMins: state.medMins + mins,
+            streak: newStreak,
+            lastDay: today,
             hist: newHist,
           };
         }),
+
+      checkAndUpdateStreak: () => {
+        const state = get();
+        const today = new Date().toDateString();
+        if (state.lastDay && state.lastDay !== today) {
+          const yesterday = new Date();
+          yesterday.setDate(yesterday.getDate() - 1);
+          if (state.lastDay !== yesterday.toDateString()) {
+            // Streak broken
+            set({ streak: 0 });
+          }
+        }
+      },
         
       syncFromServer: (serverState) => set((state) => ({ ...state, ...serverState })),
     }),

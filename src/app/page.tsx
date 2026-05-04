@@ -257,7 +257,7 @@ export default function Gateway() {
             <circle cx="55" cy="55" r="11" fill="rgba(200,144,42,.35)" className="bindu-dot"/>
             <circle cx="55" cy="55" r="4.5" fill="rgba(245,208,128,.9)"/>
           </svg>
-          <div className="tq">{tovQuote}</div>
+          <div className="tov-quote">{tovQuote}</div>
           <div className="tdots"><div className="td"></div><div className="td"></div><div className="td"></div></div>
         </div>
       </div>

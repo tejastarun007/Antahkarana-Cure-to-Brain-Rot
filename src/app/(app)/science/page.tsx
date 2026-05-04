@@ -3,11 +3,23 @@ import { useState } from 'react';
 import { SCI_SECS, ERAS, TRADEOFFS, TIERS } from '@/data/content';
 import Link from 'next/link';
 import { TopBar } from '@/components/TopBar';
+import Image from 'next/image';
+
+const BRAIN_REGIONS = [
+  {id:'pfc', name:'Prefrontal Cortex', aka:'dlPFC — Buddhi', impact:'Thinned by 35% in heavy digital users. Governs deep reasoning, impulse control, and long-term planning.', fix:'Silent Meditation · Deep Reading · Unreachable Hour', color:'#e8b84b', cite:'Loh & Kanai (2014) PLoS ONE'},
+  {id:'acc', name:'Anterior Cingulate Cortex', aka:'ACC — Manas', impact:'Hyper-activated by digital multitasking. Dominates over dlPFC by 78%. Handles rapid classification but not deep thought.', fix:'Naam Jap · Focused attention meditation', color:'#c45a0a', cite:'IISc Bangalore (2026)'},
+  {id:'dmn', name:'Default Mode Network', aka:'DMN — Ahamkara', impact:'Suppressed 80% by constant stimulation. Governs self-reflection, identity formation, and creative synthesis.', fix:'20-min meditation · Phoneless walks · Silence', color:'#7060c0', cite:'SVYASA fNIRS (2024)'},
+  {id:'hpc', name:'Hippocampus', aka:'Chitta — Memory', impact:'Shifted from deep encoding to transactive indexing (82%). Stores WHERE to find info, not the info itself.', fix:'Handwriting · Mantra memorisation · Deep reading', color:'#52a878', cite:'Hartzell (2018) Sanskrit Effect'},
+  {id:'amg', name:'Amygdala', aka:'Bhaya — Fear Center', impact:'Hyper-reactive to social threats (88% shift). Every notification triggers cortisol cascades once reserved for predators.', fix:'Pranayama · Equanimity meditation · Naam Jap', color:'#c04040', cite:'Ward et al. (2017) JACR'},
+  {id:'bca', name:"Broca's Area", aka:'Vak-shakti — Language', impact:'Language processing yielding to visual streams (75% shift). Long reading ability declining measurably across all demographics.', fix:'1hr deep reading · Handwriting · Sanskrit recitation', color:'#38bdf8', cite:'Berns et al. (2013)'},
+  {id:'cbl', name:'Cerebellum', aka:'Karma Yoga — Motor', impact:'Motor-cognitive integration declining (70%). Children on tablets show measurably weaker fine motor skills.', fix:'Hand work · Cooking · Manual craft · Yoga asanas', color:'#f09030', cite:'SVYASA Psychology Lab (2024)'},
+];
 
 export default function Science() {
-  const [activeSciTab, setActiveSciTab] = useState('timeline');
+  const [activeSciTab, setActiveSciTab] = useState('brain');
   const [openEra, setOpenEra] = useState<number>(-1);
   const [openTO, setOpenTO] = useState<number>(-1);
+  const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
 
   return (
     <div className="screen on" id="sci">
@@ -25,6 +37,53 @@ export default function Science() {
       
       <div className="scroll" style={{flex:1, paddingBottom:'90px'}}>
         
+        {activeSciTab === 'brain' && (
+          <div className="sci-sec on" style={{padding:'0 14px', paddingBottom:'16px'}}>
+            <div className="sci-h">Neural Impact Map</div>
+            <div className="sci-sub">Tap a brain region to explore how digital habits have physically altered it — and how ancient practices reverse the damage.</div>
+            
+            <div style={{position:'relative', margin:'0 auto 16px', maxWidth:'320px'}}>
+              <Image 
+                src="/brain-regions.png" 
+                alt="Brain regions affected by digital habits" 
+                width={320} 
+                height={320} 
+                style={{width:'100%', height:'auto', borderRadius:'16px', border:'1px solid var(--bdr)'}}
+                priority
+              />
+            </div>
+
+            <div style={{display:'flex', flexDirection:'column', gap:'8px'}}>
+              {BRAIN_REGIONS.map(r => (
+                <div 
+                  key={r.id} 
+                  onClick={() => setSelectedRegion(selectedRegion === r.id ? null : r.id)}
+                  style={{
+                    background: selectedRegion === r.id ? 'rgba(255,255,255,.06)' : 'rgba(255,255,255,.03)',
+                    border: `1px solid ${selectedRegion === r.id ? r.color+'66' : 'var(--bdr)'}`,
+                    borderRadius:'14px', padding:'14px', cursor:'pointer', transition:'.2s'
+                  }}
+                >
+                  <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom: selectedRegion === r.id ? '8px' : 0}}>
+                    <div>
+                      <div style={{fontSize:'14px', fontWeight:500, color:r.color}}>{r.name}</div>
+                      <div style={{fontFamily:'var(--mono)', fontSize:'10px', color:'var(--t3)', letterSpacing:'1px'}}>{r.aka}</div>
+                    </div>
+                    <div style={{fontSize:'12px', color:'var(--t4)', transition:'.2s', transform: selectedRegion === r.id ? 'rotate(90deg)' : 'none'}}>▸</div>
+                  </div>
+                  {selectedRegion === r.id && (
+                    <div style={{animation:'sIn .4s ease forwards'}}>
+                      <div style={{fontSize:'13px', color:'var(--t2)', lineHeight:1.6, marginBottom:'8px'}}>{r.impact}</div>
+                      <div style={{fontSize:'11px', color:'var(--jade)', fontFamily:'var(--mono)', marginBottom:'4px'}}>Practice: {r.fix}</div>
+                      <div className="cite">{r.cite}</div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {activeSciTab === 'timeline' && (
           <div className="sci-sec on" style={{padding:'0 14px', paddingBottom:'16px'}}>
             <div className="sci-h">1000 Years of Cognitive Evolution</div>
@@ -81,23 +140,6 @@ export default function Science() {
           </div>
         )}
 
-        {activeSciTab === 'spectrum' && (
-          <div className="sci-sec on" style={{padding:'0 14px', paddingBottom:'16px'}}>
-            <div className="sci-h">8.1 Billion Humans: Cognitive Spectrum</div>
-            <div className="sci-sub">Recalibrated using OECD PIAAC (39 countries, 250,000 adults), UNESCO literacy data, WHO activity reports, DataReportal 2024 screen time data. Original estimates were too generous.</div>
-            
-            {TIERS.map((t, i) => (
-              <div key={i} className={`tier-c ${t.cls}`}>
-                <div className="tc-h"><div className="tc-n" style={{color:t.col}}>{t.n} <span style={{fontFamily:'var(--deva)', fontSize:'12px'}}>{t.deva}</span></div><div className="tc-p">{t.pct} · {t.pop}</div></div>
-                <div style={{fontFamily:'var(--mono)', fontSize:'10px', color:t.col, marginBottom:'5px'}}>{t.proc}</div>
-                <div className="tc-desc">{t.desc}</div>
-              </div>
-            ))}
-
-            <div className="proof"><div className="proof-lbl">Vedic Parallel — Mandukya Upanishad</div><div className="proof-t">The Vedic system describes seven states of consciousness. <strong>Only the disciplined practitioner accesses Turiya</strong> (pure awareness). Only 10% can genuinely co-work with AI. The numbers converge across 3,000 years.</div></div>
-          </div>
-        )}
-
         {activeSciTab === 'evidence' && (
           <div className="sci-sec on" style={{padding:'0 14px', paddingBottom:'16px'}}>
             <div className="sci-h">Habit Impact: Scientific Evidence</div>
@@ -114,6 +156,23 @@ export default function Science() {
             ].map((x, i) => (
               <div key={i} className="sol"><div style={{fontFamily:'var(--deva)', fontSize:'13px', color:'var(--gold3)', marginBottom:'3px'}}>{x.deva}</div><div className="sol-stat" style={{color:x.col}}>{x.pct}</div><div style={{fontSize:'13px', color:'var(--t1)', fontWeight:500, marginBottom:'2px'}}>{x.h}</div><div className="cite">{x.src}</div></div>
             ))}
+          </div>
+        )}
+
+        {activeSciTab === 'spectrum' && (
+          <div className="sci-sec on" style={{padding:'0 14px', paddingBottom:'16px'}}>
+            <div className="sci-h">8.1 Billion Humans: Cognitive Spectrum</div>
+            <div className="sci-sub">Recalibrated using OECD PIAAC (39 countries, 250,000 adults), UNESCO literacy data, WHO activity reports, DataReportal 2024 screen time data. Original estimates were too generous.</div>
+            
+            {TIERS.map((t, i) => (
+              <div key={i} className={`tier-c ${t.cls}`}>
+                <div className="tc-h"><div className="tc-n" style={{color:t.col}}>{t.n} <span style={{fontFamily:'var(--deva)', fontSize:'12px'}}>{t.deva}</span></div><div className="tc-p">{t.pct} · {t.pop}</div></div>
+                <div style={{fontFamily:'var(--mono)', fontSize:'10px', color:t.col, marginBottom:'5px'}}>{t.proc}</div>
+                <div className="tc-desc">{t.desc}</div>
+              </div>
+            ))}
+
+            <div className="proof"><div className="proof-lbl">Vedic Parallel — Mandukya Upanishad</div><div className="proof-t">The Vedic system describes seven states of consciousness. <strong>Only the disciplined practitioner accesses Turiya</strong> (pure awareness). Only 10% can genuinely co-work with AI. The numbers converge across 3,000 years.</div></div>
           </div>
         )}
 

@@ -16,13 +16,20 @@ export default function Dashboard() {
     setTimeout(() => setNotifShow(false), 3000);
   };
 
-  const todayIdx = useMemo(() => {
-    const d = new Date();
-    const e = new Date(2025, 0, 1);
-    return Math.floor((d.getTime() - e.getTime()) / 86400000) % WISDOMS.length;
-  }, []);
+  // Day count = unique days the user has practiced (from hist)
+  // Wisdom cycles through the 14 wisdoms based on the user's practice day count
+  const userDay = store.hist.length || 1;
+  const todayIdx = (userDay - 1) % WISDOMS.length;
   const todayW = WISDOMS[todayIdx];
   const isWDayFav = store.favs.includes(todayW.id);
+
+  // Time-aware greeting
+  const greeting = useMemo(() => {
+    const h = new Date().getHours();
+    if (h < 12) return 'Good morning, Seeker';
+    if (h < 17) return 'Good afternoon, Seeker';
+    return 'Good evening, Seeker';
+  }, []);
 
   // Profile Calculation
   const calcScore = () => {
@@ -38,13 +45,13 @@ export default function Dashboard() {
       <TopBar />
       <div className="ss-content">
         <div className="ss-header">
-          <div className="ss-greet">Good morning, Seeker</div>
+          <div className="ss-greet">{greeting}</div>
           <div className="ss-title">Your mind is a<br/><em>sacred space.</em></div>
         </div>
         
         <div className="wh" style={{position:'relative'}}>
           <div className="wh-inner">
-            <div className="wday">Day {(todayIdx % 14) + 1} · Daily Wisdom</div>
+            <div className="wday">Day {userDay} · Daily Wisdom</div>
             <div className="w-sk deva">{todayW.s}</div>
             <div className="w-q">"{todayW.e}"</div>
             <div className="w-src">{todayW.src}</div>
@@ -53,7 +60,7 @@ export default function Dashboard() {
                 ♡ <span>{isWDayFav ? 'Saved ♡' : 'Save'}</span>
               </button>
               <div style={{flex:1}}></div>
-              <Link href="/wisdom" className="btn btn-o btn-sm">All Wisdom →</Link>
+              <Link href="/wisdom" className="btn btn-o btn-sm" style={{textDecoration:'none'}}>All Wisdom →</Link>
             </div>
             <svg className="wm rs" width="100" height="100" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="48" stroke="#c8902a" strokeWidth=".6" opacity=".5"/><ellipse cx="50" cy="10" rx="4" ry="10" fill="#c8902a"/><ellipse cx="50" cy="10" rx="4" ry="10" fill="#c8902a" transform="rotate(45 50 50)"/><ellipse cx="50" cy="10" rx="4" ry="10" fill="#c8902a" transform="rotate(90 50 50)"/><ellipse cx="50" cy="10" rx="4" ry="10" fill="#c8902a" transform="rotate(135 50 50)"/><ellipse cx="50" cy="10" rx="4" ry="10" fill="#c8902a" transform="rotate(180 50 50)"/><ellipse cx="50" cy="10" rx="4" ry="10" fill="#c8902a" transform="rotate(225 50 50)"/><ellipse cx="50" cy="10" rx="4" ry="10" fill="#c8902a" transform="rotate(270 50 50)"/><ellipse cx="50" cy="10" rx="4" ry="10" fill="#c8902a" transform="rotate(315 50 50)"/></svg>
           </div>

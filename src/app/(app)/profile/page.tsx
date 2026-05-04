@@ -1,6 +1,21 @@
 'use client';
 import { useStore } from '@/store/useStore';
-import { TRADEOFFS, MILESTONES } from '@/data/content';
+import { TRADEOFFS, MILESTONES, WISDOMS } from '@/data/content';
+
+const WISDOM_CARDS = [
+  {id:'wc1', sk:'अहं ब्रह्मास्मि', e:'"I am Brahman — the infinite, undivided consciousness."', src:'Brihadaranyaka Upanishad 1.4.10'},
+  {id:'wc2', sk:'उद्धरेदात्मनाऽऽत्मानम्', e:'"Lift yourself by your own self."', src:'Bhagavad Gita 6.5'},
+  {id:'wc3', sk:'प्रत्याहारश्चेन्द्रियाणाम्', e:'"Pratyahara — the withdrawal of senses."', src:'Patanjali Yoga Sutras 2.54'},
+  {id:'wc4', sk:'समत्वं योग उच्यते', e:'"Equanimity of mind is called Yoga."', src:'Bhagavad Gita 2.48'},
+  {id:'wc5', sk:'चले वाते चलं चित्तम्', e:'"When the breath wanders, the mind is unsteady."', src:'Hatha Yoga Pradipika 2.2'},
+  {id:'wc6', sk:'कर्मण्येवाधिकारस्ते', e:'"You have a right to your actions, never to the fruits."', src:'Bhagavad Gita 2.47'},
+  {id:'wc7', sk:'सत्यमेव जयते', e:'"Truth alone triumphs."', src:'Mundaka Upanishad 3.1.6'},
+];
+
+const ALL_SAVEABLE = [
+  ...WISDOMS.map(w => ({id: w.id, sk: w.s, e: w.e, src: w.src})),
+  ...WISDOM_CARDS,
+];
 import { useState } from 'react';
 import { TopBar } from '@/components/TopBar';
 import { useRouter } from 'next/navigation';
@@ -21,10 +36,9 @@ export default function Profile() {
   };
 
   const doSignOut = async () => {
-    if (confirm('Sign out and clear all local data?')) {
+    if (confirm('Sign out? Your practice data will be preserved.')) {
       const supabase = createClient();
       await supabase.auth.signOut();
-      localStorage.removeItem('ank_f');
       router.push('/');
       router.refresh();
     }
@@ -80,8 +94,8 @@ export default function Profile() {
         <div className="prog-items">
           {[
             {n:'Meditation', val:store.medMins||0, max:300, unit:'mins', cls:'pfill-v'},
-            {n:'Deep Reading', val:store.readMins||0, max:600, unit:'mins', cls:'pfill-s'},
-            {n:'Total Sadhana', val:store.totalMins||0, max:1000, unit:'mins', cls:'pfill-g'},
+            {n:'Deep Reading', val:Math.floor((store.readMins||0) / 60), max:50, unit:'sessions', cls:'pfill-s'},
+            {n:'Total Sadhana', val:store.totalTasks||0, max:100, unit:'sessions', cls:'pfill-g'},
             {n:'Practices Completed', val:store.totalTasks||0, max:100, unit:'sessions', cls:'pfill-g'},
             {n:'Day Streak', val:store.streak||0, max:30, unit:'days', cls:'pfill-g'},
           ].map((p, i) => (
@@ -121,6 +135,32 @@ export default function Profile() {
               return cells;
             })()}
           </div>
+        </div>
+
+        <div className="lbl" style={{padding:'0 14px', marginBottom:'10px'}}>Saved Wisdom</div>
+        <div style={{padding:'0 14px', marginBottom:'16px'}}>
+          {store.favs.length === 0 ? (
+            <div style={{background:'rgba(255,255,255,.03)', border:'1px solid var(--bdr)', borderRadius:'14px', padding:'20px', textAlign:'center'}}>
+              <div style={{fontSize:'24px', marginBottom:'6px'}}>♡</div>
+              <div style={{fontSize:'13px', color:'var(--t3)'}}>No saved wisdom yet</div>
+              <div style={{fontSize:'11px', color:'var(--t4)', marginTop:'4px'}}>Tap ♡ Save on any wisdom card to collect it here</div>
+            </div>
+          ) : (
+            <div style={{display:'flex', flexDirection:'column', gap:'8px'}}>
+              {store.favs.map(favId => {
+                const w = ALL_SAVEABLE.find(x => x.id === favId);
+                if (!w) return null;
+                return (
+                  <div key={favId} style={{background:'rgba(200,144,42,.05)', border:'1px solid var(--bdr2)', borderRadius:'14px', padding:'14px', position:'relative'}}>
+                    <div style={{fontFamily:'var(--deva)', fontSize:'15px', color:'var(--gold3)', marginBottom:'4px'}}>{w.sk}</div>
+                    <div style={{fontFamily:'var(--serif)', fontSize:'14px', fontStyle:'italic', color:'var(--t1)', lineHeight:1.5, marginBottom:'4px'}}>{w.e}</div>
+                    <div style={{fontSize:'10px', color:'var(--t4)'}}>{w.src}</div>
+                    <button onClick={() => { store.toggleFav(favId); notify('♡ Removed from saved'); }} style={{position:'absolute', top:'12px', right:'12px', background:'none', border:'none', color:'var(--gold2)', fontSize:'14px', cursor:'pointer', padding:'4px'}}>♥</button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         <div className="lbl" style={{padding:'0 14px', marginBottom:'10px'}}>Milestones & Achievements</div>
