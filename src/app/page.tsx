@@ -5,7 +5,6 @@ import { createClient } from '@/lib/supabase/client';
 
 export default function Gateway() {
   const router = useRouter();
-  const supabase = createClient();
 
   const [tovVisible, setTovVisible] = useState(false);
   const [tovQuote, setTovQuote] = useState('"तमसो मा ज्योतिर्गमय — Lead me from darkness to light"');
@@ -43,6 +42,7 @@ export default function Gateway() {
     }
 
     setLoading(true);
+    const supabase = createClient();
 
     if (mode === 'signup') {
       const { error: signUpError } = await supabase.auth.signUp({
@@ -76,6 +76,7 @@ export default function Gateway() {
 
   const handleOAuth = async (provider: 'google' | 'apple') => {
     setError('');
+    const supabase = createClient();
     const { error: oauthError } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
