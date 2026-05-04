@@ -8,7 +8,7 @@ export default function Gateway() {
 
   const [tovVisible, setTovVisible] = useState(false);
   const [tovQuote, setTovQuote] = useState('"तमसो मा ज्योतिर्गमय — Lead me from darkness to light"');
-  const [mounted, setMounted] = useState(false);
+  const [mounted, setMounted] = useState(true);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -16,11 +16,6 @@ export default function Gateway() {
   const [error, setError] = useState('');
   const [mode, setMode] = useState<'login' | 'signup'>('login');
   const [signupSuccess, setSignupSuccess] = useState(false);
-
-  useEffect(() => {
-    const t = setTimeout(() => setMounted(true), 100);
-    return () => clearTimeout(t);
-  }, []);
 
   const showTransition = () => {
     setTovQuote('"तमसो मा ज्योतिर्गमय — Lead me from darkness to light"');
