@@ -51,7 +51,7 @@ export default function Science() {
                 animation:'aura 7s ease-in-out infinite', pointerEvents:'none', zIndex:0
               }}/>
               
-              <svg viewBox="0 0 400 380" style={{width:'100%', height:'auto', position:'relative', zIndex:1}}>
+              <svg viewBox="0 0 500 380" style={{width:'100%', height:'auto', position:'relative', zIndex:1}}>
                 <defs>
                   {BRAIN_REGIONS.map(r => (
                     <filter key={`glow-${r.id}`} id={`glow-${r.id}`} x="-50%" y="-50%" width="200%" height="200%">
@@ -72,14 +72,14 @@ export default function Science() {
                     <stop offset="100%" stopColor="white" stopOpacity="0"/>
                   </radialGradient>
                   <mask id="vignetteMask">
-                    <rect width="400" height="380" fill="url(#vignette)"/>
+                    <rect width="500" height="380" fill="url(#vignette)"/>
                   </mask>
                 </defs>
 
                 {/* Real brain image as base layer */}
                 <image
                   href="/brain-regions.png"
-                  x="40" y="10" width="310" height="310"
+                  x="90" y="10" width="310" height="310"
                   opacity="0.55"
                   mask="url(#vignetteMask)"
                   style={{mixBlendMode:'screen'}}
@@ -89,97 +89,97 @@ export default function Science() {
                 
                 {/* Prefrontal Cortex — front-top of brain */}
                 <g onClick={() => setSelectedRegion(selectedRegion === 'pfc' ? null : 'pfc')} style={{cursor:'pointer'}}>
-                  <ellipse cx="110" cy="105" rx="38" ry="50" fill={selectedRegion === 'pfc' ? '#e8b84b28' : '#e8b84b0a'} 
+                  <ellipse cx="160" cy="105" rx="38" ry="50" fill={selectedRegion === 'pfc' ? '#e8b84b28' : '#e8b84b0a'} 
                     filter={`url(#glow-pfc)`} stroke={selectedRegion === 'pfc' ? '#e8b84b' : '#e8b84b33'} strokeWidth={selectedRegion === 'pfc' ? '1.5' : '0.5'}
                     style={{transition:'all 0.4s ease'}}>
                     {selectedRegion === 'pfc' && <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/>}
                   </ellipse>
-                  <line x1="85" y1="60" x2="35" y2="25" stroke="#e8b84b" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7"/>
-                  <circle cx="35" cy="25" r="3" fill="#e8b84b" opacity="0.9"/>
+                  <line x1="130" y1="60" x2="55" y2="25" stroke="#e8b84b" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7"/>
+                  <circle cx="55" cy="25" r="3" fill="#e8b84b" opacity="0.9"/>
                   <text x="3" y="19" fill="#e8b84b" fontSize="11" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="500">PREFRONTAL</text>
                   <text x="3" y="31" fill="#e8b84b" fontSize="9" fontFamily="var(--mono)" opacity="0.75">dlPFC · Buddhi</text>
                 </g>
 
                 {/* Anterior Cingulate Cortex — top center-deep */}
                 <g onClick={() => setSelectedRegion(selectedRegion === 'acc' ? null : 'acc')} style={{cursor:'pointer'}}>
-                  <ellipse cx="175" cy="75" rx="32" ry="25" fill={selectedRegion === 'acc' ? '#c45a0a33' : '#c45a0a0a'} 
+                  <ellipse cx="225" cy="75" rx="32" ry="25" fill={selectedRegion === 'acc' ? '#c45a0a33' : '#c45a0a0a'} 
                     filter={`url(#glow-acc)`} stroke={selectedRegion === 'acc' ? '#c45a0a' : '#c45a0a33'} strokeWidth={selectedRegion === 'acc' ? '1.5' : '0.5'}
                     style={{transition:'all 0.4s ease'}}>
                     {selectedRegion === 'acc' && <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/>}
                   </ellipse>
-                  <line x1="185" y1="52" x2="200" y2="15" stroke="#c45a0a" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7"/>
-                  <circle cx="200" cy="15" r="3" fill="#c45a0a" opacity="0.9"/>
-                  <text x="206" y="9" fill="#e07820" fontSize="11" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="500">ACC</text>
-                  <text x="206" y="21" fill="#e07820" fontSize="9" fontFamily="var(--mono)" opacity="0.75">Manas</text>
+                  <line x1="245" y1="52" x2="270" y2="15" stroke="#c45a0a" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7"/>
+                  <circle cx="270" cy="15" r="3" fill="#c45a0a" opacity="0.9"/>
+                  <text x="278" y="9" fill="#e07820" fontSize="11" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="500">ACC</text>
+                  <text x="278" y="21" fill="#e07820" fontSize="9" fontFamily="var(--mono)" opacity="0.75">Manas</text>
                 </g>
 
                 {/* Default Mode Network — posterior/parietal */}
                 <g onClick={() => setSelectedRegion(selectedRegion === 'dmn' ? null : 'dmn')} style={{cursor:'pointer'}}>
-                  <ellipse cx="260" cy="100" rx="42" ry="48" fill={selectedRegion === 'dmn' ? '#7060c028' : '#7060c008'} 
+                  <ellipse cx="310" cy="100" rx="42" ry="48" fill={selectedRegion === 'dmn' ? '#7060c028' : '#7060c008'} 
                     filter={`url(#glow-dmn)`} stroke={selectedRegion === 'dmn' ? '#7060c0' : '#7060c033'} strokeWidth={selectedRegion === 'dmn' ? '1.5' : '0.5'}
                     style={{transition:'all 0.4s ease'}}>
                     {selectedRegion === 'dmn' && <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/>}
                   </ellipse>
-                  <line x1="290" y1="65" x2="345" y2="25" stroke="#9080e0" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7"/>
-                  <circle cx="345" cy="25" r="3" fill="#9080e0" opacity="0.9"/>
-                  <text x="350" y="19" fill="#a090f0" fontSize="11" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="500">DMN</text>
-                  <text x="350" y="31" fill="#a090f0" fontSize="9" fontFamily="var(--mono)" opacity="0.75">Ahamkara</text>
+                  <line x1="340" y1="65" x2="400" y2="25" stroke="#9080e0" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7"/>
+                  <circle cx="400" cy="25" r="3" fill="#9080e0" opacity="0.9"/>
+                  <text x="408" y="19" fill="#a090f0" fontSize="11" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="500">DMN</text>
+                  <text x="408" y="31" fill="#a090f0" fontSize="9" fontFamily="var(--mono)" opacity="0.75">Ahamkara</text>
                 </g>
 
                 {/* Hippocampus — medial temporal deep */}
                 <g onClick={() => setSelectedRegion(selectedRegion === 'hpc' ? null : 'hpc')} style={{cursor:'pointer'}}>
-                  <ellipse cx="175" cy="185" rx="30" ry="15" fill={selectedRegion === 'hpc' ? '#52a87833' : '#52a87810'} 
+                  <ellipse cx="225" cy="185" rx="30" ry="15" fill={selectedRegion === 'hpc' ? '#52a87833' : '#52a87810'} 
                     filter={`url(#glow-hpc)`} stroke={selectedRegion === 'hpc' ? '#52a878' : '#52a87833'} strokeWidth={selectedRegion === 'hpc' ? '1.5' : '0.5'}
-                    transform="rotate(-10,175,185)" style={{transition:'all 0.4s ease'}}>
+                    transform="rotate(-10,225,185)" style={{transition:'all 0.4s ease'}}>
                     {selectedRegion === 'hpc' && <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/>}
                   </ellipse>
-                  <line x1="148" y1="195" x2="55" y2="295" stroke="#80c89a" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7"/>
-                  <circle cx="55" cy="295" r="3" fill="#80c89a" opacity="0.9"/>
+                  <line x1="198" y1="195" x2="85" y2="295" stroke="#80c89a" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7"/>
+                  <circle cx="85" cy="295" r="3" fill="#80c89a" opacity="0.9"/>
                   <text x="3" y="289" fill="#80c89a" fontSize="11" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="500">HIPPOCAMPUS</text>
                   <text x="3" y="301" fill="#80c89a" fontSize="9" fontFamily="var(--mono)" opacity="0.75">Chitta · Memory</text>
                 </g>
 
                 {/* Amygdala — deep temporal, near hippocampus */}
                 <g onClick={() => setSelectedRegion(selectedRegion === 'amg' ? null : 'amg')} style={{cursor:'pointer'}}>
-                  <ellipse cx="155" cy="210" rx="18" ry="14" fill={selectedRegion === 'amg' ? '#c0404044' : '#c0404012'} 
+                  <ellipse cx="205" cy="210" rx="18" ry="14" fill={selectedRegion === 'amg' ? '#c0404044' : '#c0404012'} 
                     filter={`url(#glow-amg)`} stroke={selectedRegion === 'amg' ? '#c04040' : '#c0404033'} strokeWidth={selectedRegion === 'amg' ? '1.5' : '0.5'}
                     style={{transition:'all 0.4s ease'}}>
                     {selectedRegion === 'amg' && <animate attributeName="opacity" values="0.6;1;0.6" dur="1.8s" repeatCount="indefinite"/>}
                   </ellipse>
-                  <line x1="145" y1="224" x2="155" y2="340" stroke="#e06060" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7"/>
-                  <circle cx="155" cy="340" r="3" fill="#e06060" opacity="0.9"/>
-                  <text x="162" y="334" fill="#e06060" fontSize="11" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="500">AMYGDALA</text>
-                  <text x="162" y="346" fill="#e06060" fontSize="9" fontFamily="var(--mono)" opacity="0.75">Bhaya · Fear</text>
+                  <line x1="195" y1="224" x2="205" y2="340" stroke="#e06060" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7"/>
+                  <circle cx="205" cy="340" r="3" fill="#e06060" opacity="0.9"/>
+                  <text x="212" y="334" fill="#e06060" fontSize="11" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="500">AMYGDALA</text>
+                  <text x="212" y="346" fill="#e06060" fontSize="9" fontFamily="var(--mono)" opacity="0.75">Bhaya · Fear</text>
                 </g>
 
                 {/* Broca's Area — lower frontal */}
                 <g onClick={() => setSelectedRegion(selectedRegion === 'bca' ? null : 'bca')} style={{cursor:'pointer'}}>
-                  <ellipse cx="110" cy="175" rx="22" ry="20" fill={selectedRegion === 'bca' ? '#38bdf833' : '#38bdf80a'} 
+                  <ellipse cx="160" cy="175" rx="22" ry="20" fill={selectedRegion === 'bca' ? '#38bdf833' : '#38bdf80a'} 
                     filter={`url(#glow-bca)`} stroke={selectedRegion === 'bca' ? '#38bdf8' : '#38bdf833'} strokeWidth={selectedRegion === 'bca' ? '1.5' : '0.5'}
                     style={{transition:'all 0.4s ease'}}>
                     {selectedRegion === 'bca' && <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/>}
                   </ellipse>
-                  <line x1="90" y1="192" x2="28" y2="250" stroke="#60d0ff" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7"/>
-                  <circle cx="28" cy="250" r="3" fill="#60d0ff" opacity="0.9"/>
+                  <line x1="140" y1="192" x2="60" y2="250" stroke="#60d0ff" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7"/>
+                  <circle cx="60" cy="250" r="3" fill="#60d0ff" opacity="0.9"/>
                   <text x="3" y="244" fill="#60d0ff" fontSize="11" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="500">BROCA&apos;S</text>
                   <text x="3" y="256" fill="#60d0ff" fontSize="9" fontFamily="var(--mono)" opacity="0.75">Vak-shakti</text>
                 </g>
 
                 {/* Cerebellum — posterior bottom */}
                 <g onClick={() => setSelectedRegion(selectedRegion === 'cbl' ? null : 'cbl')} style={{cursor:'pointer'}}>
-                  <ellipse cx="280" cy="240" rx="32" ry="30" fill={selectedRegion === 'cbl' ? '#f0903028' : '#f0903008'} 
+                  <ellipse cx="330" cy="240" rx="32" ry="30" fill={selectedRegion === 'cbl' ? '#f0903028' : '#f0903008'} 
                     filter={`url(#glow-cbl)`} stroke={selectedRegion === 'cbl' ? '#f09030' : '#f0903033'} strokeWidth={selectedRegion === 'cbl' ? '1.5' : '0.5'}
                     style={{transition:'all 0.4s ease'}}>
                     {selectedRegion === 'cbl' && <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/>}
                   </ellipse>
-                  <line x1="308" y1="252" x2="355" y2="300" stroke="#f0a050" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7"/>
-                  <circle cx="355" cy="300" r="3" fill="#f0a050" opacity="0.9"/>
-                  <text x="360" y="294" fill="#f0a050" fontSize="11" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="500">CEREBELLUM</text>
-                  <text x="360" y="306" fill="#f0a050" fontSize="9" fontFamily="var(--mono)" opacity="0.75">Karma Yoga</text>
+                  <line x1="358" y1="252" x2="410" y2="300" stroke="#f0a050" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7"/>
+                  <circle cx="410" cy="300" r="3" fill="#f0a050" opacity="0.9"/>
+                  <text x="418" y="294" fill="#f0a050" fontSize="11" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="500">CEREBELLUM</text>
+                  <text x="418" y="306" fill="#f0a050" fontSize="9" fontFamily="var(--mono)" opacity="0.75">Karma Yoga</text>
                 </g>
 
                 {/* Brain stem */}
-                <path d="M200,260 C195,275 190,290 185,310 C183,318 180,325 175,330" 
+                <path d="M250,260 C245,275 240,290 235,310 C233,318 230,325 225,330" 
                   stroke="rgba(200,144,42,0.12)" strokeWidth="8" fill="none" strokeLinecap="round"/>
               </svg>
             </div>
