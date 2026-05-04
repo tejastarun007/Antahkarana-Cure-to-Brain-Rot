@@ -344,7 +344,7 @@ body{display:flex;align-items:center;justify-content:center;font-family:var(--sa
 .ss-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .ss-bg-b1{position:absolute;top:-120px;right:-80px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(45,40,96,.5),transparent 65%)}
 .ss-bg-b2{position:absolute;bottom:-60px;left:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(140,37,0,.12),transparent 65%)}
-.ss-content{flex:1;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:90px}
+.ss-content{flex:1;display:block;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:90px}
 .ss-content::-webkit-scrollbar{display:none}
 .ss-header{padding:4px 20px 0;position:relative;z-index:2}
 .ss-greet{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--t3);margin-bottom:3px}
