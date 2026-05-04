@@ -386,7 +386,7 @@ body{display:flex;align-items:center;justify-content:center;font-family:var(--sa
 .hab-grid::after{content:'';flex:0 0 2px}
 .hab-grid::-webkit-scrollbar{display:none}
 .hab-grid .hc{flex:0 0 156px;scroll-snap-align:start}
-.hc{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:15px;cursor:pointer;transition:.2s;position:relative;overflow:hidden}
+.hc{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:15px;cursor:pointer;transition:.2s;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-start;align-items:flex-start;min-height:160px;height:auto;}
 .hc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--bdr2),transparent)}
 .hc:active{transform:scale(.96)}
 .hc.done{border-color:rgba(82,168,120,.35);background:rgba(82,168,120,.06)}
