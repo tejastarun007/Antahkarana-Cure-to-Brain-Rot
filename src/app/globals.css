@@ -632,6 +632,25 @@ body{display:flex;align-items:center;justify-content:center;font-family:var(--sa
 .prof-acts{padding:0 14px 8px;display:flex;flex-direction:column;gap:9px}
 
 /* ══════════ RESPONSIVE ══════════ */
-@media(max-height:900px){.phone{transform:scale(.9);transform-origin:center}}
-@media(max-height:780px){.phone{transform:scale(.78);transform-origin:center}}
-@media(min-width:520px){.phone{box-shadow:0 0 0 1px rgba(200,144,42,.1),0 40px 120px rgba(0,0,0,.7)}}
+@media (max-width: 600px) {
+  .phone {
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    border-radius: 0;
+    box-shadow: none;
+    transform: none !important;
+  }
+  .phone::before {
+    display: none; /* Hide the mock notch */
+  }
+}
+@media (min-width: 601px) and (max-height: 900px) {
+  .phone { transform: scale(.9); transform-origin: center; }
+}
+@media (min-width: 601px) and (max-height: 780px) {
+  .phone { transform: scale(.78); transform-origin: center; }
+}
+@media (min-width: 601px) {
+  .phone { box-shadow: 0 0 0 1px rgba(200,144,42,.1), 0 40px 120px rgba(0,0,0,.7); }
+}
