@@ -25,7 +25,7 @@ body{display:flex;align-items:center;justify-content:center;font-family:var(--sa
   background:var(--void);border-radius:52px;overflow:hidden;position:relative;
   box-shadow:0 0 0 1px rgba(200,144,42,.12),0 0 0 10px #070510,0 0 0 11px rgba(200,144,42,.06),0 60px 140px rgba(0,0,0,.9),0 0 80px rgba(100,60,200,.06);
 }
-.phone::before{content:'';position:absolute;top:14px;left:50%;transform:translateX(-50%);width:126px;height:36px;background:#050308;border-radius:22px;z-index:300}
+.phone::before{display:none}
 
 /* ══════════ SCREEN SYSTEM ══════════ */
 .screens{width:100%;height:100%;position:relative;overflow:hidden}
