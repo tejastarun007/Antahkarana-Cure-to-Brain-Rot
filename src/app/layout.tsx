@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Cormorant_Garamond, DM_Mono, DM_Sans, Noto_Serif_Devanagari } from 'next/font/google';
 import './globals.css';
+import { Analytics } from '@vercel/analytics/next';
+
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -50,7 +52,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${cormorant.variable} ${dmMono.variable} ${dmSans.variable} ${notoDeva.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
