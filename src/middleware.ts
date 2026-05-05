@@ -43,8 +43,9 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  // If user is logged in (or is a guest) and visits /, redirect to dashboard
-  if (request.nextUrl.pathname === '/' && (user || isGuest)) {
+  // If user is logged in and visits /, redirect to dashboard
+  // Guests always see the gateway so they can register or log in
+  if (request.nextUrl.pathname === '/' && user) {
     const url = request.nextUrl.clone()
     url.pathname = '/dashboard'
     return NextResponse.redirect(url)
