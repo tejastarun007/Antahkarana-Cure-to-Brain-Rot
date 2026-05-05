@@ -16,7 +16,7 @@ const ALL_SAVEABLE = [
   ...WISDOMS.map(w => ({id: w.id, sk: w.s, e: w.e, src: w.src})),
   ...WISDOM_CARDS,
 ];
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { TopBar } from '@/components/TopBar';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
@@ -28,6 +28,16 @@ export default function Profile() {
 
   const [notifMsg, setNotifMsg] = useState('');
   const [notifShow, setNotifShow] = useState(false);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const supabase = createClient();
+      const { data } = await supabase.auth.getUser();
+      setUser(data.user);
+    };
+    fetchUser();
+  }, []);
 
   const notify = (msg: string) => {
     setNotifMsg(msg);
@@ -185,8 +195,16 @@ export default function Profile() {
         </div>
 
         <div className="prof-acts">
-          <button className="btn btn-o" style={{width:'100%'}} onClick={() => notify('Profile editing coming soon ✨')}>✏️ Edit Profile</button>
-          <button className="btn btn-d" style={{width:'100%'}} onClick={doSignOut}>Sign Out</button>
+          <button className="btn btn-o" style={{width:'100%', marginBottom:'8px'}} onClick={() => notify('Profile editing coming soon ✨')}>✏️ Edit Profile</button>
+          {user === null ? (
+            <div style={{background:'rgba(200,144,42,.06)', border:'1px solid var(--bdr)', borderRadius:'14px', padding:'16px', textAlign:'center'}}>
+              <div style={{fontSize:'13px', color:'var(--gold2)', marginBottom:'6px', fontFamily:'var(--serif)'}}>Guest Session</div>
+              <div style={{fontSize:'12px', color:'var(--t2)', marginBottom:'12px', lineHeight:1.5}}>Create an account to back up your progress and streaks.</div>
+              <button className="btn btn-g" style={{width:'100%'}} onClick={() => { document.cookie = "guest_mode=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"; router.push('/'); }}>Sign Up / Log In</button>
+            </div>
+          ) : (
+            <button className="btn btn-d" style={{width:'100%'}} onClick={doSignOut}>Sign Out</button>
+          )}
         </div>
       </div>
       <div className={`notif ${notifShow ? 'show' : ''}`}>{notifMsg}</div>

@@ -35,15 +35,16 @@ export async function middleware(request: NextRequest) {
   const isProtected = protectedPaths.some((path) =>
     request.nextUrl.pathname.startsWith(path)
   )
+  const isGuest = request.cookies.has('guest_mode')
 
-  if (isProtected && !user) {
+  if (isProtected && !user && !isGuest) {
     const url = request.nextUrl.clone()
     url.pathname = '/'
     return NextResponse.redirect(url)
   }
 
-  // If user is logged in and visits /, redirect to dashboard
-  if (request.nextUrl.pathname === '/' && user) {
+  // If user is logged in (or is a guest) and visits /, redirect to dashboard
+  if (request.nextUrl.pathname === '/' && (user || isGuest)) {
     const url = request.nextUrl.clone()
     url.pathname = '/dashboard'
     return NextResponse.redirect(url)
