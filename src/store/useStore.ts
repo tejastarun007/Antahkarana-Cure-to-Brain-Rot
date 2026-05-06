@@ -14,6 +14,7 @@ export interface UserState {
   pranaMins: number;
   lastDay: string | null;
   userName: string;
+  hasSeenHabitHint: boolean;
 }
 
 interface AppState extends UserState {
@@ -24,6 +25,7 @@ interface AppState extends UserState {
   checkAndUpdateStreak: () => void;
   resetDailyIfNeeded: () => void;
   updateUserName: (name: string) => void;
+  markHabitHintSeen: () => void;
   syncFromServer: (state: Partial<UserState>) => void;
 }
 
@@ -42,6 +44,7 @@ export const useStore = create<AppState>()(
       pranaMins: 0,
       lastDay: null,
       userName: 'Seeker',
+      hasSeenHabitHint: false,
 
       addHabitDone: (id, mins, tradeoff) =>
         set((state) => {
@@ -163,6 +166,8 @@ export const useStore = create<AppState>()(
       },
 
       updateUserName: (name: string) => set({ userName: name }),
+
+      markHabitHintSeen: () => set({ hasSeenHabitHint: true }),
 
       resetDailyIfNeeded: () => {
         const state = get();

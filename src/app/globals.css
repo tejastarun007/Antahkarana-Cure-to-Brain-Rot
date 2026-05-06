@@ -651,3 +651,5 @@ body{display:flex;align-items:center;justify-content:center;font-family:var(--sa
 @media (min-width: 601px) {
   .phone { box-shadow: 0 0 0 1px rgba(200,144,42,.1), 0 40px 120px rgba(0,0,0,.7); }
 }
+
+@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }

@@ -34,6 +34,7 @@ export default function Practice() {
   };
 
   const handleHabClick = (h: any) => {
+    if (!store.hasSeenHabitHint) store.markHabitHintSeen();
     setCurHab(h);
     setHabModalOpen(true);
   };
@@ -132,10 +133,22 @@ export default function Practice() {
 
       <div className="sp-content">
         <div className="hab-grid-full">
-          {HABITS.filter(h => activePracTab === 'all' || h.cat === activePracTab).map(h => {
+          {HABITS.filter(h => activePracTab === 'all' || h.cat === activePracTab).map((h, i) => {
             const isDone = store.done.includes(h.id);
+            const showHint = i === 0 && !store.hasSeenHabitHint;
+            
             return (
-              <div className={`hc ${isDone ? 'done' : ''}`} key={h.id} onClick={() => handleHabClick(h)}>
+              <div className={`hc ${isDone ? 'done' : ''}`} key={h.id} onClick={() => handleHabClick(h)} style={{position: 'relative'}}>
+                {showHint && (
+                  <div style={{
+                    position: 'absolute', top: '-10px', right: '-10px', background: 'var(--gold2)', 
+                    color: '#000', fontSize: '10px', padding: '4px 8px', borderRadius: '12px', 
+                    fontWeight: 600, boxShadow: '0 4px 12px rgba(232, 184, 75, 0.4)',
+                    animation: 'bounce 2s infinite', zIndex: 10, pointerEvents: 'none'
+                  }}>
+                    Tap to view
+                  </div>
+                )}
                 <div className="hi" dangerouslySetInnerHTML={{__html: h.icon}}></div>
                 <div className="hn">{h.n}</div>
                 <div className="hd">{h.dur}</div>
