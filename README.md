@@ -1,39 +1,115 @@
-# Antahkarana — Cure to BrainRot
+<p align="center">
+  <img src="public/readme-hero.png" alt="Antahkarana — Digital Fragmentation vs Cognitive Restoration" width="480" />
+</p>
 
-> **A cognitive restoration platform grounded in Vedic neuroscience and modern behavioural research.**
+<h1 align="center">Antahkarana</h1>
 
-Antahkarana is a progressive web application designed to combat the measurable cognitive degradation caused by chronic digital overstimulation. The platform combines peer-reviewed neuroscience findings with time-tested practices from the Indian knowledge tradition to deliver a structured, habit-based intervention system accessible from any device.
+<p align="center">
+  <strong>अन्तःकरण — The Inner Instrument</strong><br/>
+  <em>A cognitive restoration platform grounded in Vedic neuroscience and modern behavioural research.</em>
+</p>
 
-The name *Antahkarana* (Sanskrit: अन्तःकरण) translates to "the inner instrument" — referring to the faculty of mind, intellect, memory, and ego that classical Indian philosophy identifies as the seat of human cognition.
+<p align="center">
+  <a href="https://antahkarana-cure-to-brain-rot.vercel.app"><img src="https://img.shields.io/badge/Live-antahkarana.vercel.app-0a0818?style=for-the-badge&logo=vercel&logoColor=white" alt="Live App" /></a>
+  <img src="https://img.shields.io/badge/Next.js-16.2-black?style=for-the-badge&logo=nextdotjs" alt="Next.js 16" />
+  <img src="https://img.shields.io/badge/React-19.2-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19" />
+  <img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Supabase-Auth+DB-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
+  <img src="https://img.shields.io/badge/PWA-Installable-FFD700?style=for-the-badge&logo=pwa&logoColor=black" alt="PWA" />
+  <img src="https://img.shields.io/github/license/tejastarun007/Antahkarana-Cure-to-Brain-Rot?style=for-the-badge" alt="License" />
+</p>
 
 ---
 
-## Motivation
+## The Problem
 
-Between 2004 and 2024, the average sustained attention span declined from 2.5 minutes to 65 seconds (Mark et al., 2016). Diffusion Tensor MRI studies reveal measurable thinning of the dorsolateral prefrontal cortex in heavy digital users, alongside a 35% reduction in impulse-control capacity as measured by EEG beta-wave variability (Loh & Kanai, 2014; Uncapher & Wagner, 2018).
+Between 2004 and 2024, the average human sustained attention span declined from **2.5 minutes to 65 seconds** (Mark et al., 2016). This is not a metaphor — it is a measurable, structural change in the brain.
 
-This project was built on the hypothesis that the same neuroplasticity responsible for this degradation can be leveraged for restoration — through deliberate, evidence-backed daily practices. Research from IISc Bangalore (2026), SVYASA University, and Harvard Medical School confirms that structured meditation, deep reading, and controlled breathing produce measurable increases in grey matter density, gamma-band coherence, and prefrontal cortical thickness within 8–12 weeks.
+Diffusion Tensor MRI studies reveal **measurable thinning of the dorsolateral prefrontal cortex (dlPFC)** in heavy digital users, accompanied by a **35% reduction in impulse-control capacity** as measured by EEG beta-wave variability (Loh & Kanai, 2014; Uncapher & Wagner, 2018). The anterior cingulate cortex (ACC), optimised for rapid task-switching, now dominates over the dlPFC — the seat of deep reasoning, long-term planning, and impulse control.
 
-Antahkarana operationalises these findings into a mobile-first daily practice system.
+### The Seven Neural Trade-Offs
+
+<p align="center">
+  <img src="public/readme-tradeoffs.png" alt="Seven Neural Trade-Off Systems" width="360" />
+</p>
+
+| # | Neural Trade-Off | Degradation | Vedic Parallel |
+|---|---|---|---|
+| 1 | **ACC vs dlPFC** — Deep Focus | 78% shift toward rapid-classification over deep reasoning | *Manas* overtaking *Buddhi* |
+| 2 | **Transactive Memory** — Deep Encoding | 82% shift — hippocampus stores *where* to find info, not the info itself | *Chitta* filling with metadata |
+| 3 | **Ventral vs Dorsal Attention** | 85% shift — silence feels physically uncomfortable | *Indriya-dosha* — senses pulled outward |
+| 4 | **Default Mode Network** — Suppressed | 80% suppression — self-reflection, identity formation degraded | *Ahamkara* without anchor |
+| 5 | **Language vs Visual Networks** | 75% shift — "I cannot read long articles anymore" has an MRI explanation | *Vak-shakti* degraded |
+| 6 | **Social vs Physical Threat Detection** | 88% shift — the safest generation is the most anxious | *Bhaya* — chronic fear state |
+| 7 | **Cognitive Prediction vs Motor Skill** | 70% imbalance — children on tablets show weaker grip strength | *Karma Yoga* neglected |
+
+These seven trade-offs are not independent. They compound. A person with suppressed DMN, degraded language processing, and hyperactive threat detection does not simply "focus less" — they lose the capacity for self-directed thought.
+
+### The Hypothesis
+
+The same **neuroplasticity** responsible for this degradation can be leveraged for restoration. Research from **IISc Bangalore** (2026), **SVYASA University**, and **Harvard Medical School** confirms that structured meditation, deep reading, and controlled breathing produce measurable increases in grey matter density, gamma-band coherence, and prefrontal cortical thickness within **8–12 weeks**.
+
+Antahkarana operationalises these findings into a **mobile-first daily practice system**.
+
+---
+
+## What Antahkarana Does
+
+### 🧘 Structured Daily Practices
+Nine evidence-backed habits — each mapped to a specific neural trade-off with cited neuroscience research:
+
+| Practice | Duration | Target Neural System | Source |
+|---|---|---|---|
+| Silent Meditation | 20 min | DMN reactivation, gamma coherence | IISc Bangalore (2026) |
+| Deep Reading | 1 hr | Language networks, PFC connectivity | Berns et al. (2013) |
+| Pranayama | 15 min | Amygdala regulation, HRV sync | Stanford Medicine, SVYASA |
+| Phoneless Walk | 45 min | Locus coeruleus tonic firing | Erickson et al. (2011) |
+| Naam Jap | 10 min | Hippocampal grey matter, ACC reset | Hartzell, Scientific American |
+| Hand Work | 20 min | Cerebellar-prefrontal connectivity | SVYASA Psychology Lab |
+| Unreachable Hour | 1 hr | DMN recovery threshold | Raichle et al. |
+| Handwriting | 15 min | Deep hippocampal encoding | The Sanskrit Effect |
+| Sleep Before Midnight | 7–9 hrs | Glymphatic clearance, PFC metabolism | Walker (2017), NIH |
+
+### 🧠 Interactive Brain Map
+An anatomically-aligned SVG brain visualisation with labelled regions — **Prefrontal Cortex**, **Hippocampus**, **Amygdala**, **ACC**, **Broca's Area**, **Cerebellum** — each expandable to show how digital overstimulation affects that specific region and what practice reverses it.
+
+### 📊 Cognitive Restoration Tracker
+Real-time progress visualisation across all seven neural trade-off dimensions, with percentage-based restoration scores updated as practices are completed.
+
+### 🔥 Streak & Milestone Engine
+Daily habit tracking with consecutive-day streak logic, a calendar heatmap, and eight milestone achievements — from *First Step* (1 task) to *The Quiet Inheritor* (30-day streak).
+
+### 📜 Anti-Scroll Wisdom Feed
+Full-screen cards with scroll-snap behaviour presenting Vedic teachings one at a time — with original Sanskrit, English translation, and source citation. No infinite feed. No algorithmic manipulation.
+
+### ⏳ "Time of Void" Transitions
+A 1.8-second mandala animation with rotating Vedic wisdom appears between every screen navigation — deliberately slowing the user's interaction to counteract compulsive tapping patterns.
+
+### 📈 1000-Year Cognitive Timeline
+Information processing rates from **1000 CE to 2024 CE** visualised across 12 historical eras, with expandable descriptions of how each technology shift reshaped neural architecture.
+
+### 🌍 Global Cognitive Spectrum
+OECD PIAAC-calibrated assessment of 8.1 billion humans across five cognitive processing tiers — from *Deep Thinkers* (1.2%, 320+ bits/sec) to *Cognitively Atrophied* (27%, <30 bits/sec).
 
 ---
 
 ## Technology Stack
 
 | Layer | Technology | Purpose |
-|-------|-----------|---------|
-| **Framework** | Next.js 16 (App Router) | Server-side rendering, file-based routing, middleware |
-| **Language** | TypeScript | Type safety across the full stack |
-| **Authentication** | Supabase Auth | Email/password and OAuth (Google, Apple) |
-| **Database** | Supabase (PostgreSQL) | User profiles, habit logs, streak tracking |
-| **State Management** | Zustand + persist middleware | Client-side state with localStorage persistence |
-| **Styling** | Vanilla CSS with custom design tokens | Vedic-inspired design system with no external UI libraries |
+|---|---|---|
+| **Framework** | Next.js 16.2 (App Router) | Server-side rendering, file-based routing, middleware |
+| **Language** | TypeScript 5.x | Full-stack type safety |
+| **UI Library** | React 19.2 | Component architecture with Server Components |
+| **Authentication** | Supabase Auth | Email/password + Google OAuth with SSR cookie sessions |
+| **Database** | Supabase (PostgreSQL) | User profiles, habit logs, streak persistence |
+| **State** | Zustand 5 + persist middleware | Client-side state with localStorage hydration |
+| **Styling** | Vanilla CSS + custom design tokens | Vedic-inspired design system — zero external UI libraries |
 | **Typography** | Google Fonts (Cormorant Garamond, DM Sans, DM Mono, Noto Serif Devanagari) | Multi-script rendering for English and Sanskrit |
-| **PWA** | next-pwa + Web App Manifest | Offline capability, home screen installation, native-like experience |
+| **PWA** | next-pwa + Web App Manifest | Offline capability, home screen install, native-like UX |
 | **Audio** | Web Audio API + HTML5 Audio | Meditation timer with synthesised bell fallback |
-| **Hosting** | Vercel | Edge deployment with automatic SSL and global CDN |
-| **Analytics** | Plausible / Umami | Privacy-first, cookie-free analytics |
+| **Analytics** | Vercel Analytics | Privacy-respecting, zero-config performance analytics |
 | **Error Tracking** | Sentry | Real-time error monitoring and performance tracing |
+| **Hosting** | Vercel | Edge deployment with automatic SSL, global CDN |
 
 ---
 
@@ -42,54 +118,65 @@ Antahkarana operationalises these findings into a mobile-first daily practice sy
 ```
 src/
 ├── app/
-│   ├── page.tsx                 # Gateway (authentication screen)
-│   ├── layout.tsx               # Root layout with font loading and metadata
-│   ├── globals.css              # Design system — tokens, components, animations
-│   └── (app)/                   # Protected route group
-│       ├── layout.tsx           # Persistent shell (bottom navigation)
-│       ├── dashboard/page.tsx   # Home — daily progress and habit tracking
-│       ├── practice/page.tsx    # Timer, habit completion, session logging
-│       ├── wisdom/page.tsx      # Anti-scroll feed with Vedic teachings
-│       ├── science/page.tsx     # Research data across 7 tabbed sections
-│       └── profile/page.tsx     # Progress visualisation and milestones
+│   ├── page.tsx                    # Gateway — progressive disclosure onboarding
+│   ├── layout.tsx                  # Root layout — font loading, metadata, analytics
+│   ├── globals.css                 # Design system — tokens, components, 2000+ lines
+│   ├── auth/callback/              # OAuth callback handler (Google)
+│   └── (app)/                      # Protected route group
+│       ├── layout.tsx              # App shell — persistent bottom navigation
+│       ├── dashboard/page.tsx      # Home — daily progress, habit cards, streak
+│       ├── practice/page.tsx       # Timer sessions, habit completion logging
+│       ├── wisdom/page.tsx         # Anti-scroll feed — Sanskrit with translations
+│       ├── science/page.tsx        # Research — brain map, timeline, 8 tabbed sections
+│       └── profile/page.tsx        # Progress visualisation, milestones, guest→signup
 ├── components/
-│   ├── BottomNav.tsx            # Navigation with intentional transition overlay
-│   └── TopBar.tsx               # Status bar component
+│   ├── BottomNav.tsx               # Navigation with "Time of Void" transition overlay
+│   └── TopBar.tsx                  # Status bar component
 ├── data/
-│   └── content.ts               # Modular content repository (quotes, research, habits)
+│   └── content.ts                  # Modular content repository — all habits, wisdoms,
+│                                   #   trade-offs, eras, tiers, timer sessions, milestones
 ├── lib/
-│   ├── audio.ts                 # Hybrid audio engine (file + WebAudio fallback)
+│   ├── audio.ts                    # Hybrid audio engine (file + WebAudio synthesis)
 │   └── supabase/
-│       ├── client.ts            # Browser-side Supabase client
-│       └── server.ts            # Server-side Supabase client (cookie-based sessions)
+│       ├── client.ts               # Browser-side Supabase client
+│       └── server.ts               # Server-side Supabase client (cookie-based sessions)
 ├── store/
-│   └── useStore.ts              # Zustand store with persistence middleware
-└── middleware.ts                # Route protection — redirects unauthenticated users
+│   └── useStore.ts                 # Zustand store — streaks, habits, timer, sync
+└── middleware.ts                   # Route protection — auth + guest mode bypass
 ```
 
----
+### Authentication Flow
 
-## Key Features
+```
+New User → Gateway (page.tsx)
+  ├── "Begin the Journey" → Guest Mode (cookie: guest_mode=true) → Dashboard
+  ├── Google OAuth → /auth/callback → Dashboard
+  └── Email/Password → Supabase Auth → Dashboard
 
-### Cognitive Restoration System
-- **Seven Neural Trade-Off Tracking** — monitors restoration progress across attention, memory, impulse control, self-reflection, empathy, sleep quality, and creative synthesis, mapped to peer-reviewed neuroimaging research.
-- **Structured Daily Practices** — meditation, deep reading, pranayama, walking, journaling, and digital fasting with Sanskrit names and neuroscience-backed impact data.
-- **Streak and Consistency Engine** — daily habit completion tracking with a calendar view and milestone achievements.
+Guest Mode:
+  ├── Full app access with localStorage persistence
+  ├── Profile page shows "Create Account" prompt to sync progress
+  └── Middleware allows protected routes when guest_mode cookie exists
 
-### Intentional UX Design
-- **"Time of Void" Transitions** — navigation between screens includes a 1.8-second mandala animation with a rotating Vedic wisdom quote, deliberately slowing the user's interaction to counteract compulsive tapping patterns.
-- **Anti-Scroll Wisdom Feed** — full-screen wisdom cards with scroll-snap behaviour, presenting one teaching at a time to prevent doom-scrolling.
-- **No Infinite Feeds** — every content section is finite and intentionally paced.
+Returning User → Middleware detects session → auto-redirect to Dashboard
+```
 
-### Research Section
-- **1000-Year Cognitive Timeline** — information processing rates from 1000 CE to 2024 CE with expandable era descriptions.
-- **MRI and EEG Evidence** — cited findings from PLoS ONE, PNAS, IISc Bangalore, and SVYASA University.
-- **Global Cognitive Spectrum** — OECD PIAAC-calibrated assessment of 8.1 billion humans across five processing tiers.
+### State Management
 
-### Progressive Web App
-- **Installable** — add to home screen on iOS and Android for a native-like experience.
-- **Offline-Ready** — service worker caches the application shell for reliable access without connectivity.
-- **Responsive** — designed for mobile-first with a 390×844 viewport and adaptive scaling.
+```
+Zustand Store (persisted to localStorage as 'ank_f')
+  ├── done[]         — completed habit IDs for today
+  ├── streak         — consecutive practice days
+  ├── totalTasks     — lifetime completed habits
+  ├── totalMins      — lifetime practice minutes
+  ├── restored[7]    — neural trade-off restoration scores (0–100%)
+  ├── hist[]         — daily practice calendar heatmap data
+  ├── favs[]         — bookmarked wisdom cards
+  ├── readMins       — deep reading minutes (milestone tracking)
+  ├── medMins        — meditation minutes (milestone tracking)
+  ├── pranaMins      — pranayama minutes (milestone tracking)
+  └── lastDay        — streak continuity check
+```
 
 ---
 
@@ -97,14 +184,14 @@ src/
 
 ### Prerequisites
 
-- Node.js 18+ and npm
-- A Supabase account ([supabase.com](https://supabase.com))
+- **Node.js 18+** and npm
+- A free [Supabase](https://supabase.com) account
 
 ### Installation
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/antahkarana.git
-cd antahkarana
+git clone https://github.com/tejastarun007/Antahkarana-Cure-to-Brain-Rot.git
+cd Antahkarana-Cure-to-Brain-Rot
 npm install
 ```
 
@@ -117,7 +204,7 @@ NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-public-key
 ```
 
-You can find these values in your Supabase Dashboard under **Settings → API**.
+Find these values in your Supabase Dashboard → **Settings → API**.
 
 ### Running Locally
 
@@ -125,7 +212,7 @@ You can find these values in your Supabase Dashboard under **Settings → API**.
 npm run dev
 ```
 
-The application will be available at `http://localhost:3000`.
+Open `http://localhost:3000`. Guest mode works immediately — no Supabase configuration required for exploration.
 
 ### Building for Production
 
@@ -138,66 +225,64 @@ npm start
 
 ## Deployment
 
-This project is optimised for deployment on [Vercel](https://vercel.com):
+Optimised for [Vercel](https://vercel.com):
 
-1. Push the repository to GitHub.
-2. Import the project on Vercel.
-3. Add the environment variables (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`).
-4. Deploy.
+1. Push repository to GitHub
+2. Import on Vercel
+3. Add environment variables (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`)
+4. Deploy — Vercel auto-detects Next.js, handles builds, provides SSL and global CDN
 
-Vercel will automatically detect the Next.js framework, handle the build process, and provide a production URL with SSL.
+### Post-Deployment
 
-### Post-Deployment Configuration
+Update in your Supabase Dashboard:
 
-After deploying, update the following in your Supabase Dashboard:
-
-- **Authentication → URL Configuration → Site URL**: Set to your production domain.
-- **Authentication → URL Configuration → Redirect URLs**: Add your production domain with a wildcard pattern (e.g., `https://yourdomain.com/**`).
+- **Authentication → URL Configuration → Site URL**: Your production domain
+- **Authentication → URL Configuration → Redirect URLs**: `https://yourdomain.com/**`
+- **Authentication → Providers → Google**: Enable and configure OAuth credentials
 
 ---
 
 ## Research References
 
-This project synthesises findings from the following published research:
-
-| Study | Citation |
-|-------|----------|
+| Domain | Citation |
+|---|---|
 | Attention span decline | Mark, G., Gudith, D., & Klocke, U. (2016). *The Cost of Interrupted Work*. CHI Conference. |
 | Prefrontal cortex thinning | Loh, K. K., & Kanai, R. (2014). *Higher Media Multi-Tasking Activity Is Associated with Smaller Gray-Matter Density in the ACC*. PLoS ONE. |
 | Media multitasking deficits | Uncapher, M. R., & Wagner, A. D. (2018). *Minds and Brains of Media Multitaskers*. PNAS. |
-| Meditation and gamma activity | IISc Centre for Neuroscience, Bangalore (2026). *Long-term Meditation and Neural Coherence*. |
-| Sanskrit memorisation and cortical density | Hartzell, J. F. et al. (2018). *The Sanskrit Effect*. Scientific American. |
-| Sleep and cognitive restoration | Walker, M. (2017). *Why We Sleep*. Penguin Books. |
+| Meditation & gamma activity | IISc Centre for Neuroscience, Bangalore (2026). *Long-term Meditation and Neural Coherence*. |
+| Sanskrit & cortical density | Hartzell, J. F. et al. (2018). *The Sanskrit Effect*. Scientific American. |
+| Sleep & cognitive restoration | Walker, M. (2017). *Why We Sleep*. Penguin Books. |
 | Information processing evolution | Hilbert, M., & López, P. (2011). *The World's Technological Capacity*. Science, 332(6025). |
 | Smartphone cognitive drain | Ward, A. F. et al. (2017). *Brain Drain*. Journal of the Association for Consumer Research. |
-| Global literacy and cognition | OECD PIAAC (2023). *Survey of Adult Skills*. 39 countries, 250,000 participants. |
-| Pranayama and fNIRS | SVYASA University (2024). *Functional Near-Infrared Spectroscopy Studies on Yogic Breathing*. |
+| Global literacy & cognition | OECD PIAAC (2023). *Survey of Adult Skills*. 39 countries, 250,000 participants. |
+| Pranayama & fNIRS | SVYASA University (2024). *Functional Near-Infrared Spectroscopy Studies on Yogic Breathing*. |
+| Hippocampal neurogenesis | Erickson, K. I. et al. (2011). *Exercise Training Increases Size of Hippocampus*. PNAS. |
+| Novel reading & connectivity | Berns, G. S. et al. (2013). *Short- and Long-Term Effects of a Novel on Connectivity in the Brain*. Brain Connectivity. |
 
 ---
 
-## Project Structure
+## UX Philosophy
 
-```
-antahkarana/
-├── public/                      # Static assets (manifest, icons, audio)
-├── src/                         # Application source code
-├── .env.local                   # Environment variables (not committed)
-├── next.config.ts               # Next.js + PWA configuration
-├── tsconfig.json                # TypeScript configuration
-├── package.json                 # Dependencies and scripts
-└── README.md                    # This file
-```
+Antahkarana is designed to be the **opposite of every engagement-optimised app**:
+
+- **No infinite scroll** — every content section is finite and intentionally paced
+- **No notifications** — the app never pulls you back
+- **No gamification loops** — streaks exist for self-accountability, not dopamine exploitation
+- **Deliberate friction** — the 1.8s transition between screens is intentional, not a performance issue
+- **Guest-first onboarding** — explore everything before creating an account; no gates, no paywalls
+- **Sanskrit as interface language** — not decoration, but a deliberate cognitive re-patterning tool (Hartzell, 2018)
 
 ---
 
 ## Contributing
 
-Contributions are welcome. Please ensure all pull requests:
+Contributions are welcome. All pull requests must:
 
-1. Follow the existing code style and design token system.
-2. Do not introduce external CSS frameworks or UI libraries.
-3. Include proper TypeScript types for any new components or utilities.
-4. Preserve the intentional, non-instant-gratification UX philosophy.
+1. Follow the existing vanilla CSS design token system — no external CSS frameworks or UI libraries
+2. Include proper TypeScript types for all new components and utilities
+3. Preserve the intentional, non-instant-gratification UX philosophy
+4. Cite peer-reviewed sources for any new neuroscience claims
+5. Test on mobile viewports (primary target: 390×844)
 
 ---
 
