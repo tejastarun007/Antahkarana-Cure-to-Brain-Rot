@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { TopBar } from '@/components/TopBar';
 import { playBell } from '@/lib/audio';
 
+import { ClickHand } from '@/components/ClickHand';
+
 export default function Practice() {
   const store = useStore();
   const [activePracTab, setActivePracTab] = useState('all');
@@ -146,11 +148,11 @@ export default function Practice() {
               <div className={`hc ${isDone ? 'done' : ''}`} key={h.id} onClick={() => handleHabClick(h)} style={{position: 'relative'}}>
                 {showHint && (
                   <div style={{
-                    position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-                    fontSize: '32px', animation: 'bounce 2s infinite', zIndex: 10, pointerEvents: 'none',
+                    position: 'absolute', bottom: '12px', right: '12px',
+                    animation: 'bounce 2s infinite', zIndex: 10, pointerEvents: 'none',
                     filter: 'drop-shadow(0 4px 12px rgba(232, 184, 75, 0.4))'
                   }}>
-                    👆
+                    <ClickHand style={{width:'24px', height:'24px', color:'var(--gold2)'}} />
                   </div>
                 )}
                 <div className="hi" dangerouslySetInnerHTML={{__html: h.icon}}></div>

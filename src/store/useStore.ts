@@ -15,6 +15,7 @@ export interface UserState {
   lastDay: string | null;
   userName: string;
   hasSeenHabitHint: boolean;
+  hasSeenScienceHint: boolean;
 }
 
 interface AppState extends UserState {
@@ -26,6 +27,7 @@ interface AppState extends UserState {
   resetDailyIfNeeded: () => void;
   updateUserName: (name: string) => void;
   markHabitHintSeen: () => void;
+  markScienceHintSeen: () => void;
   syncFromServer: (state: Partial<UserState>) => void;
 }
 
@@ -45,6 +47,7 @@ export const useStore = create<AppState>()(
       lastDay: null,
       userName: 'Seeker',
       hasSeenHabitHint: false,
+      hasSeenScienceHint: false,
 
       addHabitDone: (id, mins, tradeoff) =>
         set((state) => {
@@ -168,6 +171,7 @@ export const useStore = create<AppState>()(
       updateUserName: (name: string) => set({ userName: name }),
 
       markHabitHintSeen: () => set({ hasSeenHabitHint: true }),
+      markScienceHintSeen: () => set({ hasSeenScienceHint: true }),
 
       resetDailyIfNeeded: () => {
         const state = get();
