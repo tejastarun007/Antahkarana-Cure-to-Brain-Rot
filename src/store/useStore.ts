@@ -21,6 +21,7 @@ interface AppState extends UserState {
   toggleFav: (id: string) => void;
   logTimerSession: (mins: number) => void;
   checkAndUpdateStreak: () => void;
+  resetDailyIfNeeded: () => void;
   syncFromServer: (state: Partial<UserState>) => void;
 }
 
@@ -43,7 +44,7 @@ export const useStore = create<AppState>()(
         set((state) => {
           const newRestored = [...state.restored];
           newRestored[tradeoff] = Math.min(100, (newRestored[tradeoff] || 0) + 7);
-          
+
           const today = new Date().toDateString();
           const newHist = [...state.hist];
           let h = newHist.find((x) => x.date === today);
@@ -59,7 +60,7 @@ export const useStore = create<AppState>()(
             const yesterday = new Date();
             yesterday.setDate(yesterday.getDate() - 1);
             const yesterdayStr = yesterday.toDateString();
-            
+
             if (state.lastDay === yesterdayStr) {
               // Consecutive day — increment streak
               newStreak = state.streak + 1;
@@ -126,7 +127,7 @@ export const useStore = create<AppState>()(
             const yesterday = new Date();
             yesterday.setDate(yesterday.getDate() - 1);
             const yesterdayStr = yesterday.toDateString();
-            
+
             if (state.lastDay === yesterdayStr) {
               newStreak = state.streak + 1;
             } else if (state.lastDay === null) {
@@ -157,11 +158,29 @@ export const useStore = create<AppState>()(
           }
         }
       },
+
+      resetDailyIfNeeded: () => {
+        const state = get();
+        const today = new Date().toDateString();
+        if (state.lastDay && state.lastDay !== today) {
+          // New day — reset today's completions
+          set({ done: [] });
+        }
+      },
         
       syncFromServer: (serverState) => set((state) => ({ ...state, ...serverState })),
     }),
     {
       name: 'ank_f',
+      onRehydrateStorage: () => {
+        return (state) => {
+          // After hydrating from localStorage, check if it's a new day
+          if (state) {
+            state.resetDailyIfNeeded();
+            state.checkAndUpdateStreak();
+          }
+        };
+      },
     }
   )
 );

@@ -105,8 +105,8 @@ export default function Profile() {
           {[
             {n:'Meditation', val:store.medMins||0, max:300, unit:'mins', cls:'pfill-v'},
             {n:'Deep Reading', val:Math.floor((store.readMins||0) / 60), max:50, unit:'sessions', cls:'pfill-s'},
+            {n:'Pranayama', val:store.pranaMins||0, max:200, unit:'mins', cls:'pfill-g'},
             {n:'Total Sadhana', val:store.totalTasks||0, max:100, unit:'sessions', cls:'pfill-g'},
-            {n:'Practices Completed', val:store.totalTasks||0, max:100, unit:'sessions', cls:'pfill-g'},
             {n:'Day Streak', val:store.streak||0, max:30, unit:'days', cls:'pfill-g'},
           ].map((p, i) => (
             <div key={i} className="pi"><div className="pi-h"><div className="pi-n">{p.n}</div><div className="pi-v">{p.val} / {p.max} {p.unit}</div></div><div className="pbar"><div className={`pfill ${p.cls}`} style={{width:`${Math.min(100,Math.round(p.val/p.max*100))}%`}}></div></div></div>
