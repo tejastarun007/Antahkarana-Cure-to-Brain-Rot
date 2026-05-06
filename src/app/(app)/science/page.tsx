@@ -100,15 +100,6 @@ export default function Science() {
 
                 {/* ═══ TAPPABLE BRAIN REGIONS ═══ */}
 
-                {/* Hint Hand for PFC */}
-                {mounted && !store.hasSeenScienceHint && (
-                  <foreignObject x="135" y="80" width="40" height="40" style={{ pointerEvents: 'none', zIndex: 10 }}>
-                    <div style={{ animation: 'bounce 2s infinite', filter: 'drop-shadow(0 4px 12px rgba(232, 184, 75, 0.4))' }}>
-                      <ClickHand style={{ width: '36px', height: '36px', color: 'var(--gold2)' }} />
-                    </div>
-                  </foreignObject>
-                )}
-
                 {/* Prefrontal Cortex — front-top of brain */}
                 <g onClick={() => handleRegionClick('pfc')} style={{ cursor: 'pointer' }}>
                   <ellipse cx="160" cy="105" rx="38" ry="50" fill={selectedRegion === 'pfc' ? '#e8b84b28' : '#e8b84b0a'}
@@ -284,15 +275,6 @@ export default function Science() {
                 const r = Math.round(80 + warm * 175), g = Math.round(100 - warm * 90), b = Math.round(60 - warm * 50);
                 return (
                   <div key={i} style={{ position: 'relative' }}>
-                    {mounted && !store.hasSeenScienceHint && i === 0 && (
-                      <div style={{
-                        position: 'absolute', top: '10px', right: '10px',
-                        animation: 'bounce 2s infinite', zIndex: 10, pointerEvents: 'none',
-                        filter: 'drop-shadow(0 4px 12px rgba(232, 184, 75, 0.4))'
-                      }}>
-                        <ClickHand style={{width:'20px', height:'20px', color:'var(--gold2)'}} />
-                      </div>
-                    )}
                     <div className="era-row2" onClick={() => {
                       if (!store.hasSeenScienceHint) store.markScienceHintSeen();
                       setOpenEra(openEra === i ? -1 : i);
@@ -332,15 +314,6 @@ export default function Science() {
                 if (!store.hasSeenScienceHint) store.markScienceHintSeen();
                 setOpenTO(openTO === i ? -1 : i);
               }}>
-                {mounted && !store.hasSeenScienceHint && i === 0 && (
-                  <div style={{
-                    position: 'absolute', top: '12px', right: '12px',
-                    animation: 'bounce 2s infinite', zIndex: 10, pointerEvents: 'none',
-                    filter: 'drop-shadow(0 4px 12px rgba(232, 184, 75, 0.4))'
-                  }}>
-                    <ClickHand style={{width:'20px', height:'20px', color:'var(--gold2)'}} />
-                  </div>
-                )}
                 <div className="to-h2"><div><div className="to-n2">{t.n}</div><div className="to-v2">{t.vedic}</div></div><div className="to-p2">{t.pct}% shifted</div></div>
                 <div className="to-bar2"><div className="to-r2" style={{ width: '0%' }}></div><div className="to-d2" style={{ width: `${t.pct}%`, left: '0%' }}></div></div>
                 <div className={`to-exp2 ${openTO === i ? 'open' : ''}`}><p>{t.desc}</p><div className="to-fix">Practice: {t.fix}</div></div>
