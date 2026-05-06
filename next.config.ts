@@ -1,16 +1,19 @@
 import type { NextConfig } from "next";
-// @ts-expect-error next-pwa doesn't have types out of the box
-import withPWAInit from "next-pwa";
+import withPWAInit from "@ducanh2912/next-pwa";
 
 const withPWA = withPWAInit({
   dest: "public",
   disable: process.env.NODE_ENV === "development",
   register: true,
-  skipWaiting: true,
+  cacheOnFrontEndNav: true,
+  aggressiveFrontEndNavCaching: true,
+  workboxOptions: {
+    // We want to ensure audio/media and static content are heavily cached for offline use
+    disableDevLogs: true,
+  }
 });
 
 const nextConfig: NextConfig = {
-  turbopack: {},
   /* config options here */
 };
 
