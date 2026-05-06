@@ -30,6 +30,9 @@ export default function Profile() {
   const [notifShow, setNotifShow] = useState(false);
   const [user, setUser] = useState<any>(null);
 
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [tempName, setTempName] = useState('');
+
   useEffect(() => {
     const fetchUser = async () => {
       const supabase = createClient();
@@ -54,6 +57,14 @@ export default function Profile() {
     }
   };
 
+  const saveName = () => {
+    if (tempName.trim()) {
+      store.updateUserName(tempName.trim());
+      notify('Name updated ✨');
+    }
+    setIsEditingName(false);
+  };
+
   // Profile Calculation
   const calcScore = () => {
     const r = TRADEOFFS.reduce((a, t, i) => a + Math.min(store.restored[i] || 0, t.pct), 0);
@@ -73,8 +84,27 @@ export default function Profile() {
       <div className="spf-content">
         <div className="prof-hero">
           <div className="avatar">🧘</div>
-          <div>
-            <div className="prof-name">Seeker</div>
+          <div style={{ flex: 1 }}>
+            {isEditingName ? (
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '4px' }}>
+                <input 
+                  type="text" 
+                  value={tempName} 
+                  onChange={(e) => setTempName(e.target.value)}
+                  maxLength={20}
+                  autoFocus
+                  onBlur={saveName}
+                  onKeyDown={(e) => e.key === 'Enter' && saveName()}
+                  style={{
+                    background: 'rgba(255,255,255,0.05)', border: '1px solid var(--gold2)', 
+                    color: 'var(--gold2)', borderRadius: '6px', padding: '4px 8px', 
+                    fontSize: '18px', fontFamily: 'var(--serif)', width: '140px', outline: 'none'
+                  }}
+                />
+              </div>
+            ) : (
+              <div className="prof-name">{store.userName || 'Seeker'}</div>
+            )}
             <div className="prof-tier">◈ {['Tamas','Pramaada','Mumukshu','Jijnasu','Sadhaka'][Math.floor(Math.min(sc,99)/20)]} · Tier {Math.floor(sc/20)+1}</div>
             <div className="prof-streak">🔥 <span>{store.streak}</span> day streak</div>
           </div>
@@ -195,7 +225,7 @@ export default function Profile() {
         </div>
 
         <div className="prof-acts">
-          <button className="btn btn-o" style={{width:'100%', marginBottom:'8px'}} onClick={() => notify('Profile editing coming soon ✨')}>✏️ Edit Profile</button>
+          <button className="btn btn-o" style={{width:'100%', marginBottom:'8px'}} onClick={() => { setTempName(store.userName || 'Seeker'); setIsEditingName(true); }}>✏️ Edit Profile</button>
           {user === null ? (
             <div style={{background:'rgba(200,144,42,.06)', border:'1px solid var(--bdr)', borderRadius:'14px', padding:'16px', textAlign:'center'}}>
               <div style={{fontSize:'13px', color:'var(--gold2)', marginBottom:'6px', fontFamily:'var(--serif)'}}>Guest Session</div>

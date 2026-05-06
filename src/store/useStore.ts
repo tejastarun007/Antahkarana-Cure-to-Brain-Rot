@@ -13,6 +13,7 @@ export interface UserState {
   medMins: number;
   pranaMins: number;
   lastDay: string | null;
+  userName: string;
 }
 
 interface AppState extends UserState {
@@ -22,6 +23,7 @@ interface AppState extends UserState {
   logTimerSession: (mins: number) => void;
   checkAndUpdateStreak: () => void;
   resetDailyIfNeeded: () => void;
+  updateUserName: (name: string) => void;
   syncFromServer: (state: Partial<UserState>) => void;
 }
 
@@ -39,6 +41,7 @@ export const useStore = create<AppState>()(
       medMins: 0,
       pranaMins: 0,
       lastDay: null,
+      userName: 'Seeker',
 
       addHabitDone: (id, mins, tradeoff) =>
         set((state) => {
@@ -158,6 +161,8 @@ export const useStore = create<AppState>()(
           }
         }
       },
+
+      updateUserName: (name: string) => set({ userName: name }),
 
       resetDailyIfNeeded: () => {
         const state = get();

@@ -26,10 +26,11 @@ export default function Dashboard() {
   // Time-aware greeting
   const greeting = useMemo(() => {
     const h = new Date().getHours();
-    if (h < 12) return 'Good morning, Seeker';
-    if (h < 17) return 'Good afternoon, Seeker';
-    return 'Good evening, Seeker';
-  }, []);
+    const name = store.userName || 'Seeker';
+    if (h < 12) return `Good morning, ${name}`;
+    if (h < 17) return `Good afternoon, ${name}`;
+    return `Good evening, ${name}`;
+  }, [store.userName]);
 
   // Profile Calculation
   const calcScore = () => {
