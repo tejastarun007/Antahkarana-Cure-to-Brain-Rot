@@ -1,7 +1,7 @@
 'use client';
 import { useStore } from '@/store/useStore';
 import { HABITS, TIMER_SESSIONS, TIMER_PHASES } from '@/data/content';
-import { useMemo, useState, useRef } from 'react';
+import { useMemo, useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { TopBar } from '@/components/TopBar';
 import { playBell } from '@/lib/audio';
@@ -9,6 +9,11 @@ import { playBell } from '@/lib/audio';
 export default function Practice() {
   const store = useStore();
   const [activePracTab, setActivePracTab] = useState('all');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const [notifMsg, setNotifMsg] = useState('');
   const [notifShow, setNotifShow] = useState(false);
@@ -135,18 +140,17 @@ export default function Practice() {
         <div className="hab-grid-full">
           {HABITS.filter(h => activePracTab === 'all' || h.cat === activePracTab).map((h, i) => {
             const isDone = store.done.includes(h.id);
-            const showHint = i === 0 && !store.hasSeenHabitHint;
+            const showHint = mounted && i === 0 && !store.hasSeenHabitHint;
             
             return (
               <div className={`hc ${isDone ? 'done' : ''}`} key={h.id} onClick={() => handleHabClick(h)} style={{position: 'relative'}}>
                 {showHint && (
                   <div style={{
-                    position: 'absolute', top: '-10px', right: '-10px', background: 'var(--gold2)', 
-                    color: '#000', fontSize: '10px', padding: '4px 8px', borderRadius: '12px', 
-                    fontWeight: 600, boxShadow: '0 4px 12px rgba(232, 184, 75, 0.4)',
-                    animation: 'bounce 2s infinite', zIndex: 10, pointerEvents: 'none'
+                    position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+                    fontSize: '32px', animation: 'bounce 2s infinite', zIndex: 10, pointerEvents: 'none',
+                    filter: 'drop-shadow(0 4px 12px rgba(232, 184, 75, 0.4))'
                   }}>
-                    Tap to view
+                    👆
                   </div>
                 )}
                 <div className="hi" dangerouslySetInnerHTML={{__html: h.icon}}></div>
