@@ -44,7 +44,7 @@ export default function Wisdom() {
     <div className="screen on" id="sw">
       <TopBar />
       <div className="wf-header">
-        <div className="wf-hl"><h2>The<br/>Anti‑Scroll</h2><div className="sub">Intentional Wisdom · Slow Down</div></div>
+        <div className="wf-hl"><h2><span style={{ color: 'var(--gold2)' }}>The<br/>Anti‑Scroll</span></h2><div className="sub">Intentional Wisdom · Slow Down</div></div>
         <div className="wf-count"><span>{wfNum}</span>/7</div>
       </div>
 

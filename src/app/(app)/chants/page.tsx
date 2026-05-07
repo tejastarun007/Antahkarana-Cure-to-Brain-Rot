@@ -6,34 +6,34 @@ const TRACK_GROUPS = [
   {
     label: "5-Minute Quick Center",
     tracks: [
-      {icon:"🕉️", name:"Om Namah Shivaya",   artist:"Sacred Chant", src:"/audio/om_namah_shivaya.mp3",   tag:"Morning Sadhana",  tot:"5:00",  sec:300},
-      {icon:"🌸", name:"Gayatri Mantra",     artist:"Deva Premal", src:"/audio/gayatri_mantra.mp3",     tag:"Solar Activation", tot:"5:00",  sec:300},
-      {icon:"🔔", name:"Om Mani Padme Hum",  artist:"Tibetan Monks", src:"/audio/om_mani_padme_hum.mp3",  tag:"Deep Healing",     tot:"5:00",  sec:300},
-      {icon:"🌙", name:"Mahamrityunjaya",    artist:"Healing Chant", src:"/audio/mahamrityunjaya.mp3",   tag:"Protection Chant", tot:"5:00",  sec:300},
-      {icon:"☀️", name:"Surya Namaskar",     artist:"Morning Raga", src:"/audio/surya_namaskar.mp3",    tag:"Sun Salutation",   tot:"5:00",  sec:300},
-      {icon:"🕊️", name:"Shanti Mantra",      artist:"Vedic Scholars", src:"/audio/shanti_mantra.mp3",   tag:"Peace Invocation", tot:"5:00",  sec:300},
+      {icon: <span style={{fontFamily:'var(--deva)',fontSize:'22px',lineHeight:1}}>ॐ</span>, name:"Om Namah Shivaya", artist:"Chantress Seba · 432Hz Sacred", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", tag:"Morning Sadhana", tot:"5:00", sec:300},
+      {icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 22c4-4 8-8 8-12a8 8 0 00-16 0c0 4 4 8 8 12z"/><path d="M12 22c-4-8-2-14 0-18 2 4 4 10 0 18z"/></svg>, name:"Gayatri Mantra", artist:"Deva Premal · Sunrise", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", tag:"Solar Activation", tot:"5:00", sec:300},
+      {icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>, name:"Om Mani Padme Hum", artist:"Tibetan Monks · 528Hz", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", tag:"Deep Healing", tot:"5:00", sec:300},
+      {icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>, name:"Mahamrityunjaya", artist:"Chantress Seba · Healing", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3", tag:"Protection Chant", tot:"5:00", sec:300},
+      {icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>, name:"Surya Namaskar", artist:"Morning Raga · Pure", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3", tag:"Sun Salutation", tot:"5:00", sec:300},
+      {icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/></svg>, name:"Shanti Mantra", artist:"Vedic Scholars", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3", tag:"Peace Invocation", tot:"5:00", sec:300},
     ]
   },
   {
     label: "10-Minute Deep Dive",
     tracks: [
-      {icon:"🐘", name:"Ganesh Maha Mantra", artist:"Sounds of Isha", src:"/audio/ganesh_mantra.mp3",       tag:"Obstacle Removal", tot:"10:00", sec:600},
-      {icon:"📚", name:"Saraswati Beej",     artist:"Focus Chant", src:"/audio/saraswati_beej.mp3",    tag:"Intellect & Flow", tot:"10:00", sec:600},
-      {icon:"🗡️", name:"Durga Suktam",       artist:"Vedic Chants", src:"/audio/durga_suktam.mp3",        tag:"Inner Strength",   tot:"10:00", sec:600},
-      {icon:"🌿", name:"Medicine Buddha",    artist:"Tibetan Bowls", src:"/audio/medicine_buddha.mp3",     tag:"Cellular Healing", tot:"10:00", sec:600},
-      {icon:"💚", name:"Green Tara Mantra",  artist:"Himalayan Monks", src:"/audio/green_tara.mp3",         tag:"Compassion",       tot:"10:00", sec:600},
-      {icon:"🌀", name:"Shiva Tandava",      artist:"Agni Ritual", src:"/audio/shiva_tandava.mp3",        tag:"Dynamic Energy",   tot:"10:00", sec:600},
+      {icon: <span style={{fontFamily:'var(--deva)',fontSize:'20px',lineHeight:1}}>गं</span>, name:"Ganesh Maha Mantra", artist:"Sounds of Isha", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3", tag:"Obstacle Removal", tot:"10:00", sec:600},
+      {icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>, name:"Saraswati Beej", artist:"432Hz Focus", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3", tag:"Intellect & Flow", tot:"10:00", sec:600},
+      {icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M14.5 17.5L6.5 9.5M17.5 14.5 22 22l-7.5-4.5L14.5 17.5zM18 11l-7 7M10 13l3-3M6 10l-4-4 4-4 4 4-4 4z"/></svg>, name:"Durga Suktam", artist:"Vedic Chants", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3", tag:"Inner Strength", tot:"10:00", sec:600},
+      {icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 1 8.3C19.54 15.68 15.55 20 11 20z"/></svg>, name:"Medicine Buddha", artist:"Tibetan Bowls", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3", tag:"Cellular Healing", tot:"10:00", sec:600},
+      {icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>, name:"Green Tara Mantra", artist:"Himalayan Monks", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3", tag:"Compassion", tot:"10:00", sec:600},
+      {icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 22A10 10 0 1 1 22 12c0 2-2 4-4 4s-4-2-4-4a4 4 0 1 1 8 0"/></svg>, name:"Shiva Tandava", artist:"Agni Ritual", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3", tag:"Dynamic Energy", tot:"10:00", sec:600},
     ]
   },
   {
     label: "15-Minute Immersion",
     tracks: [
-      {icon:"🔥", name:"Rudram Chamakam",    artist:"Vedic Fire", src:"/audio/rudram_chamakam.mp3",       tag:"Cosmic Order",     tot:"15:00", sec:900},
-      {icon:"🌌", name:"Vishnu Sahasranama", artist:"Ancient Recitation", src:"/audio/vishnu_sahasranama.mp3",       tag:"Universal Form",   tot:"15:00", sec:900},
-      {icon:"📿", name:"108 Om Chanting",    artist:"Deep Resonance", src:"/audio/108_om_chanting.mp3",      tag:"Root Alignment",   tot:"15:00", sec:900},
-      {icon:"🌈", name:"Chakra Bija Mantras",artist:"7 Frequencies", src:"/audio/chakra_bija.mp3",        tag:"Full Alignment",   tot:"15:00", sec:900},
-      {icon:"👁️", name:"Purusha Suktam",     artist:"Vedic Heritage", src:"/audio/purusha_suktam.mp3",      tag:"Creation Hymn",    tot:"15:00", sec:900},
-      {icon:"🪷", name:"Avalokiteshvara",    artist:"Pure Love", src:"/audio/avalokiteshvara.mp3", tag:"Heart Opening",  tot:"15:00", sec:900},
+      {icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>, name:"Rudram Chamakam", artist:"Vedic Fire", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3", tag:"Cosmic Order", tot:"15:00", sec:900},
+      {icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>, name:"Vishnu Sahasranama", artist:"Ancient Recitation", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3", tag:"Universal Form", tot:"15:00", sec:900},
+      {icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="5" r="2"/><circle cx="17" cy="7" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="17" cy="17" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="7" cy="17" r="2"/><circle cx="5" cy="12" r="2"/><circle cx="7" cy="7" r="2"/></svg>, name:"108 Om Chanting", artist:"Deep Resonance", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3", tag:"Root Alignment", tot:"15:00", sec:900},
+      {icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M22 17a10 10 0 0 0-20 0"/><path d="M18 17a6 6 0 0 0-12 0"/><path d="M14 17a2 2 0 0 0-4 0"/></svg>, name:"Chakra Bija Mantras", artist:"7 Frequencies", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3", tag:"Full Alignment", tot:"15:00", sec:900},
+      {icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>, name:"Purusha Suktam", artist:"Vedic Heritage", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-17.mp3", tag:"Creation Hymn", tot:"15:00", sec:900},
+      {icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 22c4-4 8-8 8-12a8 8 0 00-16 0c0 4 4 8 8 12z"/><path d="M12 22c-4-8-2-14 0-18 2 4 4 10 0 18z"/></svg>, name:"Avalokiteshvara", artist:"Pure Love", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-18.mp3", tag:"Heart Opening", tot:"15:00", sec:900},
     ]
   }
 ];

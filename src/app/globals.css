@@ -1,15 +1,27 @@
 
 /* ══════════ DESIGN TOKENS ══════════ */
 :root{
-  --void:#08060f;--deep:#0d0a1c;--mid:#12102a;--dusk:#1c1840;
-  --gold:#c8902a;--gold2:#e8b84b;--gold3:#f5d080;--gold4:#fdeeb0;
-  --saffron:#c45a0a;--saffron2:#e07820;--flame:#f09030;
-  --sindoor:#8b2500;--sindoor2:#c04040;
-  --sage:#3a7a5a;--sage2:#52a878;--jade:#80c89a;
-  --violet:#5040a0;--violet2:#7060c0;
-  --t1:#f0e8d8;--t2:#c8b890;--t3:#8a7a60;--t4:#4e4430;
-  --bdr:rgba(200,144,42,.15);--bdr2:rgba(200,144,42,.3);
-  --glass:rgba(200,144,42,.08);
+  /* Base */
+  --void:#08060f;--deep:#0d0a1c;--mid:#120f28;--dusk:#1c1840;
+  --twilight:#242050;--indigo-dim:#2d2860;
+
+  /* Gold & Accents - Brightened for compatibility */
+  --ember:#8a5a15;--amber:#c48030;--gold:#e0a548;--gold2:#f0c058;--gold3:#f8d890;--gold4:#fdeec8;
+  
+  /* Sacred Spectrum */
+  --sindoor:#9b2b00;--saffron:#d46a15;--saffron2:#f08830;--flame:#ffa040;
+  --forest:#1a3a2a;--sage:#3a7a5a;--sage2:#52a878;--jade:#80c89a;
+  --violet:#5040a0;--violet2:#7060c0;--violet3:#9080e0;
+
+  /* Typography - Brighter for high legibility */
+  --t1:#fdf6e8;--t2:#d8c8a8;--t3:#a09070;--t4:#706858;
+
+  /* Borders & Glass - Based on user gold theme */
+  --glass:rgba(212,150,60,.12);
+  --glass2:rgba(212,150,60,.25);
+  --bdr:rgba(212,150,60,.2);
+  --bdr2:rgba(212,150,60,.38);
+  
   --serif:var(--font-serif),'Cormorant Garamond',Georgia,serif;
   --sans:var(--font-sans),'DM Sans',sans-serif;
   --mono:var(--font-mono),'DM Mono',monospace;
@@ -40,8 +52,8 @@ body{display:flex;align-items:center;justify-content:center;font-family:var(--sa
 .scroll{overflow-y:auto;overflow-x:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;flex:1}
 .scroll::-webkit-scrollbar{display:none}
 .card{background:var(--mid);border:1px solid var(--bdr);border-radius:20px;position:relative;overflow:hidden}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
-.plain{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:12px}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.plain{background:rgba(0,0,0,.02);border:1px solid var(--bdr);border-radius:12px}
 .pad{padding:20px}.padm{padding:16px}.pads{padding:12px 14px}
 .serif{font-family:var(--serif)}.mono{font-family:var(--mono)}.deva{font-family:var(--deva)}
 .lbl{font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--t3)}
@@ -58,14 +70,14 @@ body{display:flex;align-items:center;justify-content:center;font-family:var(--sa
 .btn-sm{padding:8px 16px;font-size:10px}
 
 /* PROGRESS BAR */
-.pbar{height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+.pbar{height:6px;background:rgba(0,0,0,.06);border-radius:3px;overflow:hidden}
 .pfill{height:100%;border-radius:3px;transition:width 1s cubic-bezier(.4,0,.2,1)}
 .pfill-g{background:linear-gradient(90deg,var(--saffron),var(--gold2))}
 .pfill-s{background:linear-gradient(90deg,var(--sage),var(--jade))}
 .pfill-v{background:linear-gradient(90deg,var(--violet),var(--violet2))}
 
 /* BOTTOM NAV */
-.bnav{display:flex;background:rgba(8,6,15,.96);backdrop-filter:blur(16px);border-top:1px solid var(--bdr);position:absolute;bottom:0;left:0;right:0;z-index:50;padding:10px 0 max(14px,env(safe-area-inset-bottom))}
+.bnav{display:flex;background:rgba(13,10,28,.96);backdrop-filter:blur(16px);border-top:1px solid var(--bdr);position:absolute;bottom:0;left:0;right:0;z-index:50;padding:10px 0 max(14px,env(safe-area-inset-bottom))}
 .bn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 2px;border-radius:10px;margin:0 2px;transition:.2s;color:var(--t4)}
 .bn:active{background:var(--glass)}
 .bn-i{font-size:20px;line-height:1;transition:.2s}
@@ -89,7 +101,7 @@ body{display:flex;align-items:center;justify-content:center;font-family:var(--sa
 
 /* TRANSITION OVERLAY — Shatkona Counter-Spin */
 .tov{
-  position:absolute;inset:0;background:rgba(8,6,15,.97);z-index:1000;
+  position:absolute;inset:0;background:rgba(8,6,15,.98);z-index:1000;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   opacity:0;pointer-events:none;
   transition:opacity .5s cubic-bezier(0.4,0,0.2,1);
@@ -155,7 +167,7 @@ body{display:flex;align-items:center;justify-content:center;font-family:var(--sa
 
 /* ══════════ SCREEN 1 — GATEWAY (Premium Vedic) ══════════ */
 #sg{
-  background:linear-gradient(170deg,#0a0818 0%,#0e0b22 30%,#12102a 60%,#08060f 100%);
+  background:linear-gradient(170deg,#08060f 0%,#0d0a1c 30%,#120f28 60%,#08060f 100%);
   display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;
 }
 
@@ -295,7 +307,7 @@ body{display:flex;align-items:center;justify-content:center;font-family:var(--sa
 .field-lbl{display:block;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold3);opacity:0.8;margin-bottom:8px;margin-left:4px}
 .field input{
   width:100%;background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.08);border-radius:12px;
+  border:1px solid rgba(255,255,255,.1);border-radius:12px;
   padding:14px 16px;font-family:var(--sans);font-size:15px;font-weight:300;
   color:var(--t1);outline:none;caret-color:var(--gold2);
   transition:border-color .4s,background .4s, box-shadow .4s;
