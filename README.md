@@ -91,6 +91,9 @@ Information processing rates from **1000 CE to 2024 CE** visualised across 12 hi
 ### 🌍 Global Cognitive Spectrum
 OECD PIAAC-calibrated assessment of 8.1 billion humans across five cognitive processing tiers — from *Deep Thinkers* (1.2%, 320+ bits/sec) to *Cognitively Atrophied* (27%, <30 bits/sec).
 
+### 🎶 Vedic Chants Player
+A built-in, cross-platform audio engine featuring 18 curated mantras grouped by duration (5, 10, and 15 minutes). Designed with a spinning vinyl UI, progress tracking, and ambient fallback integration.
+
 ---
 
 ## Technology Stack
@@ -128,7 +131,8 @@ src/
 │       ├── practice/page.tsx       # Timer sessions, habit completion logging
 │       ├── wisdom/page.tsx         # Anti-scroll feed — Sanskrit with translations
 │       ├── science/page.tsx        # Research — brain map, timeline, 8 tabbed sections
-│       └── profile/page.tsx        # Progress visualisation, milestones, guest→signup
+│       ├── chants/page.tsx         # Audio player — 18 curated Vedic mantras & soundscapes
+│       └── profile/page.tsx        # Progress visualisation, milestones (accessed via TopBar)
 ├── components/
 │   ├── BottomNav.tsx               # Navigation with "Time of Void" transition overlay
 │   └── TopBar.tsx                  # Status bar component
