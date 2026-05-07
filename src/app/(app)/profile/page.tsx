@@ -82,6 +82,12 @@ export default function Profile() {
     <div className="screen on" id="spf">
       <TopBar />
       <div className="spf-content">
+        <div style={{ marginBottom: '12px', padding: '0 10px' }}>
+          <button onClick={() => router.push('/dashboard')} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: 'var(--gold2)', fontSize: '15px', background: 'none', border: 'none', cursor: 'pointer', padding: '4px 8px 4px 0', fontFamily: 'var(--sans)' }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            Dashboard
+          </button>
+        </div>
         <div className="prof-hero">
           <div className="avatar">🧘</div>
           <div style={{ flex: 1 }}>

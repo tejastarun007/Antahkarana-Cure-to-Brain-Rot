@@ -8,8 +8,23 @@ const withPWA = withPWAInit({
   cacheOnFrontEndNav: true,
   aggressiveFrontEndNavCaching: true,
   workboxOptions: {
-    // We want to ensure audio/media and static content are heavily cached for offline use
     disableDevLogs: true,
+    runtimeCaching: [
+      {
+        urlPattern: /^https?.+\/audio\/.+\.mp3$/,
+        handler: 'CacheFirst',
+        options: {
+          cacheName: 'audio-cache',
+          expiration: {
+            maxEntries: 50,
+            maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
+          },
+          cacheableResponse: {
+            statuses: [0, 200, 206],
+          },
+        },
+      },
+    ],
   }
 });
 

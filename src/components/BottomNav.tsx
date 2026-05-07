@@ -40,7 +40,7 @@ export function BottomNav() {
     { p: '/practice', l: 'Practice', i: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2s-4 4-4 10c0 4 4 10 4 10s4-6 4-10c0-6-4-10-4-10z"/><path d="M12 22s-6-3-8-9c-1.5-4.5 1-8 1-8s2.5 4 3 8c1 4 4 9 4 9z"/><path d="M12 22s6-3 8-9c1.5-4.5-1-8-1-8s-2.5 4-3 8c-1 4-4 9-4 9z"/></svg> },
     { p: '/wisdom', l: 'Wisdom', i: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"><path d="M12 2L2 12l10 10 10-10L12 2z"/><path d="M12 6.5L6.5 12 12 17.5 17.5 12 12 6.5z"/></svg> },
     { p: '/science', l: 'Science', i: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M2 12C2 12 6 5 12 5C18 5 22 12 22 12C22 12 18 19 12 19C6 19 2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg> },
-    { p: '/profile', l: 'Profile', i: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> }
+    { p: '/chants', l: 'Chants', i: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M8 9v6M4 11v2M16 7v10M20 10v4"/></svg> }
   ];
 
   return (
