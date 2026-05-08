@@ -64,7 +64,7 @@ export default function Science() {
                 animation: 'aura 7s ease-in-out infinite', pointerEvents: 'none', zIndex: 0
               }} />
 
-              <svg viewBox="0 0 500 380" style={{ width: '100%', height: 'auto', position: 'relative', zIndex: 1 }}>
+              <svg viewBox="-50 0 600 380" style={{ width: '100%', height: 'auto', position: 'relative', zIndex: 1 }}>
                 <defs>
                   {BRAIN_REGIONS.map(r => (
                     <filter key={`glow-${r.id}`} id={`glow-${r.id}`} x="-50%" y="-50%" width="200%" height="200%">
@@ -85,7 +85,7 @@ export default function Science() {
                     <stop offset="100%" stopColor="white" stopOpacity="0" />
                   </radialGradient>
                   <mask id="vignetteMask">
-                    <rect width="500" height="380" fill="url(#vignette)" />
+                    <rect x="-50" y="0" width="600" height="380" fill="url(#vignette)" />
                   </mask>
                 </defs>
 
@@ -107,10 +107,10 @@ export default function Science() {
                     style={{ transition: 'all 0.4s ease' }}>
                     {selectedRegion === 'pfc' && <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite" />}
                   </ellipse>
-                  <line x1="130" y1="60" x2="55" y2="25" stroke="#e8b84b" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7" />
-                  <circle cx="55" cy="25" r="3" fill="#e8b84b" opacity="0.9" />
-                  <text x="3" y="19" fill="#e8b84b" fontSize="11" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="500">PREFRONTAL</text>
-                  <text x="3" y="31" fill="#e8b84b" fontSize="9" fontFamily="var(--mono)" opacity="0.75">dlPFC · Buddhi</text>
+                  <line x1="130" y1="60" x2="55" y2="25" stroke="#e8b84b" strokeWidth="1.2" strokeDasharray="2,3" opacity="0.8" />
+                  <circle cx="55" cy="25" r="4" fill="#e8b84b" opacity="0.9" />
+                  <text x="-40" y="18" fill="#e8b84b" fontSize="14" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="600">PREFRONTAL</text>
+                  <text x="-40" y="32" fill="#e8b84b" fontSize="11" fontFamily="var(--mono)" opacity="0.8">dlPFC · Buddhi</text>
                 </g>
 
                 {/* Anterior Cingulate Cortex — top center-deep */}
@@ -120,10 +120,10 @@ export default function Science() {
                     style={{ transition: 'all 0.4s ease' }}>
                     {selectedRegion === 'acc' && <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite" />}
                   </ellipse>
-                  <line x1="245" y1="52" x2="270" y2="15" stroke="#c45a0a" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7" />
-                  <circle cx="270" cy="15" r="3" fill="#c45a0a" opacity="0.9" />
-                  <text x="278" y="9" fill="#e07820" fontSize="11" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="500">ACC</text>
-                  <text x="278" y="21" fill="#e07820" fontSize="9" fontFamily="var(--mono)" opacity="0.75">Manas</text>
+                  <line x1="245" y1="52" x2="270" y2="15" stroke="#c45a0a" strokeWidth="1.2" strokeDasharray="2,3" opacity="0.8" />
+                  <circle cx="270" cy="15" r="4" fill="#c45a0a" opacity="0.9" />
+                  <text x="282" y="12" fill="#e07820" fontSize="14" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="600">ACC</text>
+                  <text x="282" y="26" fill="#e07820" fontSize="11" fontFamily="var(--mono)" opacity="0.8">Manas</text>
                 </g>
 
                 {/* Default Mode Network — posterior/parietal */}
@@ -133,10 +133,10 @@ export default function Science() {
                     style={{ transition: 'all 0.4s ease' }}>
                     {selectedRegion === 'dmn' && <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite" />}
                   </ellipse>
-                  <line x1="340" y1="65" x2="400" y2="25" stroke="#9080e0" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7" />
-                  <circle cx="400" cy="25" r="3" fill="#9080e0" opacity="0.9" />
-                  <text x="408" y="19" fill="#a090f0" fontSize="11" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="500">DMN</text>
-                  <text x="408" y="31" fill="#a090f0" fontSize="9" fontFamily="var(--mono)" opacity="0.75">Ahamkara</text>
+                  <line x1="340" y1="65" x2="400" y2="25" stroke="#9080e0" strokeWidth="1.2" strokeDasharray="2,3" opacity="0.8" />
+                  <circle cx="400" cy="25" r="4" fill="#9080e0" opacity="0.9" />
+                  <text x="412" y="18" fill="#a090f0" fontSize="14" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="600">DMN</text>
+                  <text x="412" y="32" fill="#a090f0" fontSize="11" fontFamily="var(--mono)" opacity="0.8">Ahamkara</text>
                 </g>
 
                 {/* Hippocampus — medial temporal deep */}
@@ -146,10 +146,10 @@ export default function Science() {
                     transform="rotate(-10,225,185)" style={{ transition: 'all 0.4s ease' }}>
                     {selectedRegion === 'hpc' && <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite" />}
                   </ellipse>
-                  <line x1="198" y1="195" x2="85" y2="295" stroke="#80c89a" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7" />
-                  <circle cx="85" cy="295" r="3" fill="#80c89a" opacity="0.9" />
-                  <text x="3" y="289" fill="#80c89a" fontSize="11" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="500">HIPPOCAMPUS</text>
-                  <text x="3" y="301" fill="#80c89a" fontSize="9" fontFamily="var(--mono)" opacity="0.75">Chitta · Memory</text>
+                  <line x1="198" y1="195" x2="85" y2="295" stroke="#80c89a" strokeWidth="1.2" strokeDasharray="2,3" opacity="0.8" />
+                  <circle cx="85" cy="295" r="4" fill="#80c89a" opacity="0.9" />
+                  <text x="-30" y="288" fill="#80c89a" fontSize="14" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="600">HIPPOCAMPUS</text>
+                  <text x="-30" y="302" fill="#80c89a" fontSize="11" fontFamily="var(--mono)" opacity="0.8">Chitta · Memory</text>
                 </g>
 
                 {/* Amygdala — deep temporal, near hippocampus */}
@@ -159,10 +159,10 @@ export default function Science() {
                     style={{ transition: 'all 0.4s ease' }}>
                     {selectedRegion === 'amg' && <animate attributeName="opacity" values="0.6;1;0.6" dur="1.8s" repeatCount="indefinite" />}
                   </ellipse>
-                  <line x1="195" y1="224" x2="205" y2="340" stroke="#e06060" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7" />
-                  <circle cx="205" cy="340" r="3" fill="#e06060" opacity="0.9" />
-                  <text x="212" y="334" fill="#e06060" fontSize="11" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="500">AMYGDALA</text>
-                  <text x="212" y="346" fill="#e06060" fontSize="9" fontFamily="var(--mono)" opacity="0.75">Bhaya · Fear</text>
+                  <line x1="195" y1="224" x2="205" y2="340" stroke="#e06060" strokeWidth="1.2" strokeDasharray="2,3" opacity="0.8" />
+                  <circle cx="205" cy="340" r="4" fill="#e06060" opacity="0.9" />
+                  <text x="217" y="335" fill="#e06060" fontSize="14" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="600">AMYGDALA</text>
+                  <text x="217" y="349" fill="#e06060" fontSize="11" fontFamily="var(--mono)" opacity="0.8">Bhaya · Fear</text>
                 </g>
 
                 {/* Broca's Area — lower frontal */}
@@ -172,10 +172,10 @@ export default function Science() {
                     style={{ transition: 'all 0.4s ease' }}>
                     {selectedRegion === 'bca' && <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite" />}
                   </ellipse>
-                  <line x1="140" y1="192" x2="60" y2="250" stroke="#60d0ff" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7" />
-                  <circle cx="60" cy="250" r="3" fill="#60d0ff" opacity="0.9" />
-                  <text x="3" y="244" fill="#60d0ff" fontSize="11" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="500">BROCA&apos;S</text>
-                  <text x="3" y="256" fill="#60d0ff" fontSize="9" fontFamily="var(--mono)" opacity="0.75">Vak-shakti</text>
+                  <line x1="140" y1="192" x2="60" y2="250" stroke="#60d0ff" strokeWidth="1.2" strokeDasharray="2,3" opacity="0.8" />
+                  <circle cx="60" cy="250" r="4" fill="#60d0ff" opacity="0.9" />
+                  <text x="-40" y="244" fill="#60d0ff" fontSize="14" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="600">BROCA&apos;S</text>
+                  <text x="-40" y="258" fill="#60d0ff" fontSize="11" fontFamily="var(--mono)" opacity="0.8">Vak-shakti</text>
                 </g>
 
                 {/* Cerebellum — posterior bottom */}
@@ -185,10 +185,10 @@ export default function Science() {
                     style={{ transition: 'all 0.4s ease' }}>
                     {selectedRegion === 'cbl' && <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite" />}
                   </ellipse>
-                  <line x1="358" y1="252" x2="410" y2="300" stroke="#f0a050" strokeWidth="0.8" strokeDasharray="2,3" opacity="0.7" />
-                  <circle cx="410" cy="300" r="3" fill="#f0a050" opacity="0.9" />
-                  <text x="418" y="294" fill="#f0a050" fontSize="11" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="500">CEREBELLUM</text>
-                  <text x="418" y="306" fill="#f0a050" fontSize="9" fontFamily="var(--mono)" opacity="0.75">Karma Yoga</text>
+                  <line x1="358" y1="252" x2="410" y2="300" stroke="#f0a050" strokeWidth="1.2" strokeDasharray="2,3" opacity="0.8" />
+                  <circle cx="410" cy="300" r="4" fill="#f0a050" opacity="0.9" />
+                  <text x="422" y="294" fill="#f0a050" fontSize="14" fontFamily="var(--mono)" letterSpacing="0.5" fontWeight="600">CEREBELLUM</text>
+                  <text x="422" y="308" fill="#f0a050" fontSize="11" fontFamily="var(--mono)" opacity="0.8">Karma Yoga</text>
                 </g>
 
                 {/* Brain stem */}
@@ -202,7 +202,7 @@ export default function Science() {
               const r = BRAIN_REGIONS.find(b => b.id === selectedRegion);
               if (!r) return null;
               return (
-                <div style={{
+                <div key={r.id} style={{
                   background: `linear-gradient(145deg, ${r.color}11, rgba(12,10,28,0.95))`,
                   border: `1px solid ${r.color}44`,
                   borderRadius: '20px', padding: '20px', marginBottom: '12px',

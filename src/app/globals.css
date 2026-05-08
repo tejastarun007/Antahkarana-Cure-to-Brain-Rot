@@ -167,7 +167,7 @@ body{display:flex;align-items:center;justify-content:center;font-family:var(--sa
 
 /* ══════════ SCREEN 1 — GATEWAY (Premium Vedic) ══════════ */
 #sg{
-  background:linear-gradient(170deg,#08060f 0%,#0d0a1c 30%,#120f28 60%,#08060f 100%);
+  background:linear-gradient(170deg,var(--void) 0%,var(--deep) 30%,var(--mid) 60%,var(--void) 100%);
   display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;
 }
 
@@ -286,7 +286,7 @@ body{display:flex;align-items:center;justify-content:center;font-family:var(--sa
 
 /* ─── Form Section ─── */
 .gw-form{
-  background:linear-gradient(to top,rgba(8,6,15,1) 0%,rgba(8,6,15,.97) 60%,rgba(12,10,28,.92) 100%);
+  background:linear-gradient(to top,rgba(10,7,18,1) 0%,rgba(10,7,18,.97) 60%,rgba(16,12,34,.92) 100%);
   padding:18px 24px max(18px,env(safe-area-inset-bottom));flex-shrink:0;
   border-top:1px solid var(--bdr);
   position:relative;
