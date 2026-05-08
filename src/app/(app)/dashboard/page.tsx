@@ -1,7 +1,7 @@
 'use client';
 import { useStore } from '@/store/useStore';
 import { HABITS, WISDOMS, TRADEOFFS } from '@/data/content';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { TopBar } from '@/components/TopBar';
 
@@ -23,14 +23,7 @@ export default function Dashboard() {
   const todayW = WISDOMS[todayIdx];
   const isWDayFav = store.favs.includes(todayW.id);
 
-  // Time-aware greeting
-  const greeting = useMemo(() => {
-    const h = new Date().getHours();
-    const name = store.userName || 'Seeker';
-    if (h < 12) return `Good morning, ${name}`;
-    if (h < 17) return `Good afternoon, ${name}`;
-    return `Good evening, ${name}`;
-  }, [store.userName]);
+
 
   // Profile Calculation
   const calcScore = () => {
@@ -45,8 +38,7 @@ export default function Dashboard() {
       <div className="ss-bg"><div className="ss-bg-b1"></div><div className="ss-bg-b2"></div></div>
       <TopBar />
       <div className="ss-content">
-        <div className="ss-header">
-          <div className="ss-greet">{greeting}</div>
+        <div className="ss-header" style={{ paddingTop: '2px' }}>
           <div className="ss-title">Your mind is a<br/><em>sacred space.</em></div>
         </div>
         
