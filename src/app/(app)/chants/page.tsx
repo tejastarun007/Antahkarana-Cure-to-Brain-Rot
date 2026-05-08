@@ -44,6 +44,7 @@ export default function ChantsPage() {
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(1);
+  const [volume, setVolume] = useState(1);
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -110,6 +111,12 @@ export default function ChantsPage() {
     }
   }, [curGroupIdx, curTrackIdx]);
 
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+    }
+  }, [volume]);
+
   const togglePlay = () => {
     if (!audioRef.current) return;
     
@@ -175,7 +182,7 @@ export default function ChantsPage() {
 
   return (
     <div className="screen active" id="chants-screen" style={{ opacity: 1, pointerEvents: 'all' }}>
-      
+      <TopBar />
       <div className="vinyl-wrap">
         <div className="vinyl-aura"></div>
         <div className={`vinyl ${playing ? 'spin' : ''}`}>
@@ -218,7 +225,7 @@ export default function ChantsPage() {
           </div>
         </div>
         <div className="pl-times">
-          <span>{curTime}</span>
+          <span style={{ color: 'var(--gold2)' }}>{curTime}</span>
           <span>{t.tot}</span>
         </div>
       </div>
@@ -243,6 +250,21 @@ export default function ChantsPage() {
         <button className="ctrl" title="Repeat">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
         </button>
+      </div>
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '0 28px 18px', flexShrink: 0 }}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.6 }}><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon></svg>
+        <div className="pl-bar" style={{ flex: 1, height: '4px', background: 'rgba(212,150,60,.1)' }} onClick={(e) => {
+          const bar = e.currentTarget;
+          const r = bar.getBoundingClientRect();
+          const newVol = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
+          setVolume(newVol);
+        }}>
+          <div className="pl-fill" style={{ width: `${volume * 100}%`, background: 'linear-gradient(90deg, var(--gold), var(--gold2))', transition: 'none' }}>
+            <div className="pl-thumb" style={{ width: '10px', height: '10px', top: '-3px', right: '-5px', boxShadow: '0 0 8px rgba(212,150,60,.5)' }}></div>
+          </div>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold2)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
       </div>
 
       <div className="pl-queue scroll" style={{ paddingBottom: 'calc(var(--safe-bot) + 80px)' }}>

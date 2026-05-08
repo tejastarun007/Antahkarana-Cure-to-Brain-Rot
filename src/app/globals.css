@@ -686,7 +686,7 @@ body{display:flex;align-items:center;justify-content:center;font-family:var(--sa
 /* Vinyl */
 .vinyl-wrap {
   flex-shrink:0; display:flex; align-items:center; justify-content:center;
-  padding-top:calc(var(--safe-top)+62px); position:relative;
+  padding-top:30px; position:relative;
 }
 .vinyl-aura {
   position:absolute; width:280px; height:280px; border-radius:50%;
