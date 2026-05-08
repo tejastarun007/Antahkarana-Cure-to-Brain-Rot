@@ -36,7 +36,7 @@ export default function Science() {
   return (
     <div className="screen on" id="sci">
       <TopBar />
-      <div style={{ padding: '6px 14px 6px', flexShrink: 0 }}>
+      <div style={{ padding: '6px 20px 6px', flexShrink: 0 }}>
         <div className="lbl">Research · Evidence · 2024–2026</div>
         <div style={{ fontFamily: 'var(--serif)', fontSize: '22px', fontWeight: 300, color: 'var(--gold2)' }}>The Crisis & the Cure</div>
         <p style={{ fontSize: '12px', color: 'var(--t2)', marginTop: '4px', lineHeight: 1.5 }}>Problem → Scientific Proof → Ancient Solution. All data verifiable.</p>
@@ -50,7 +50,7 @@ export default function Science() {
       <div className="scroll" style={{ flex: 1, paddingBottom: '90px' }}>
 
         {activeSciTab === 'brain' && (
-          <div className="sci-sec on" style={{ padding: '0 14px', paddingBottom: '16px' }}>
+          <div className="sci-sec on" style={{ padding: '0 20px', paddingBottom: '20px' }}>
             <div className="sci-h">Neural Impact Map</div>
             <div className="sci-sub">Tap a brain region to explore how digital habits have physically altered it — and how ancient practices reverse the damage.</div>
 
@@ -264,7 +264,7 @@ export default function Science() {
         )}
 
         {activeSciTab === 'timeline' && (
-          <div className="sci-sec on" style={{ padding: '0 14px', paddingBottom: '16px' }}>
+          <div className="sci-sec on" style={{ padding: '0 20px', paddingBottom: '20px' }}>
             <div className="sci-h">1000 Years of Cognitive Evolution</div>
             <div className="sci-sub">Conscious, meaningful processing — not raw sensory input (~11M bits/sec). Data: UNESCO, WHO, OECD PIAAC, Hilbert & Lopez (2011 Science), Bohn & Short (2012 IJOC).</div>
             <div className="proof"><div className="proof-lbl">Key Finding</div><div className="proof-stat" style={{ color: 'var(--sindoor2)' }}>700×</div><div className="proof-t">increase in information processing rate since 1000 CE. But comprehension and depth have inverted. <strong>The gap between exposure and understanding is at its widest in human history.</strong></div><div className="cite">Source: Synthesis model v2.0 · Neuroscience research, UNESCO, WHO, OECD PIAAC</div></div>
@@ -294,7 +294,7 @@ export default function Science() {
         )}
 
         {activeSciTab === 'crisis' && (
-          <div className="sci-sec on" style={{ padding: '0 14px', paddingBottom: '16px' }}>
+          <div className="sci-sec on" style={{ padding: '0 20px', paddingBottom: '20px' }}>
             <div className="sci-h">The Brain Has Been Refactored</div>
             <div className="sci-sub">Not metaphorically. Physically. Measurably. Diffusion Tensor MRI shows structural changes across every lobe in heavy digital users.</div>
             <div className="proof"><div className="proof-lbl">MRI Evidence · DTI Scans</div><div className="proof-t">Visual processing stream has <strong>thickened</strong>. Dorsolateral prefrontal cortex has <strong>thinned</strong>. Heavy digital users show a <strong>35% drop</strong> in prefrontal impulse control via EEG Beta wave variability collapse.</div><div className="cite">Loh & Kanai (2014) PLoS ONE · Uncapher & Wagner (2018) PNAS</div></div>
@@ -305,7 +305,7 @@ export default function Science() {
         )}
 
         {activeSciTab === 'tradeoffs' && (
-          <div className="sci-sec on" style={{ padding: '0 14px', paddingBottom: '16px' }}>
+          <div className="sci-sec on" style={{ padding: '0 20px', paddingBottom: '20px' }}>
             <div className="sci-h">The Seven Neural Trade-Offs</div>
             <div className="sci-sub">Brain energy budget: ~20 watts. Zero-sum. When one region gains dominance, others yield. Seven measurable shifts — all moving in the same direction simultaneously. Source: fMRI, VBM/DTI studies, EEG behavioural proxy metrics.</div>
 
@@ -326,7 +326,7 @@ export default function Science() {
         )}
 
         {activeSciTab === 'evidence' && (
-          <div className="sci-sec on" style={{ padding: '0 14px', paddingBottom: '16px' }}>
+          <div className="sci-sec on" style={{ padding: '0 20px', paddingBottom: '20px' }}>
             <div className="sci-h">Habit Impact: Scientific Evidence</div>
             <div className="sci-sub">Every habit either builds or erodes neural infrastructure. Peak effect sizes from peer-reviewed research.</div>
             <div className="sci-h" style={{ fontSize: '14px', color: 'var(--jade)', margin: '0 0 8px' }}>✅ Positive Habits</div>
@@ -345,7 +345,7 @@ export default function Science() {
         )}
 
         {activeSciTab === 'spectrum' && (
-          <div className="sci-sec on" style={{ padding: '0 14px', paddingBottom: '16px' }}>
+          <div className="sci-sec on" style={{ padding: '0 20px', paddingBottom: '20px' }}>
             <div className="sci-h">8.1 Billion Humans: Cognitive Spectrum</div>
             <div className="sci-sub">Recalibrated using OECD PIAAC (39 countries, 250,000 adults), UNESCO literacy data, WHO activity reports, DataReportal 2024 screen time data. Original estimates were too generous.</div>
 
@@ -362,7 +362,7 @@ export default function Science() {
         )}
 
         {activeSciTab === 'verdict' && (
-          <div className="sci-sec on" style={{ padding: '0 14px', paddingBottom: '16px' }}>
+          <div className="sci-sec on" style={{ padding: '0 20px', paddingBottom: '20px' }}>
             <div className="sci-h">The Final Calculation</div>
             <div className="sci-sub">After 1000 years of evolution data, 7 neural trade-offs, and global cognitive assessment of 8.1 billion humans.</div>
             <div className="vcard vc10"><div className="vc-n" style={{ color: 'var(--jade)' }}>10%</div><div className="vc-l" style={{ color: 'var(--jade)' }}>~810 Million</div><div className="vc-d">Can genuinely co-work with AI. They use AI. AI does not use them.</div></div>
@@ -373,7 +373,7 @@ export default function Science() {
         )}
 
         {activeSciTab === 'solution' && (
-          <div className="sci-sec on" style={{ padding: '0 14px', paddingBottom: '16px' }}>
+          <div className="sci-sec on" style={{ padding: '0 20px', paddingBottom: '20px' }}>
             <div className="sci-h">The Ancient Solution, Confirmed Modern</div>
             <div className="sci-sub">The compounding atrophy runs in both directions. The same recursive logic that degrades the unprotected brain rebuilds the protected one.</div>
             {[
