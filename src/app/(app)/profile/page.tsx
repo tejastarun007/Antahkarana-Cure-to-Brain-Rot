@@ -34,6 +34,7 @@ export default function Profile() {
 
   const [isEditingName, setIsEditingName] = useState(false);
   const [tempName, setTempName] = useState('');
+  const [showTiers, setShowTiers] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -67,13 +68,35 @@ export default function Profile() {
     setIsEditingName(false);
   };
 
-  // Profile Calculation
-  const calcScore = () => {
-    const r = TRADEOFFS.reduce((a, t, i) => a + Math.min(store.restored[i] || 0, t.pct), 0);
-    const mx = TRADEOFFS.reduce((a, t) => a + t.pct, 0);
-    return Math.min(100, Math.round(store.streak * 2 + (r / mx) * 40 + Math.min(store.totalTasks, 60) * 0.6));
-  };
-  const sc = calcScore();
+  /* ═══ LONG-TERM TIER SYSTEM (1–5 year journey) ═══ */
+  const TIERS = [
+    { min: 0,    title: 'Tamas',         desc: 'Begin your practice. The first step is the hardest.', req: 'Day 1' },
+    { min: 7,    title: 'Pramaada',      desc: 'The fog of negligence lifts. Awareness dawns.', req: '~1 week of practice' },
+    { min: 30,   title: 'Arambhaka',     desc: 'The foundation is being laid, brick by brick.', req: '~1 month of practice' },
+    { min: 75,   title: 'Mumukshu',      desc: 'The desire for freedom stirs within you.', req: '~2-3 months of practice' },
+    { min: 150,  title: 'Jijnasu',       desc: 'The thirst for true knowledge deepens.', req: '~4-6 months of practice' },
+    { min: 300,  title: 'Sadhaka',       desc: 'Practice becomes second nature. Circuits rebuild.', req: '~8-12 months of practice' },
+    { min: 550,  title: 'Tapasvi',       desc: 'Discipline is your fire. The mind obeys.', req: '~1-1.5 years of practice' },
+    { min: 900,  title: 'Yogarudha',     desc: 'Established in yoga. A rare capacity emerges.', req: '~1.5-2.5 years of practice' },
+    { min: 1400, title: 'Sthitaprajna',  desc: 'Steady wisdom. The mind is a still lake.', req: '~2.5-3.5 years of practice' },
+    { min: 2000, title: 'Jivanmukta',    desc: 'Liberation while living. Guard it fiercely.', req: '~3.5-5 years of practice' },
+    { min: 2800, title: 'Brahmanishtha', desc: 'Established in Brahman. The ultimate realization.', req: '5+ years of dedicated practice' },
+  ];
+
+  // XP = practice days + hours practiced + weeks of streak
+  const xp = (store.hist.length || 0) + Math.floor((store.totalMins || 0) / 60) + Math.floor((store.streak || 0) / 7);
+
+  // Find current tier
+  let tierIdx = 0;
+  for (let i = TIERS.length - 1; i >= 0; i--) {
+    if (xp >= TIERS[i].min) { tierIdx = i; break; }
+  }
+  const tier = TIERS[tierIdx];
+  const nextTier = TIERS[tierIdx + 1];
+  // Progress % toward next tier (0-100 for ring/bar)
+  const tierPct = nextTier
+    ? Math.min(100, Math.round(((xp - tier.min) / (nextTier.min - tier.min)) * 100))
+    : 100;
 
   const checkMS = (req: string, need: number) => {
     const v: any = { totalTasks: store.totalTasks, streak: store.streak, readMins: store.readMins, medMins: store.medMins, pranaMins: store.pranaMins, totalMins: store.totalMins };
@@ -113,30 +136,87 @@ export default function Profile() {
             ) : (
               <div className="prof-name">{store.userName || 'Seeker'}</div>
             )}
-            <div className="prof-tier">◈ {['Tamas','Pramaada','Mumukshu','Jijnasu','Sadhaka'][Math.floor(Math.min(sc,99)/20)]} · Tier {Math.floor(sc/20)+1}</div>
+            <div className="prof-tier" onClick={() => setShowTiers(true)} style={{cursor:'pointer'}}>◈ {tier.title} · Tier {tierIdx + 1} <span style={{fontSize:'9px', opacity:.5}}>▼</span></div>
             <div className="prof-streak">🔥 <span>{store.streak}</span> day streak</div>
           </div>
         </div>
 
         <div className="score-ring-wrap">
-          <div className="card pad">
+          <div className="card pad" onClick={() => setShowTiers(true)} style={{cursor:'pointer', transition:'.2s', border:'1px solid rgba(255,255,255,.05)'}}>
             <div className="sr-inner">
               <div className="ring-svg">
                 <svg width="80" height="80" viewBox="0 0 80 80">
                   <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,.06)" strokeWidth="7"/>
-                  <circle cx="40" cy="40" r="34" fill="none" stroke="url(#sg2)" strokeWidth="7" strokeLinecap="round" strokeDasharray="214" strokeDashoffset={214 - (214 * sc / 100)}/>
+                  <circle cx="40" cy="40" r="34" fill="none" stroke="url(#sg2)" strokeWidth="7" strokeLinecap="round" strokeDasharray="214" strokeDashoffset={214 - (214 * tierPct / 100)}/>
                   <defs><linearGradient id="sg2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stopColor="#c45a0a"/><stop offset="100%" stopColor="#e8b84b"/></linearGradient></defs>
                 </svg>
-                <div className="ring-center"><div className="ring-n">{sc}</div><div className="ring-l">BUDDHI</div></div>
+                <div className="ring-center"><div className="ring-n">{xp}</div><div className="ring-l">XP</div></div>
               </div>
               <div style={{flex:1}}>
-                <div style={{fontSize:'13px', color:'var(--t2)', marginBottom:'8px'}}>Neural Restoration Score</div>
-                <div className="pbar" style={{marginBottom:'5px'}}><div className="pfill pfill-g" style={{width:`${sc}%`}}></div></div>
-                <div style={{fontSize:'11px', color:'var(--t3)', fontFamily:'var(--mono)'}}>{sc < 20 ? 'Begin your practice. The journey of 1000 steps...' : sc < 50 ? 'Progress is measurable. The circuits are rebuilding.' : sc < 80 ? 'The Quiet Inheritor emerges. Keep going.' : 'Rare capacity. Protect it fiercely.'}</div>
+                <div style={{fontSize:'13px', color:'var(--t2)', marginBottom:'4px'}}>Sadhana Journey</div>
+                <div style={{fontSize:'11px', color:'var(--t3)', fontFamily:'var(--mono)', marginBottom:'6px'}}>{tier.title} → {nextTier ? nextTier.title : '∞'}{nextTier ? ` (${nextTier.min - xp} XP to go)` : ''}</div>
+                <div className="pbar" style={{marginBottom:'5px'}}><div className="pfill pfill-g" style={{width:`${tierPct}%`}}></div></div>
+                <div style={{fontSize:'11px', color:'var(--t3)', fontFamily:'var(--mono)'}}>{ tier.desc }</div>
               </div>
+            </div>
+            
+            <div style={{marginTop: '16px', padding: '10px 14px', borderRadius: '10px', background: 'rgba(212,170,80,.06)', border: '1px solid rgba(212,170,80,.15)', display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+              <div style={{display:'flex', alignItems:'center', gap:'8px'}}>
+                <span style={{fontSize: '14px'}}>📜</span>
+                <span style={{fontSize: '12px', color: 'var(--gold2)', fontFamily: 'var(--sans)', fontWeight: 500}}>View Tier Progression Guide</span>
+              </div>
+              <span style={{fontSize: '12px', color: 'var(--gold2)'}}>→</span>
             </div>
           </div>
         </div>
+
+        {/* ═══ TIER PROGRESSION MODAL ═══ */}
+        {showTiers && (
+          <div style={{position:'fixed', inset:0, zIndex:999, background:'rgba(0,0,0,.85)', backdropFilter:'blur(12px)', display:'flex', alignItems:'center', justifyContent:'center', padding:'20px'}} onClick={() => setShowTiers(false)}>
+            <div style={{width:'100%', maxWidth:'400px', maxHeight:'85vh', overflowY:'auto', borderRadius:'24px', background:'linear-gradient(160deg,#1a140a,#0e0c08,#0a0804)', border:'1px solid rgba(212,170,80,.25)', boxShadow:'0 16px 64px rgba(0,0,0,.6)', padding:'28px 20px'}} onClick={e => e.stopPropagation()}>
+              <div style={{textAlign:'center', marginBottom:'20px'}}>
+                <div style={{fontSize:'11px', fontFamily:'var(--mono)', letterSpacing:'2.5px', textTransform:'uppercase', color:'rgba(212,170,80,.7)', marginBottom:'6px'}}>Sadhana Journey</div>
+                <div style={{fontSize:'20px', fontFamily:'var(--serif)', color:'var(--gold2)'}}>Tier Progression</div>
+                <div style={{fontSize:'11px', color:'var(--t3)', marginTop:'4px'}}>XP = Practice Days + Hours + Streak Weeks</div>
+              </div>
+              <div style={{display:'flex', flexDirection:'column', gap:'8px'}}>
+                {TIERS.map((t, i) => {
+                  const isActive = i === tierIdx;
+                  const isLocked = i > tierIdx;
+                  const nextT = TIERS[i + 1];
+                  return (
+                    <div key={i} style={{
+                      padding:'14px 16px', borderRadius:'16px', position:'relative', transition:'.2s',
+                      background: isActive ? 'rgba(212,170,80,.1)' : 'rgba(255,255,255,.02)',
+                      border: isActive ? '1px solid rgba(212,170,80,.4)' : '1px solid rgba(255,255,255,.05)',
+                      opacity: isLocked ? 0.65 : 1,
+                    }}>
+                      <div style={{display:'flex', alignItems:'center', gap:'10px', marginBottom:'4px'}}>
+                        <div style={{width:'28px', height:'28px', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'12px', fontWeight:600, fontFamily:'var(--mono)', flexShrink:0, background: isActive ? 'rgba(212,170,80,.2)' : 'rgba(255,255,255,.04)', color: isActive ? 'var(--gold2)' : 'var(--t3)', border: isActive ? '1px solid rgba(212,170,80,.4)' : '1px solid rgba(255,255,255,.06)'}}>{i + 1}</div>
+                        <div style={{flex:1}}>
+                          <div style={{fontSize:'14px', fontWeight:500, color: isActive ? 'var(--gold2)' : isLocked ? 'var(--t3)' : 'var(--t1)'}}>{t.title}{isActive ? ' ← You are here' : ''}</div>
+                        </div>
+                        <div style={{fontSize:'10px', fontFamily:'var(--mono)', color:'var(--t4)'}}>{t.min} XP</div>
+                      </div>
+                      <div style={{fontSize:'11px', color:'var(--t3)', lineHeight:1.5, paddingLeft:'38px'}}>{t.desc}</div>
+                      <div style={{fontSize:'9px', color: isActive ? 'var(--gold2)' : 'rgba(212,170,80,.6)', fontFamily:'var(--mono)', marginTop:'6px', paddingLeft:'38px'}}>
+                        <span style={{opacity:0.8}}>Requires:</span> {t.req}
+                      </div>
+                      {isActive && nextT && (
+                        <div style={{marginTop:'8px', paddingLeft:'38px'}}>
+                          <div className="pbar" style={{height:'4px'}}><div className="pfill pfill-g" style={{width:`${tierPct}%`}}></div></div>
+                          <div style={{fontSize:'9px', fontFamily:'var(--mono)', color:'var(--t4)', marginTop:'4px'}}>{xp} / {nextT.min} XP · {tierPct}%</div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              <button onClick={() => setShowTiers(false)} style={{display:'block', width:'100%', marginTop:'20px', padding:'12px', borderRadius:'14px', background:'rgba(212,170,80,.08)', border:'1px solid rgba(212,170,80,.25)', color:'var(--gold2)', fontSize:'12px', fontFamily:'var(--mono)', letterSpacing:'1.5px', textTransform:'uppercase', cursor:'pointer'}}>Close</button>
+            </div>
+          </div>
+        )}
+
 
         <div className="lbl" style={{padding:'0 14px', marginBottom:'8px'}}>Restoration Progress</div>
         <div className="prog-items">

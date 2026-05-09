@@ -63,11 +63,12 @@ export default function Wisdom() {
     setTimeout(() => setNotifShow(false), 3000);
   };
 
+  const totalCards = todayCards.length + 1; // +1 for the Gita teaching card
   const handleWfScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const t = e.currentTarget;
     if (t.scrollHeight > t.clientHeight) {
       const pct = t.scrollTop / (t.scrollHeight - t.clientHeight);
-      setWfNum(Math.min(7, Math.round(pct * 7) + 1));
+      setWfNum(Math.min(totalCards, Math.round(pct * totalCards) + 1));
     }
   };
 
@@ -82,7 +83,7 @@ export default function Wisdom() {
       <TopBar />
       <div className="wf-header">
         <div className="wf-hl"><h2><span style={{ color: 'var(--gold2)' }}>The<br/>Anti‑Scroll</span></h2><div className="sub">Intentional Wisdom · Slow Down</div></div>
-        <div className="wf-count"><span>{wfNum}</span>/7</div>
+        <div className="wf-count"><span>{wfNum}</span>/{totalCards}</div>
       </div>
 
       <div className="wf-feed scroll" onScroll={handleWfScroll} id="wfFeed">
