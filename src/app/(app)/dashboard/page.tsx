@@ -11,12 +11,30 @@ export default function Dashboard() {
   const [notifShow, setNotifShow] = useState(false);
   const [isGuest, setIsGuest] = useState(false);
   
+  const [intention, setIntention] = useState({ main: 'Your mind is a', italic: 'sacred space.' });
+  
   useEffect(() => {
     if (typeof document !== 'undefined' && document.cookie.includes('guest_mode=true')) {
       if (localStorage.getItem('ank_guest_warn_dismissed') !== 'true') {
         setTimeout(() => setIsGuest(true), 0);
       }
     }
+
+    // Set Dynamic Intention based on time of day
+    const updateIntention = () => {
+      const h = new Date().getHours();
+      if (h >= 5 && h < 11) {
+        setIntention({ main: 'Set your intention for', italic: 'clarity and focus.' });
+      } else if (h >= 11 && h < 17) {
+        setIntention({ main: 'Maintain your center', italic: 'amidst the movement.' });
+      } else if (h >= 17 && h < 21) {
+        setIntention({ main: 'Let go of the day;', italic: 'return to stillness.' });
+      } else {
+        setIntention({ main: 'Rest in the space of', italic: 'pure awareness.' });
+      }
+    };
+    
+    setTimeout(updateIntention, 0);
   }, []);
   
   const dismissGuest = () => {
@@ -51,7 +69,7 @@ export default function Dashboard() {
       <TopBar />
       <div className="ss-content">
         <div className="ss-header" style={{ paddingTop: '2px' }}>
-          <div className="ss-title">Your mind is a<br/><em>sacred space.</em></div>
+          <div className="ss-title">{intention.main}<br/><em>{intention.italic}</em></div>
         </div>
         
         {isGuest && (
