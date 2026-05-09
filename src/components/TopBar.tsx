@@ -41,10 +41,17 @@ export function TopBar() {
   const pathname = usePathname();
   const isHome = pathname === '/dashboard';
   const [quoteVisible, setQuoteVisible] = useState(true);
+  const [quoteIndex, setQuoteIndex] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const now = new Date();
+      return Math.floor(
+        (now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) / 86400000
+      ) % DAILY_QUOTES.length;
+    }
+    return 0;
+  });
 
   let greeting = '';
-  let dailyQuote = '';
-
   if (typeof window !== 'undefined') {
     const h = new Date().getHours();
     if (h < 5) greeting = 'Sacred Hours';
@@ -52,23 +59,24 @@ export function TopBar() {
     else if (h < 17) greeting = 'Shubh Madhyahna · शुभ मध्याह्न';
     else if (h < 21) greeting = 'Shubh Sandhya · शुभ सन्ध्या';
     else greeting = 'Shubh Ratri · शुभ रात्रि';
-
-    const now = new Date();
-    const dayOfYear = Math.floor(
-      (now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) / 86400000
-    );
-    dailyQuote = DAILY_QUOTES[dayOfYear % DAILY_QUOTES.length];
   }
 
-
-  // Cycle quote visibility for dissolving sand effect
+  // Cycle quote visibility and change text while invisible
   useEffect(() => {
     const interval = setInterval(() => {
       setQuoteVisible(false);
-      setTimeout(() => setQuoteVisible(true), 1500);
+      setTimeout(() => {
+        setQuoteIndex(prev => (prev + 1) % DAILY_QUOTES.length);
+        setQuoteVisible(true);
+      }, 1500); // Wait for the fade out to finish before changing text and fading in
     }, 14000);
     return () => clearInterval(interval);
   }, []);
+
+  const dailyQuote = DAILY_QUOTES[quoteIndex];
+
+
+
 
   if (!isHome) {
     // Non-home pages: compact branded spacer
