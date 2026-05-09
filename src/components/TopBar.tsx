@@ -42,25 +42,24 @@ export function TopBar() {
   const isHome = pathname === '/dashboard';
   const [quoteVisible, setQuoteVisible] = useState(true);
 
-  // Lazy initializers — computed once on mount, avoiding SSR purity issues
-  const [greeting] = useState(() => {
-    if (typeof window === 'undefined') return '';
-    const h = new Date().getHours();
-    if (h < 5) return 'Sacred Hours';
-    if (h < 12) return 'Namaste · शुभ प्रभात';
-    if (h < 17) return 'Shubh Madhyahna · शुभ मध्याह्न';
-    if (h < 21) return 'Shubh Sandhya · शुभ सन्ध्या';
-    return 'Shubh Ratri · शुभ रात्रि';
-  });
+  let greeting = '';
+  let dailyQuote = '';
 
-  const [dailyQuote] = useState(() => {
-    if (typeof window === 'undefined') return '';
+  if (typeof window !== 'undefined') {
+    const h = new Date().getHours();
+    if (h < 5) greeting = 'Sacred Hours';
+    else if (h < 12) greeting = 'Namaste · शुभ प्रभात';
+    else if (h < 17) greeting = 'Shubh Madhyahna · शुभ मध्याह्न';
+    else if (h < 21) greeting = 'Shubh Sandhya · शुभ सन्ध्या';
+    else greeting = 'Shubh Ratri · शुभ रात्रि';
+
     const now = new Date();
     const dayOfYear = Math.floor(
       (now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) / 86400000
     );
-    return DAILY_QUOTES[dayOfYear % DAILY_QUOTES.length];
-  });
+    dailyQuote = DAILY_QUOTES[dayOfYear % DAILY_QUOTES.length];
+  }
+
 
   // Cycle quote visibility for dissolving sand effect
   useEffect(() => {
@@ -132,7 +131,7 @@ export function TopBar() {
               color: 'var(--t1)', letterSpacing: '3px', textTransform: 'uppercase',
               lineHeight: 1.1
             }}>Antahkarana</div>
-            <div style={{
+            <div suppressHydrationWarning style={{
               fontFamily: 'var(--mono)', fontSize: '9px', color: 'var(--gold)',
               letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '3px',
               opacity: 0.75
@@ -171,7 +170,7 @@ export function TopBar() {
           position: 'absolute', top: 0, left: '15%', right: '15%', height: '1px',
           background: 'linear-gradient(90deg, transparent, rgba(212,150,60,.3), transparent)'
         }}/>
-        <p style={{
+        <p suppressHydrationWarning style={{
           fontFamily: 'var(--serif)', fontSize: '13px', fontStyle: 'italic',
           color: 'var(--gold3)', textAlign: 'center', lineHeight: 1.5,
           whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',

@@ -1,7 +1,7 @@
 'use client';
 import { useStore } from '@/store/useStore';
 import { HABITS, WISDOMS, TRADEOFFS } from '@/data/content';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { TopBar } from '@/components/TopBar';
 
@@ -9,6 +9,20 @@ export default function Dashboard() {
   const store = useStore();
   const [notifMsg, setNotifMsg] = useState('');
   const [notifShow, setNotifShow] = useState(false);
+  const [isGuest, setIsGuest] = useState(false);
+  
+  useEffect(() => {
+    if (typeof document !== 'undefined' && document.cookie.includes('guest_mode=true')) {
+      if (localStorage.getItem('ank_guest_warn_dismissed') !== 'true') {
+        setTimeout(() => setIsGuest(true), 0);
+      }
+    }
+  }, []);
+  
+  const dismissGuest = () => {
+    localStorage.setItem('ank_guest_warn_dismissed', 'true');
+    setIsGuest(false);
+  };
   
   const notify = (msg: string) => {
     setNotifMsg(msg);
@@ -22,8 +36,6 @@ export default function Dashboard() {
   const todayIdx = (userDay - 1) % WISDOMS.length;
   const todayW = WISDOMS[todayIdx];
   const isWDayFav = store.favs.includes(todayW.id);
-
-
 
   // Profile Calculation
   const calcScore = () => {
@@ -41,6 +53,15 @@ export default function Dashboard() {
         <div className="ss-header" style={{ paddingTop: '2px' }}>
           <div className="ss-title">Your mind is a<br/><em>sacred space.</em></div>
         </div>
+        
+        {isGuest && (
+          <div style={{ background: 'rgba(232, 184, 75, 0.1)', border: '1px solid rgba(232, 184, 75, 0.3)', borderRadius: '12px', padding: '16px', marginBottom: '24px', position: 'relative' }}>
+            <button onClick={dismissGuest} style={{ position: 'absolute', top: '10px', right: '10px', background: 'none', border: 'none', color: 'var(--t2)', fontSize: '20px', cursor: 'pointer', padding: '4px', lineHeight: 1 }}>&times;</button>
+            <div style={{ fontFamily: 'var(--serif)', fontSize: '16px', color: 'var(--gold2)', marginBottom: '4px' }}>Temporary Sanctuary</div>
+            <div style={{ fontSize: '12px', color: 'var(--t2)', lineHeight: 1.5, marginBottom: '12px', paddingRight: '20px' }}>Your progress is only saved on this device for 24 hours. Create an account to permanently sync your journey.</div>
+            <Link href="/" className="btn btn-sm btn-o" style={{ display: 'inline-block', textDecoration: 'none', background: 'rgba(232, 184, 75, 0.15)', color: 'var(--gold1)', border: 'none' }}>Save Progress →</Link>
+          </div>
+        )}
         
         <div className="wh" style={{position:'relative'}}>
           <div className="wh-inner">
