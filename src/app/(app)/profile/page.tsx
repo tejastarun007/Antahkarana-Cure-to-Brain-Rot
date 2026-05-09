@@ -1,6 +1,7 @@
 'use client';
 import { useStore } from '@/store/useStore';
 import { TRADEOFFS, MILESTONES, WISDOMS } from '@/data/content';
+import { GITA_TEACHINGS } from '@/data/gita-daily';
 
 const WISDOM_CARDS = [
   {id:'wc1', sk:'अहं ब्रह्मास्मि', e:'"I am Brahman — the infinite, undivided consciousness."', src:'Brihadaranyaka Upanishad 1.4.10'},
@@ -15,6 +16,7 @@ const WISDOM_CARDS = [
 const ALL_SAVEABLE = [
   ...WISDOMS.map(w => ({id: w.id, sk: w.s, e: w.e, src: w.src})),
   ...WISDOM_CARDS,
+  ...GITA_TEACHINGS.map(g => ({id: g.id, sk: g.sanskrit, e: `"${g.translation}"`, src: `Bhagavad Gita · ${g.verse}`})),
 ];
 import { useState, useEffect } from 'react';
 import { TopBar } from '@/components/TopBar';

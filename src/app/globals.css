@@ -510,6 +510,185 @@ body{display:flex;align-items:center;justify-content:center;font-family:var(--sa
 
 .wcard-lotus { position:absolute; right:-18px; bottom:-18px; opacity:.04; pointer-events:none; }
 
+/* ═══ DAILY GITA TEACHING — PREMIUM SACRED CARD ═══ */
+.gita-daily {
+  position:relative; margin-bottom:24px; border-radius:28px; overflow:hidden;
+  scroll-snap-align:start;
+  background:linear-gradient(160deg,#1a140a 0%,#12100a 25%,#0e0c08 50%,#100a06 75%,#0a0804 100%);
+  border:1px solid rgba(212,170,80,.3);
+  box-shadow:
+    0 0 0 1px rgba(212,170,80,.08),
+    0 8px 32px rgba(0,0,0,.5),
+    0 2px 16px rgba(180,130,40,.06),
+    inset 0 1px 0 rgba(255,220,120,.06);
+}
+/* Top crown stripe — animated gradient */
+.gita-daily::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg,transparent,#c8902a,#f6cc60,#e8b050,#c8902a,transparent);
+  background-size:200% 100%;
+  animation:gitaCrown 4s linear infinite;
+}
+@keyframes gitaCrown { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+/* Inner padding — separate from card shell */
+.gita-daily-inner { padding:30px 24px 24px; position:relative; z-index:2; }
+
+/* Sacred ambient glow — two layers */
+.gita-daily-glow {
+  position:absolute; top:-60px; right:-60px; width:260px; height:260px; border-radius:50%;
+  background:radial-gradient(circle,rgba(212,170,80,.1) 0%,rgba(180,120,30,.04) 40%,transparent 70%);
+  pointer-events:none; animation:gitaGlow 7s ease-in-out infinite;
+}
+.gita-daily-glow2 {
+  position:absolute; bottom:-40px; left:-40px; width:200px; height:200px; border-radius:50%;
+  background:radial-gradient(circle,rgba(160,80,20,.06),transparent 65%);
+  pointer-events:none; animation:gitaGlow 9s ease-in-out infinite 3s;
+}
+@keyframes gitaGlow { 0%,100%{transform:scale(.8);opacity:.3} 50%{transform:scale(1.4);opacity:1} }
+
+/* Badge — sacred gold pill */
+.gita-daily-badge {
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--mono); font-size:10px; letter-spacing:2.5px; text-transform:uppercase;
+  padding:6px 16px; border-radius:20px; margin-bottom:18px;
+  color:#f0d080; background:rgba(212,170,80,.08);
+  border:1px solid rgba(212,170,80,.25);
+  animation:gitaBadgePulse 4s ease-in-out infinite;
+  box-shadow:0 0 12px rgba(212,170,80,.06);
+}
+.gita-daily-badge-icon { font-size:14px; }
+@keyframes gitaBadgePulse { 0%,100%{opacity:.7;box-shadow:0 0 8px rgba(212,170,80,.04)} 50%{opacity:1;box-shadow:0 0 18px rgba(212,170,80,.1)} }
+
+/* Chapter label */
+.gita-daily-chapter {
+  font-family:var(--mono); font-size:11px; color:var(--t3); letter-spacing:1.5px; margin-bottom:14px;
+}
+
+/* Sanskrit — large gold devanagari */
+.gita-daily-sanskrit {
+  font-size:24px; line-height:1.5; margin-bottom:16px;
+  color:var(--gold2);
+  text-shadow:0 0 20px rgba(212,170,80,.15);
+}
+
+/* Translation — elegant serif */
+.gita-daily-translation {
+  font-family:var(--serif); font-size:18px; font-weight:300; font-style:italic;
+  color:var(--t1); line-height:1.7; margin-bottom:18px;
+  text-shadow:0 1px 2px rgba(0,0,0,.3);
+}
+
+/* Sacred divider — ornamental */
+.gita-daily-divider {
+  text-align:center; margin:0 0 18px; position:relative; height:20px;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+}
+.gita-daily-divider::before, .gita-daily-divider::after {
+  content:''; flex:1; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(212,170,80,.25),transparent);
+}
+.gita-daily-divider span {
+  font-size:12px; color:rgba(212,170,80,.5); flex-shrink:0;
+}
+
+/* Reflection — bordered insight */
+.gita-daily-reflection {
+  font-size:14px; color:var(--t2); line-height:1.75; margin-bottom:16px;
+  padding:14px 16px; border-radius:12px;
+  background:rgba(212,170,80,.03);
+  border-left:3px solid rgba(212,170,80,.4);
+}
+
+/* Theme tag */
+.gita-daily-theme-tag {
+  display:inline-block; font-family:var(--mono); font-size:9px; letter-spacing:2px;
+  text-transform:uppercase; color:rgba(212,170,80,.7); margin-bottom:16px;
+  padding:5px 12px; border:1px solid rgba(212,170,80,.2); border-radius:14px;
+  background:rgba(212,170,80,.04);
+}
+
+/* Neuroscience section — jade accent preserved */
+.gita-daily-neuro-wrap {
+  background:rgba(82,168,120,.05); border:1px solid rgba(82,168,120,.15);
+  border-radius:14px; padding:16px; margin-bottom:18px;
+  position:relative; overflow:hidden;
+}
+.gita-daily-neuro-wrap::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(82,168,120,.3),transparent);
+}
+.gita-daily-neuro-lbl {
+  font-family:var(--mono); font-size:9px; letter-spacing:2.5px; text-transform:uppercase;
+  color:var(--jade); margin-bottom:8px; font-weight:500;
+}
+.gita-daily-neuro { font-size:12px; color:var(--t2); line-height:1.7; }
+
+/* Footer actions */
+.gita-daily-foot {
+  display:flex; align-items:center; gap:16px;
+  padding-top:16px; border-top:1px solid rgba(212,170,80,.1);
+}
+
+/* Mandala watermark — sacred geometry */
+.gita-daily-mandala {
+  position:absolute; right:-12px; bottom:-12px; pointer-events:none;
+  animation:slw 50s linear infinite; color:rgba(212,170,80,.5);
+  opacity:.07;
+}
+
+/* Shimmer overlay — sweeping light */
+.gita-daily::after {
+  content:''; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(115deg,transparent 30%,rgba(255,220,120,.03) 45%,rgba(255,220,120,.06) 50%,rgba(255,220,120,.03) 55%,transparent 70%);
+  background-size:300% 100%;
+  animation:gitaShimmer 8s ease-in-out infinite;
+}
+@keyframes gitaShimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+/* ═══ UPCOMING TEACHINGS PEEK ═══ */
+.gita-peek-toggle {
+  display:block; width:100%; background:none; border:1px solid var(--bdr);
+  border-radius:14px; padding:10px; margin-bottom:16px;
+  font-family:var(--mono); font-size:10px; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--t3); cursor:pointer; transition:.2s;
+}
+.gita-peek-toggle:active { background:var(--glass); color:var(--gold2); border-color:var(--bdr2); }
+
+.gita-peek-list { display:flex; flex-direction:column; gap:10px; margin-bottom:20px; }
+.gita-peek-item {
+  padding:14px 16px; border-radius:14px; position:relative;
+}
+.gita-peek-saffron { background:rgba(226,116,24,.05); border:1px solid rgba(226,116,24,.18); }
+.gita-peek-indigo  { background:rgba(100,90,180,.05); border:1px solid rgba(100,90,180,.18); }
+.gita-peek-forest  { background:rgba(66,138,102,.05); border:1px solid rgba(66,138,102,.18); }
+.gita-peek-wine    { background:rgba(160,50,70,.05); border:1px solid rgba(160,50,70,.18); }
+.gita-peek-violet  { background:rgba(110,80,200,.05); border:1px solid rgba(110,80,200,.18); }
+
+.gita-peek-day {
+  font-family:var(--mono); font-size:9px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--t4); margin-bottom:6px;
+}
+.gita-peek-sk { font-size:15px; line-height:1.4; margin-bottom:4px; }
+.gita-peek-saffron .gita-peek-sk { color:var(--gold2); }
+.gita-peek-indigo  .gita-peek-sk { color:#a8a0f0; }
+.gita-peek-forest  .gita-peek-sk { color:var(--jade); }
+.gita-peek-wine    .gita-peek-sk { color:#e080a0; }
+.gita-peek-violet  .gita-peek-sk { color:#a092ee; }
+
+.gita-peek-verse { font-family:var(--mono); font-size:10px; color:var(--t4); margin-bottom:2px; }
+.gita-peek-theme { font-family:var(--mono); font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:var(--t3); }
+
+/* ═══ SECTION DIVIDER ═══ */
+.wf-section-div {
+  display:flex; align-items:center; gap:12px; margin:8px 0 20px; padding:0 4px;
+}
+.wf-section-line { flex:1; height:1px; background:linear-gradient(90deg,transparent,var(--bdr),transparent); }
+.wf-section-div span {
+  font-family:var(--mono); font-size:9px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--t3); white-space:nowrap;
+}
+
 .wf-hint {
   text-align:center; padding:6px 16px 90px;
   font-family:var(--mono); font-size:10px; color:var(--t4); letter-spacing:2px; text-transform:uppercase; flex-shrink:0;
