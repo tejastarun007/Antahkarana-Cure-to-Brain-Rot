@@ -268,7 +268,7 @@ export default function ChantsPage() {
         </button>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '0 28px 18px', flexShrink: 0 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '0 20px 18px', flexShrink: 0 }}>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.6 }}><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon></svg>
         <div className="pl-bar" style={{ flex: 1, height: '4px', background: 'rgba(212,150,60,.1)' }} onClick={(e) => {
           const bar = e.currentTarget;
@@ -285,7 +285,7 @@ export default function ChantsPage() {
 
       </div>
 
-      <div ref={queueRef} className="pl-queue scroll" onScroll={handleScroll} style={{ paddingBottom: 'calc(var(--safe-bot) + 150px)', flex: 1, overflowY: 'auto' }}>
+      <div ref={queueRef} className="pl-queue scroll" onScroll={handleScroll} style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 20px) + 150px)', flex: 1, overflowY: 'auto' }}>
         {TRACK_GROUPS.map((group, gIdx) => (
           <div key={gIdx} style={{ marginBottom: '16px' }}>
             <div className="ql">{group.label}</div>
