@@ -851,7 +851,7 @@ body{display:flex;align-items:center;justify-content:center;font-family:var(--sa
 #chants-screen {
   background:linear-gradient(170deg,#18102c 0%,#0e0a1c 35%,#08060f 100%);
   display:flex; flex-direction:column;
-  overflow-y:auto; overflow-x:hidden;
+  overflow:hidden;
   scrollbar-width:none; -webkit-overflow-scrolling:touch;
 }
 #chants-screen::-webkit-scrollbar { display:none; }
@@ -893,6 +893,22 @@ body{display:flex;align-items:center;justify-content:center;font-family:var(--sa
   background:var(--void); border:2px solid rgba(212,150,60,.25);
   display:flex; align-items:center; justify-content:center; z-index:1;
 }
+
+/* Minimizable Player State */
+.player-top { display:flex; flex-direction:column; flex-shrink:0; position:relative; z-index:5; }
+.player-top .vinyl-wrap, .player-top .waveform {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: 350px; opacity: 1; transform: scale(1); transform-origin: top center;
+}
+.player-top.minimized .vinyl-wrap,
+.player-top.minimized .waveform {
+  max-height: 0; opacity: 0; padding: 0; margin: 0; overflow: hidden; transform: scale(0.6); pointer-events: none;
+}
+.player-top .pl-info { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+.player-top.minimized .pl-info { padding: 10px 28px 6px; }
+.player-top.minimized .pl-title { font-size: 22px; margin-bottom: 2px; }
+.player-top.minimized .pl-artist { font-size: 12px; margin-bottom: 0; }
+.player-top.minimized .pl-tag { display: none; }
 
 /* Track info */
 .pl-info { flex-shrink:0; text-align:center; padding:22px 28px 12px; }

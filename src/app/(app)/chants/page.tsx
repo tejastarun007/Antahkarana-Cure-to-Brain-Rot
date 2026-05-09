@@ -45,8 +45,10 @@ export default function ChantsPage() {
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(1);
   const [volume, setVolume] = useState(1);
+  const [isScrolled, setIsScrolled] = useState(false);
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const queueRef = useRef<HTMLDivElement | null>(null);
 
   const t = TRACK_GROUPS[curGroupIdx].tracks[curTrackIdx];
 
@@ -117,6 +119,13 @@ export default function ChantsPage() {
     }
   }, [volume]);
 
+  const expandPlayer = () => {
+    setIsScrolled(false);
+    if (queueRef.current) {
+      queueRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   const togglePlay = () => {
     if (!audioRef.current) return;
     
@@ -131,6 +140,7 @@ export default function ChantsPage() {
       }
       audioRef.current.play().then(() => {
         setPlaying(true);
+        expandPlayer();
       }).catch(err => {
         console.error("Audio playback failed:", err);
         setPlaying(false);
@@ -152,6 +162,7 @@ export default function ChantsPage() {
   const selTrack = (gIdx: number, tIdx: number) => {
     setCurGroupIdx(gIdx);
     setCurTrackIdx(tIdx);
+    expandPlayer();
   };
 
   const skipTrack = (forward: boolean) => {
@@ -180,10 +191,15 @@ export default function ChantsPage() {
 
   const hs = [6,12,20,16,28,22,36,30,40,34,46,38,50,42,54,46,50,42,46,38,40,32,36,28,30,22,28,18,14,10,8,6];
 
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    setIsScrolled(e.currentTarget.scrollTop > 10);
+  };
+
   return (
     <div className="screen active" id="chants-screen" style={{ opacity: 1, pointerEvents: 'all' }}>
       <TopBar />
-      <div className="vinyl-wrap">
+      <div className={`player-top ${isScrolled ? 'minimized' : ''}`}>
+        <div className="vinyl-wrap">
         <div className="vinyl-aura"></div>
         <div className={`vinyl ${playing ? 'spin' : ''}`}>
           <div className="vinyl-ring" style={{ width: '216px', height: '216px', top: '4px', left: '4px' }}></div>
@@ -267,7 +283,9 @@ export default function ChantsPage() {
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold2)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
       </div>
 
-      <div className="pl-queue scroll" style={{ paddingBottom: 'calc(var(--safe-bot) + 150px)' }}>
+      </div>
+
+      <div ref={queueRef} className="pl-queue scroll" onScroll={handleScroll} style={{ paddingBottom: 'calc(var(--safe-bot) + 150px)', flex: 1, overflowY: 'auto' }}>
         {TRACK_GROUPS.map((group, gIdx) => (
           <div key={gIdx} style={{ marginBottom: '16px' }}>
             <div className="ql">{group.label}</div>
