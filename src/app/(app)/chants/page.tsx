@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { TopBar } from '@/components/TopBar';
 
 const TRACK_GROUPS = [
@@ -49,8 +49,35 @@ export default function ChantsPage() {
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const queueRef = useRef<HTMLDivElement | null>(null);
+  const [audioCurrentTime, setAudioCurrentTime] = useState(0);
+  const [audioDuration, setAudioDuration] = useState(0);
 
   const t = TRACK_GROUPS[curGroupIdx].tracks[curTrackIdx];
+
+  const selTrack = useCallback((gIdx: number, tIdx: number) => {
+    setCurGroupIdx(gIdx);
+    setCurTrackIdx(tIdx);
+  }, []);
+
+  const skipTrack = useCallback((forward: boolean) => {
+    setCurGroupIdx(prev => {
+      let nG = prev;
+      setCurTrackIdx(prevT => {
+        let nT = forward ? prevT + 1 : prevT - 1;
+        if (nT >= TRACK_GROUPS[nG].tracks.length) {
+          nG = (nG + 1) % TRACK_GROUPS.length;
+          nT = 0;
+          setCurGroupIdx(nG);
+        } else if (nT < 0) {
+          nG = nG - 1 < 0 ? TRACK_GROUPS.length - 1 : nG - 1;
+          nT = TRACK_GROUPS[nG].tracks.length - 1;
+          setCurGroupIdx(nG);
+        }
+        return nT;
+      });
+      return prev;
+    });
+  }, []);
 
   // Initialize Audio Object
   useEffect(() => {
@@ -60,6 +87,7 @@ export default function ChantsPage() {
       const updateProg = () => {
         if (audioRef.current && audioRef.current.duration) {
           setProgress((audioRef.current.currentTime / audioRef.current.duration) * 100);
+          setAudioCurrentTime(audioRef.current.currentTime);
         }
       };
 
@@ -72,6 +100,7 @@ export default function ChantsPage() {
       const handleLoadedMeta = () => {
         if (audioRef.current) {
           setDuration(audioRef.current.duration);
+          setAudioDuration(audioRef.current.duration);
         }
       };
 
@@ -89,7 +118,7 @@ export default function ChantsPage() {
         }
       };
     }
-  }, []);
+  }, [skipTrack]);
 
   // Synchronize audio source when track changes
   useEffect(() => {
@@ -126,6 +155,11 @@ export default function ChantsPage() {
     }
   };
 
+  const handleTrackSelect = (gIdx: number, tIdx: number) => {
+    selTrack(gIdx, tIdx);
+    expandPlayer();
+  };
+
   const togglePlay = () => {
     if (!audioRef.current) return;
     
@@ -159,37 +193,23 @@ export default function ChantsPage() {
     }
   };
 
-  const selTrack = (gIdx: number, tIdx: number) => {
-    setCurGroupIdx(gIdx);
-    setCurTrackIdx(tIdx);
-    expandPlayer();
-  };
-
-  const skipTrack = (forward: boolean) => {
-    let nT = forward ? curTrackIdx + 1 : curTrackIdx - 1;
-    let nG = curGroupIdx;
-    
-    if (nT >= TRACK_GROUPS[curGroupIdx].tracks.length) {
-      nG = (curGroupIdx + 1) % TRACK_GROUPS.length;
-      nT = 0;
-    } else if (nT < 0) {
-      nG = curGroupIdx - 1 < 0 ? TRACK_GROUPS.length - 1 : curGroupIdx - 1;
-      nT = TRACK_GROUPS[nG].tracks.length - 1;
-    }
-    selTrack(nG, nT);
-  };
-
-  // Safe time calculation using actual audio duration if available, otherwise fallback
-  const currentTotalSeconds = audioRef.current && !isNaN(audioRef.current.duration) 
-    ? audioRef.current.duration 
-    : t.sec;
-  const curSecs = audioRef.current ? audioRef.current.currentTime : (progress / 100) * currentTotalSeconds;
+  // Use state-tracked values instead of reading audioRef during render
+  const currentTotalSeconds = audioDuration > 0 ? audioDuration : t.sec;
+  const curSecs = audioCurrentTime;
   
   const curMinsStr = Math.floor(curSecs / 60);
   const curSecsStr = Math.floor(curSecs % 60).toString().padStart(2, '0');
   const curTime = `${curMinsStr}:${curSecsStr}`;
 
-  const hs = [6,12,20,16,28,22,36,30,40,34,46,38,50,42,54,46,50,42,46,38,40,32,36,28,30,22,28,18,14,10,8,6];
+  // Pre-compute stable waveform animation durations (avoids Math.random() during render)
+  const waveformBars = useMemo(() => {
+    const hs = [6,12,20,16,28,22,36,30,40,34,46,38,50,42,54,46,50,42,46,38,40,32,36,28,30,22,28,18,14,10,8,6];
+    return hs.map((h, i) => ({
+      height: h,
+      animDuration: (0.55 + ((Math.sin(i * 2.7 + 1.3) + 1) / 2) * 0.8).toFixed(2),
+      animDelay: (i * 0.055).toFixed(2),
+    }));
+  }, []);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     setIsScrolled(e.currentTarget.scrollTop > 10);
@@ -220,14 +240,14 @@ export default function ChantsPage() {
       </div>
 
       <div className="waveform">
-        {hs.map((h, i) => (
+        {waveformBars.map((bar, i) => (
           <div 
             key={i} 
             className="wb" 
             style={{ 
-              height: `${h}px`, 
-              animationDuration: `${(0.55 + Math.random() * 0.8).toFixed(2)}s`,
-              animationDelay: `${(i * 0.055).toFixed(2)}s`,
+              height: `${bar.height}px`, 
+              animationDuration: `${bar.animDuration}s`,
+              animationDelay: `${bar.animDelay}s`,
               animationPlayState: playing ? 'running' : 'paused'
             }}
           ></div>
@@ -292,7 +312,7 @@ export default function ChantsPage() {
             {group.tracks.map((trk, tIdx) => {
               const isSelected = curGroupIdx === gIdx && curTrackIdx === tIdx;
               return (
-                <div key={tIdx} className={`qi ${isSelected ? 'on' : ''}`} onClick={() => selTrack(gIdx, tIdx)}>
+                <div key={tIdx} className={`qi ${isSelected ? 'on' : ''}`} onClick={() => handleTrackSelect(gIdx, tIdx)}>
                   <div className="qi-thumb">{trk.icon}</div>
                   <div className="qi-meta-wrap">
                     <div className="qi-name">{trk.name}</div>

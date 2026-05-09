@@ -11,17 +11,13 @@ import { ClickHand } from '@/components/ClickHand';
 export default function Practice() {
   const store = useStore();
   const [activePracTab, setActivePracTab] = useState('all');
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const [mounted] = useState(() => typeof window !== 'undefined');
 
   const [notifMsg, setNotifMsg] = useState('');
   const [notifShow, setNotifShow] = useState(false);
 
   const [habModalOpen, setHabModalOpen] = useState(false);
-  const [curHab, setCurHab] = useState<any>(null);
+  const [curHab, setCurHab] = useState<typeof HABITS[number] | null>(null);
 
   // Timer State
   const [timerSes, setTimerSes] = useState(0);
@@ -40,7 +36,7 @@ export default function Practice() {
     setTimeout(() => setNotifShow(false), 3000);
   };
 
-  const handleHabClick = (h: any) => {
+  const handleHabClick = (h: typeof HABITS[number]) => {
     if (!store.hasSeenHabitHint) store.markHabitHintSeen();
     setCurHab(h);
     setHabModalOpen(true);
@@ -184,7 +180,7 @@ export default function Practice() {
             </button>
             {(timerLeft < timerTotal || timerComplete) && <button className="btn btn-d btn-sm" onClick={resetTimer}>Reset</button>}
           </div>
-          <div className="tq">"{curPhase ? curPhase.q : activeSess.q}"</div>
+          <div className="tq">&ldquo;{curPhase ? curPhase.q : activeSess.q}&rdquo;</div>
           <div className="ts deva">{curPhase ? curPhase.deva : activeSess.deva}</div>
           
           {/* Session log */}
@@ -212,7 +208,7 @@ export default function Practice() {
         </div>
       </div>
 
-      <div className={`modal-bg ${habModalOpen ? 'open' : ''}`} onClick={(e) => { if ((e.target as any).className.includes('modal-bg')) setHabModalOpen(false); }}>
+      <div className={`modal-bg ${habModalOpen ? 'open' : ''}`} onClick={(e) => { if ((e.target as HTMLElement).className.includes('modal-bg')) setHabModalOpen(false); }}>
         <div className="msheet">
           <div className="mhandle"></div>
           {curHab && (

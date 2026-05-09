@@ -1,14 +1,25 @@
 'use client';
 import { BottomNav } from '@/components/BottomNav';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+import { pullStateFromCloud, pushStateToCloud } from '@/lib/sync';
+import { useStore } from '@/store/useStore';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
-  const [mounted, setMounted] = useState(false);
-  
+  const [mounted] = useState(() => typeof window !== 'undefined');
+
   useEffect(() => {
-    setMounted(true);
-    // Auth is now handled by middleware.ts — no client-side check needed
-  }, []);
+    if (!mounted) return;
+    
+    // Pull latest state on mount
+    pullStateFromCloud();
+
+    // Subscribe to local state changes and push to cloud
+    const unsubscribe = useStore.subscribe((state) => {
+      pushStateToCloud(state);
+    });
+
+    return () => unsubscribe();
+  }, [mounted]);
 
   if (!mounted) return null;
 

@@ -1,6 +1,6 @@
 'use client';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 
 const TQUOTES = [
   '"तदेजति तन्नैजति तद्दूरे तद्वन्तिके — It moves and it moves not; it is far and it is near."',
@@ -17,11 +17,13 @@ export function BottomNav() {
   const [tovVisible, setTovVisible] = useState(false);
   const [tovQuote, setTovQuote] = useState(TQUOTES[0]);
   const [navigatingTo, setNavigatingTo] = useState<string | null>(null);
+  const quoteIndexRef = useRef(0);
 
-  const doNav = (path: string) => {
+  const doNav = useCallback((path: string) => {
     if (path === current || tovVisible) return;
     setNavigatingTo(path);
-    setTovQuote(TQUOTES[Math.floor(Math.random() * TQUOTES.length)]);
+    quoteIndexRef.current = (quoteIndexRef.current + 1) % TQUOTES.length;
+    setTovQuote(TQUOTES[quoteIndexRef.current]);
     setTovVisible(true);
     
     // The "Time of Void" transition logic
@@ -33,7 +35,7 @@ export function BottomNav() {
         setNavigatingTo(null);
       }, 1000);
     }, 1800);
-  };
+  }, [current, tovVisible, router]);
 
   const navs = [
     { p: '/dashboard', l: 'Home', i: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 3L3 10.5V21h18V10.5L12 3z"/></svg> },

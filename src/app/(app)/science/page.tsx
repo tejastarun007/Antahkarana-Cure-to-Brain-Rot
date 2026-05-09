@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useStore } from '@/store/useStore';
 import { SCI_SECS, ERAS, TRADEOFFS, TIERS } from '@/data/content';
 import Link from 'next/link';
@@ -22,11 +22,6 @@ export default function Science() {
   const [openEra, setOpenEra] = useState<number>(-1);
   const [openTO, setOpenTO] = useState<number>(-1);
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const handleRegionClick = (id: string) => {
     if (!store.hasSeenScienceHint) store.markScienceHintSeen();
@@ -320,7 +315,7 @@ export default function Science() {
               </div>
             ))}
 
-            <div className="proof" style={{ borderColor: 'rgba(192,64,64,.3)', background: 'rgba(192,64,64,.05)' }}><div className="proof-lbl" style={{ color: 'var(--sindoor2)' }}>The Compound Effect · Nature Scientific Reports (2024)</div><div className="proof-t">ACC dominance (#1) worsens ventral attention takeover (#3), suppresses DMN (#4), and reduces the reflective capacity to even <strong>recognise</strong> the degradation. The very circuits that would alert you are being consumed first.</div><div className="cite">BioRxiv: "Energy information trade-off in brain networks" · Nature Sci Rep 2024</div></div>
+            <div className="proof" style={{ borderColor: 'rgba(192,64,64,.3)', background: 'rgba(192,64,64,.05)' }}><div className="proof-lbl" style={{ color: 'var(--sindoor2)' }}>The Compound Effect · Nature Scientific Reports (2024)</div><div className="proof-t">ACC dominance (#1) worsens ventral attention takeover (#3), suppresses DMN (#4), and reduces the reflective capacity to even <strong>recognise</strong> the degradation. The very circuits that would alert you are being consumed first.</div><div className="cite">BioRxiv: &ldquo;Energy information trade-off in brain networks&rdquo; · Nature Sci Rep 2024</div></div>
             <div className="proof"><div className="proof-lbl">Vedic Systems Theory — Triguna Dynamics</div><div className="proof-t">Sattva-Rajas-Tamas interact dynamically; excess Rajas (agitation) suppresses Sattva (clarity) and amplifies Tamas (inertia) — a self-reinforcing loop.</div><div style={{ fontFamily: 'var(--deva)', fontSize: '14px', color: 'var(--gold3)', marginTop: '5px' }}>रजो-रागात्मकं विद्धि — Bhagavad Gita 14.7</div></div>
           </div>
         )}

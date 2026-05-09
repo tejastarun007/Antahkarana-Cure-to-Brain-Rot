@@ -46,7 +46,7 @@ export default function Dashboard() {
           <div className="wh-inner">
             <div className="wday">Day {userDay} · Daily Wisdom</div>
             <div className="w-sk deva">{todayW.s}</div>
-            <div className="w-q">"{todayW.e}"</div>
+            <div className="w-q">&ldquo;{todayW.e}&rdquo;</div>
             <div className="w-src">{todayW.src}</div>
             <div className="w-acts">
               <button className={`fav-b ${isWDayFav ? 'on' : ''}`} onClick={() => { store.toggleFav(todayW.id); notify(isWDayFav ? '♡ Removed from saved' : '♡ Wisdom saved!'); }}>
@@ -69,7 +69,7 @@ export default function Dashboard() {
         <div className="today-prog">
           <div className="tp-card">
             <div style={{display:'flex', justifyContent:'space-between', alignItems:'baseline', marginBottom:'7px'}}>
-              <div style={{fontSize:'12px', color:'var(--t2)'}}>Today's Progress</div>
+              <div style={{fontSize:'12px', color:'var(--t2)'}}>Today&apos;s Progress</div>
               <div className="mono" style={{fontSize:'12px', color:'var(--gold2)'}}>{store.done.length} / {HABITS.length}</div>
             </div>
             <div className="pbar"><div className="pfill pfill-g" style={{width: `${Math.round((store.done.length / HABITS.length) * 100)}%`}}></div></div>
@@ -80,7 +80,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="s-row"><h3>Today's Sadhana</h3><Link href="/practice">See all →</Link></div>
+        <div className="s-row"><h3>Today&apos;s Sadhana</h3><Link href="/practice">See all →</Link></div>
         <div className="hab-grid">
           {HABITS.slice(0, 4).map(h => {
             const isDone = store.done.includes(h.id);

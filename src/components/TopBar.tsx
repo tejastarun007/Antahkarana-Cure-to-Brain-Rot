@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useMemo, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const DAILY_QUOTES = [
   "सत्यमेव जयते — Truth alone triumphs",
@@ -42,21 +42,25 @@ export function TopBar() {
   const isHome = pathname === '/dashboard';
   const [quoteVisible, setQuoteVisible] = useState(true);
 
-  const greeting = useMemo(() => {
+  // Lazy initializers — computed once on mount, avoiding SSR purity issues
+  const [greeting] = useState(() => {
+    if (typeof window === 'undefined') return '';
     const h = new Date().getHours();
     if (h < 5) return 'Sacred Hours';
     if (h < 12) return 'Namaste · शुभ प्रभात';
     if (h < 17) return 'Shubh Madhyahna · शुभ मध्याह्न';
     if (h < 21) return 'Shubh Sandhya · शुभ सन्ध्या';
     return 'Shubh Ratri · शुभ रात्रि';
-  }, []);
+  });
 
-  const dailyQuote = useMemo(() => {
+  const [dailyQuote] = useState(() => {
+    if (typeof window === 'undefined') return '';
+    const now = new Date();
     const dayOfYear = Math.floor(
-      (Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000
+      (now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) / 86400000
     );
     return DAILY_QUOTES[dayOfYear % DAILY_QUOTES.length];
-  }, []);
+  });
 
   // Cycle quote visibility for dissolving sand effect
   useEffect(() => {

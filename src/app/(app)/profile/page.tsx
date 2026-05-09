@@ -1,6 +1,6 @@
 'use client';
 import { useStore } from '@/store/useStore';
-import { TRADEOFFS, MILESTONES, WISDOMS } from '@/data/content';
+import { MILESTONES, WISDOMS } from '@/data/content';
 import { GITA_TEACHINGS } from '@/data/gita-daily';
 
 const WISDOM_CARDS = [
@@ -30,7 +30,7 @@ export default function Profile() {
 
   const [notifMsg, setNotifMsg] = useState('');
   const [notifShow, setNotifShow] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<{ id: string; email?: string } | null>(null);
 
   const [isEditingName, setIsEditingName] = useState(false);
   const [tempName, setTempName] = useState('');
@@ -99,7 +99,7 @@ export default function Profile() {
     : 100;
 
   const checkMS = (req: string, need: number) => {
-    const v: any = { totalTasks: store.totalTasks, streak: store.streak, readMins: store.readMins, medMins: store.medMins, pranaMins: store.pranaMins, totalMins: store.totalMins };
+    const v: Record<string, number> = { totalTasks: store.totalTasks, streak: store.streak, readMins: store.readMins, medMins: store.medMins, pranaMins: store.pranaMins, totalMins: store.totalMins };
     return (v[req] || 0) >= need;
   };
 
@@ -253,11 +253,11 @@ export default function Profile() {
               for(let i=0; i<first; i++) cells.push(<div key={`e${i}`} className="cal-d emp"></div>);
               for(let d=1; d<=dim; d++) {
                 const date2 = new Date(calDate.getFullYear(), calDate.getMonth(), d);
-                const key = date2.toDateString();
-                const h = store.hist.find((x: any) => x.date === key);
+                const dayKey = date2.toDateString();
+                const h = store.hist.find((x: { date: string; count: number }) => x.date === dayKey);
                 const isToday2 = isCur && d === today2.getDate();
                 const isFut = date2 > today2;
-                let cls = isToday2 ? 'today' : isFut ? 'fut' : h && h.count >= 3 ? 'done' : h && h.count > 0 ? 'part' : '';
+                const cls = isToday2 ? 'today' : isFut ? 'fut' : h && h.count >= 3 ? 'done' : h && h.count > 0 ? 'part' : '';
                 cells.push(<div key={`d${d}`} className={`cal-d ${cls}`}>{d}</div>);
               }
               return cells;
@@ -295,7 +295,7 @@ export default function Profile() {
         <div className="ms-grid">
           {MILESTONES.map((m, i) => {
             const unlocked = checkMS(m.req, m.need);
-            const v: any = { totalTasks: store.totalTasks, streak: store.streak, readMins: store.readMins, medMins: store.medMins, pranaMins: store.pranaMins, totalMins: store.totalMins };
+            const v: Record<string, number> = { totalTasks: store.totalTasks, streak: store.streak, readMins: store.readMins, medMins: store.medMins, pranaMins: store.pranaMins, totalMins: store.totalMins };
             const cur = v[m.req] || 0;
             const pct = Math.min(100, Math.round(cur / m.need * 100));
             return (
