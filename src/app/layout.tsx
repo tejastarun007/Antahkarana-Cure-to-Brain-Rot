@@ -2,8 +2,7 @@ import type { Metadata } from 'next';
 import { Cormorant_Garamond, DM_Mono, DM_Sans, Noto_Serif_Devanagari } from 'next/font/google';
 import './globals.css';
 import { Analytics } from '@vercel/analytics/next';
-
-
+import { SpeedInsights } from "@vercel/speed-insights/next";
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600'],
@@ -55,6 +54,7 @@ export default function RootLayout({
       <body>
         {children}
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
