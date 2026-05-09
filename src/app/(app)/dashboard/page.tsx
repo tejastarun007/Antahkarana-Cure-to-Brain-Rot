@@ -62,6 +62,41 @@ export default function Dashboard() {
             <Link href="/" className="btn btn-sm btn-o" style={{ display: 'inline-block', textDecoration: 'none', background: 'rgba(232, 184, 75, 0.15)', color: 'var(--gold1)', border: 'none' }}>Save Progress →</Link>
           </div>
         )}
+
+        {/* Mood Router */}
+        <div style={{ marginBottom: '24px' }}>
+          <div style={{ fontSize: '13px', color: 'var(--t2)', marginBottom: '12px', fontFamily: 'var(--serif)' }}>How is your mind right now?</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+            <Link href="/chants" style={{ background: 'rgba(212,150,60,.05)', border: '1px solid rgba(212,150,60,.15)', borderRadius: '12px', padding: '12px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px', transition: 'all 0.2s' }}>
+              <span style={{ fontSize: '20px' }}>🌊</span>
+              <div>
+                <div style={{ fontSize: '13px', color: 'var(--gold2)' }}>Anxious</div>
+                <div style={{ fontSize: '10px', color: 'var(--t4)' }}>Om Chanting</div>
+              </div>
+            </Link>
+            <Link href="/practice" style={{ background: 'rgba(212,150,60,.05)', border: '1px solid rgba(212,150,60,.15)', borderRadius: '12px', padding: '12px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px', transition: 'all 0.2s' }}>
+              <span style={{ fontSize: '20px' }}>🎯</span>
+              <div>
+                <div style={{ fontSize: '13px', color: 'var(--gold2)' }}>Scattered</div>
+                <div style={{ fontSize: '10px', color: 'var(--t4)' }}>Focus Timer</div>
+              </div>
+            </Link>
+            <Link href="/chants" style={{ background: 'rgba(212,150,60,.05)', border: '1px solid rgba(212,150,60,.15)', borderRadius: '12px', padding: '12px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px', transition: 'all 0.2s' }}>
+              <span style={{ fontSize: '20px' }}>⚡️</span>
+              <div>
+                <div style={{ fontSize: '13px', color: 'var(--gold2)' }}>Lethargic</div>
+                <div style={{ fontSize: '10px', color: 'var(--t4)' }}>Dynamic Energy</div>
+              </div>
+            </Link>
+            <Link href="/wisdom" style={{ background: 'rgba(212,150,60,.05)', border: '1px solid rgba(212,150,60,.15)', borderRadius: '12px', padding: '12px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px', transition: 'all 0.2s' }}>
+              <span style={{ fontSize: '20px' }}>🔥</span>
+              <div>
+                <div style={{ fontSize: '13px', color: 'var(--gold2)' }}>Overwhelmed</div>
+                <div style={{ fontSize: '10px', color: 'var(--t4)' }}>Read Wisdom</div>
+              </div>
+            </Link>
+          </div>
+        </div>
         
         <div className="wh" style={{position:'relative'}}>
           <div className="wh-inner">
