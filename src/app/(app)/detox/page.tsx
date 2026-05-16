@@ -15,7 +15,7 @@ export default function Detox() {
   const masterCollapsed = expandedCard !== null;
 
   return (
-    <div className="screen on" id="detox">
+    <div className="screen on" id="detox" style={{ animation: 'sIn 0.5s cubic-bezier(0.4,0,0.2,1) both' }}>
       {/* Header */}
       <div style={{ padding: '20px 20px 0' }}>
         <Link href="/dashboard" style={{ color: 'var(--t3)', textDecoration: 'none', fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>← Back</Link>
