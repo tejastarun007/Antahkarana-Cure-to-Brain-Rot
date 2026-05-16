@@ -41,25 +41,25 @@ export function TopBar() {
   const pathname = usePathname();
   const isHome = pathname === '/dashboard';
   const [quoteVisible, setQuoteVisible] = useState(true);
-  const [quoteIndex, setQuoteIndex] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const now = new Date();
-      return Math.floor(
-        (now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) / 86400000
-      ) % DAILY_QUOTES.length;
-    }
-    return 0;
-  });
+  const [greeting, setGreeting] = useState('');
+  const [quoteIndex, setQuoteIndex] = useState(0);
 
-  let greeting = '';
-  if (typeof window !== 'undefined') {
-    const h = new Date().getHours();
-    if (h < 5) greeting = 'Sacred Hours';
-    else if (h < 12) greeting = 'Namaste · शुभ प्रभात';
-    else if (h < 17) greeting = 'Shubh Madhyahna · शुभ मध्याह्न';
-    else if (h < 21) greeting = 'Shubh Sandhya · शुभ सन्ध्या';
-    else greeting = 'Shubh Ratri · शुभ रात्रि';
-  }
+  // Set greeting and quote index on mount (client-only to avoid hydration mismatch)
+  useEffect(() => {
+    const now = new Date();
+    const h = now.getHours();
+    if (h < 5) setGreeting('Sacred Hours');
+    else if (h < 12) setGreeting('Namaste · शुभ प्रभात');
+    else if (h < 17) setGreeting('Shubh Madhyahna · शुभ मध्याह्न');
+    else if (h < 21) setGreeting('Shubh Sandhya · शुभ सन्ध्या');
+    else setGreeting('Shubh Ratri · शुभ रात्रि');
+
+    setQuoteIndex(
+      Math.floor(
+        (now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) / 86400000
+      ) % DAILY_QUOTES.length
+    );
+  }, []);
 
   // Cycle quote visibility and change text while invisible
   useEffect(() => {
@@ -110,7 +110,7 @@ export function TopBar() {
   return (
     <div style={{
       display: 'flex', flexDirection: 'column',
-      padding: '16px 22px 0', width: '100%',
+      padding: '16px 20px 0', width: '100%',
       zIndex: 100, position: 'relative',
     }}>
 

@@ -49,6 +49,7 @@ export default function ChantsPage() {
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const queueRef = useRef<HTMLDivElement | null>(null);
+  const playingRef = useRef(false);
   const [audioCurrentTime, setAudioCurrentTime] = useState(0);
   const [audioDuration, setAudioDuration] = useState(0);
 
@@ -93,6 +94,7 @@ export default function ChantsPage() {
 
       const handleEnded = () => {
         setPlaying(false);
+        playingRef.current = false;
         setProgress(0);
         skipTrack(true);
       };
@@ -123,7 +125,7 @@ export default function ChantsPage() {
   // Synchronize audio source when track changes
   useEffect(() => {
     if (audioRef.current) {
-      const wasPlaying = playing;
+      const wasPlaying = playingRef.current;
       const targetSrc = t.src;
       
       if (audioRef.current.src !== targetSrc) {
@@ -136,6 +138,7 @@ export default function ChantsPage() {
           audioRef.current.play().catch(err => {
             console.error("Audio playback failed:", err);
             setPlaying(false);
+            playingRef.current = false;
           });
         }
       }
@@ -166,6 +169,7 @@ export default function ChantsPage() {
     if (playing) {
       audioRef.current.pause();
       setPlaying(false);
+      playingRef.current = false;
     } else {
       // Ensure src is set before playing
       if (!audioRef.current.src || audioRef.current.src === window.location.href) {
@@ -174,6 +178,7 @@ export default function ChantsPage() {
       }
       audioRef.current.play().then(() => {
         setPlaying(true);
+        playingRef.current = true;
         expandPlayer();
       }).catch(err => {
         console.error("Audio playback failed:", err);

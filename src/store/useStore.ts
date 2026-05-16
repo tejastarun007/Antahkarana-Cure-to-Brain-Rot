@@ -1,6 +1,14 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+export interface JournalEntry {
+  id: string;
+  text: string;
+  mood: string;
+  date: string;
+  words: number;
+}
+
 export interface UserState {
   done: string[];
   streak: number;
@@ -16,6 +24,7 @@ export interface UserState {
   userName: string;
   hasSeenHabitHint: boolean;
   hasSeenScienceHint: boolean;
+  journal: JournalEntry[];
 }
 
 interface AppState extends UserState {
@@ -28,6 +37,7 @@ interface AppState extends UserState {
   updateUserName: (name: string) => void;
   markHabitHintSeen: () => void;
   markScienceHintSeen: () => void;
+  addJournalEntry: (entry: JournalEntry) => void;
   syncFromServer: (state: Partial<UserState>) => void;
 }
 
@@ -48,6 +58,7 @@ export const useStore = create<AppState>()(
       userName: 'Seeker',
       hasSeenHabitHint: false,
       hasSeenScienceHint: false,
+      journal: [],
 
       addHabitDone: (id, mins, tradeoff) =>
         set((state) => {
@@ -55,13 +66,15 @@ export const useStore = create<AppState>()(
           newRestored[tradeoff] = Math.min(100, (newRestored[tradeoff] || 0) + 7);
 
           const today = new Date().toDateString();
-          const newHist = [...state.hist];
-          let h = newHist.find((x) => x.date === today);
-          if (!h) {
-            h = { date: today, count: 0 };
-            newHist.push(h);
+          const existingIdx = state.hist.findIndex((x) => x.date === today);
+          let newHist;
+          if (existingIdx === -1) {
+            newHist = [...state.hist, { date: today, count: 1 }];
+          } else {
+            newHist = state.hist.map((x, i) =>
+              i === existingIdx ? { ...x, count: x.count + 1 } : x
+            );
           }
-          h.count += 1;
 
           // Streak logic: if this is the first completion today, update streak
           let newStreak = state.streak;
@@ -122,13 +135,15 @@ export const useStore = create<AppState>()(
       logTimerSession: (mins) =>
         set((state) => {
           const today = new Date().toDateString();
-          const newHist = [...state.hist];
-          let h = newHist.find((x) => x.date === today);
-          if (!h) {
-            h = { date: today, count: 0 };
-            newHist.push(h);
+          const existingIdx = state.hist.findIndex((x) => x.date === today);
+          let newHist;
+          if (existingIdx === -1) {
+            newHist = [...state.hist, { date: today, count: 1 }];
+          } else {
+            newHist = state.hist.map((x, i) =>
+              i === existingIdx ? { ...x, count: x.count + 1 } : x
+            );
           }
-          h.count += 1;
 
           // Streak logic for timer sessions too
           let newStreak = state.streak;
@@ -172,6 +187,11 @@ export const useStore = create<AppState>()(
 
       markHabitHintSeen: () => set({ hasSeenHabitHint: true }),
       markScienceHintSeen: () => set({ hasSeenScienceHint: true }),
+
+      addJournalEntry: (entry) =>
+        set((state) => ({
+          journal: [...state.journal, entry],
+        })),
 
       resetDailyIfNeeded: () => {
         const state = get();

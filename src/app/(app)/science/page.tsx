@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useStore } from '@/store/useStore';
 import { SCI_SECS, ERAS, TRADEOFFS, TIERS } from '@/data/content';
+import { DIET_DATA, ADHD_DATA, ADHD_STATS } from '@/data/science-bible';
 import Link from 'next/link';
 import { TopBar } from '@/components/TopBar';
 import { ClickHand } from '@/components/ClickHand';
@@ -296,6 +297,47 @@ export default function Science() {
             <div className="proof"><div className="proof-lbl">IISc Bangalore, 2026</div><div className="proof-t">Long-term meditators show <strong>stronger gamma brain activity</strong> and enhanced neural patterns linked to healthier inhibitory circuits. Confirms practice physically rebuilds what digital habits erode.</div><div className="cite">IISc Centre for Neuroscience · thecsrjournal.in · India Today (2026)</div></div>
             <div className="proof"><div className="proof-lbl">Attention Collapse</div><div className="proof-stat" style={{ color: 'var(--sindoor2)' }}>65 sec</div><div className="proof-t">Average sustained focus duration. Down from <strong>2.5 minutes in 2004</strong>. Doom scrolling fragments attention into 8-second cycles.</div><div className="cite">Mark et al. (2016) CHI Conference · Volkow et al. (2011)</div></div>
             <div className="proof"><div className="proof-lbl">Cortisol & Anxiety</div><div className="proof-t">The safest generation in human history is by every measure the most anxious. Every notification triggers cortisol cascades once reserved for predators.</div><div className="cite">Twenge (2017) iGen · Ward et al. (2017) JACR Brain Drain Study</div></div>
+
+            <div style={{ margin: '24px 0 16px', height: '1px', background: 'rgba(255,255,255,0.05)' }}></div>
+            
+            <div className="sci-h">ADHD & Algorithm Damage</div>
+            <div className="sci-sub">ADHD diagnoses have risen 400% since smartphone ubiquity. The mechanism: variable-ratio reinforcement schedules destroying the prefrontal cortex&apos;s capacity for sustained attention. Ancient texts diagnosed this as <em>chitta vikṣepa</em> — scattering of the mind-field.</div>
+            <div style={{ fontFamily: 'var(--deva)', fontSize: '15px', color: 'var(--gold3)', textAlign: 'center', marginBottom: '14px' }}>विक्षेप — Mental Distraction & Scattering</div>
+
+            {/* Stats Banner */}
+            <div style={{ display: 'flex', gap: '6px', marginBottom: '14px' }}>
+              {ADHD_STATS.map((s, i) => {
+                const colors: Record<string, string> = { jade: 'var(--jade)', gold: 'var(--gold2)', red: 'var(--sindoor2)' };
+                return (
+                  <div key={i} style={{ flex: 1, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.07)', borderRadius: '12px', padding: '10px 6px', textAlign: 'center' }}>
+                    <div style={{ fontFamily: 'var(--mono)', fontSize: '18px', fontWeight: 500, color: colors[s.color] || 'var(--gold2)', marginBottom: '2px' }}>{s.stat}</div>
+                    <div style={{ fontFamily: 'var(--mono)', fontSize: '8px', letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--t4)', lineHeight: 1.4 }}>{s.label}</div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Trade-off Table */}
+            {ADHD_DATA.map((d, i) => (
+              <div key={i} style={{
+                background: 'var(--mid)', border: '1px solid var(--bdr)', borderRadius: '12px',
+                padding: '12px', marginBottom: '6px',
+                display: 'grid', gridTemplateColumns: '1fr auto', gap: '8px', alignItems: 'center'
+              }}>
+                <div>
+                  <div style={{ fontSize: '13px', color: 'var(--t1)', fontWeight: 500, marginBottom: '2px' }}>{d.tradeoff}</div>
+                  <div style={{ fontFamily: 'var(--deva)', fontSize: '11px', color: 'var(--gold3)', opacity: .7, marginBottom: '4px' }}>{d.vedicDiagnosis}</div>
+                  <div style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: 'var(--jade)', letterSpacing: '.5px' }}>Fix: {d.antidotePractice}</div>
+                </div>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: '16px', color: 'var(--sindoor2)', fontWeight: 500 }}>{d.damagePct}</div>
+              </div>
+            ))}
+
+            <div className="proof" style={{ borderColor: 'rgba(112,96,192,.3)', background: 'rgba(112,96,192,.05)', marginTop: '12px' }}>
+              <div className="proof-lbl" style={{ color: 'var(--violet2)' }}>Patanjali&apos;s Diagnosis — 2,000 Years Before DSM-5</div>
+              <div className="proof-t">Yoga Sutras 1.30 lists <strong>9 obstacles (Antarayas)</strong> to mental clarity: disease, dullness, doubt, carelessness, laziness, sensory addiction, false perception, inability to progress, and instability. Every modern ADHD symptom maps to these 9 categories.</div>
+              <div style={{ fontFamily: 'var(--deva)', fontSize: '14px', color: 'var(--violet2)', marginTop: '5px' }}>व्याधि-स्त्यान-संशय-प्रमाद-आलस्य — Yoga Sutras 1.30</div>
+            </div>
           </div>
         )}
 
@@ -320,11 +362,73 @@ export default function Science() {
           </div>
         )}
 
-        {activeSciTab === 'evidence' && (
+        {activeSciTab === 'diet' && (
           <div className="sci-sec on" style={{ padding: '0 20px', paddingBottom: '20px' }}>
-            <div className="sci-h">Habit Impact: Scientific Evidence</div>
-            <div className="sci-sub">Every habit either builds or erodes neural infrastructure. Peak effect sizes from peer-reviewed research.</div>
-            <div className="sci-h" style={{ fontSize: '14px', color: 'var(--jade)', margin: '0 0 8px' }}>✅ Positive Habits</div>
+            <div className="sci-h">Sattvic Diet & Gut-Brain Axis</div>
+            <div className="sci-sub">The gut produces 95% of the body&apos;s serotonin and 50% of its dopamine precursors. What you eat directly determines your neurotransmitter baseline. Ayurveda mapped this 2,600 years before neurogastroenterology.</div>
+            <div style={{ fontFamily: 'var(--deva)', fontSize: '15px', color: 'var(--gold3)', textAlign: 'center', marginBottom: '14px' }}>आहार शुद्धि — Purity of Food</div>
+
+            {DIET_DATA.map((d, i) => (
+              <div key={i} style={{
+                background: d.good ? 'rgba(82,168,120,.06)' : 'rgba(192,64,64,.06)',
+                border: `1px solid ${d.good ? 'rgba(82,168,120,.15)' : 'rgba(192,64,64,.15)'}`,
+                borderRadius: '14px', padding: '14px', marginBottom: '8px',
+                borderLeft: `3px solid ${d.good ? 'var(--jade)' : 'var(--sindoor2)'}`
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '6px' }}>
+                  <div>
+                    <div style={{ fontSize: '14px', fontWeight: 500, color: 'var(--t1)', marginBottom: '2px' }}>{d.name}</div>
+                    <div style={{ fontFamily: 'var(--deva)', fontSize: '11px', color: 'var(--gold3)', opacity: .7 }}>{d.devaLabel} — {d.vedic}</div>
+                  </div>
+                  <div style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: d.good ? 'var(--jade)' : 'var(--sindoor2)', flexShrink: 0, paddingTop: '4px' }}>
+                    {d.good ? '✓ Sattvic' : '✗ Avoid'}
+                  </div>
+                </div>
+                <div style={{ fontSize: '12px', color: 'var(--t2)', lineHeight: 1.6, marginBottom: '6px' }}>{d.effect}</div>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: '9px', color: 'var(--t4)' }}>📄 {d.evidence}</div>
+              </div>
+            ))}
+
+            <div className="proof" style={{ marginTop: '12px' }}>
+              <div className="proof-lbl">The Vedic Framework</div>
+              <div className="proof-t">Bhagavad Gita Chapter 17 classifies all food as Sattvic (clarity), Rajasic (agitation), or Tamasic (inertia). Modern gut-brain axis research confirms these categories map directly to microbiome diversity, neurotransmitter production, and cognitive performance.</div>
+              <div style={{ fontFamily: 'var(--deva)', fontSize: '14px', color: 'var(--gold3)', marginTop: '5px' }}>आहारशुद्धौ सत्त्वशुद्धिः — Chandogya Upanishad 7.26.2</div>
+            </div>
+          </div>
+        )}
+
+        {activeSciTab === 'verdict' && (
+          <div className="sci-sec on" style={{ padding: '0 20px', paddingBottom: '20px' }}>
+            <div className="sci-h">The Final Calculation</div>
+            <div className="sci-sub">After 1000 years of evolution data, 7 neural trade-offs, and global cognitive assessment of 8.1 billion humans.</div>
+            <div className="vcard vc10"><div className="vc-n" style={{ color: 'var(--jade)' }}>10%</div><div className="vc-l" style={{ color: 'var(--jade)' }}>~810 Million</div><div className="vc-d">Can genuinely co-work with AI. They use AI. AI does not use them.</div></div>
+            <div className="vcard vc24"><div className="vc-n" style={{ color: 'var(--gold2)' }}>24%</div><div className="vc-l" style={{ color: 'var(--gold2)' }}>~1.94 Billion</div><div className="vc-d">Danger zone. Capacity is eroding. Deliberate intervention can reverse it.</div></div>
+            <div className="vcard vc66"><div className="vc-n" style={{ color: 'var(--sindoor2)' }}>66%</div><div className="vc-l" style={{ color: 'var(--sindoor2)' }}>~5.35 Billion</div><div className="vc-d">Need AI to operate. Cannot meaningfully direct AI, detect hallucinations, or exercise independent analytical judgment.</div></div>
+            <div className="proof" style={{ marginBottom: '24px' }}><div className="proof-lbl">The Harder Truth</div><div className="proof-t">The 10% figure is <strong>shrinking</strong> as digital habits erode Tier 2 processors faster than education creates new ones. And the monitoring circuits that would alert people to this degradation are themselves being degraded first.</div><div className="cite">OECD PIAAC 2023 · UNESCO GMR · WHO GHO · DataReportal Digital 2024</div></div>
+
+            <div style={{ margin: '24px 0 16px', height: '1px', background: 'rgba(255,255,255,0.05)' }}></div>
+            
+            <div className="sci-h">The Cognitive Spectrum</div>
+            <div className="sci-sub">Recalibrated using OECD PIAAC (39 countries, 250,000 adults), UNESCO literacy data, WHO activity reports, DataReportal 2024 screen time data. Original estimates were too generous.</div>
+
+            {TIERS.map((t, i) => (
+              <div key={i} className={`tier-c ${t.cls}`}>
+                <div className="tc-h"><div className="tc-n" style={{ color: t.col }}>{t.n} <span style={{ fontFamily: 'var(--deva)', fontSize: '12px' }}>{t.deva}</span></div><div className="tc-p">{t.pct} · {t.pop}</div></div>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: t.col, marginBottom: '5px' }}>{t.proc}</div>
+                <div className="tc-desc">{t.desc}</div>
+              </div>
+            ))}
+
+            <div className="proof" style={{ marginTop: '12px' }}><div className="proof-lbl">Vedic Parallel — Mandukya Upanishad</div><div className="proof-t">The Vedic system describes seven states of consciousness. <strong>Only the disciplined practitioner accesses Turiya</strong> (pure awareness). Only 10% can genuinely co-work with AI. The numbers converge across 3,000 years.</div></div>
+          </div>
+        )}
+
+        {activeSciTab === 'solution' && (
+          <div className="sci-sec on" style={{ padding: '0 20px', paddingBottom: '20px' }}>
+            <div className="sci-h">The Ancient Solution, Confirmed Modern</div>
+            <div className="sci-sub">The compounding atrophy runs in both directions. The same recursive logic that degrades the unprotected brain rebuilds the protected one. Peak effect sizes from peer-reviewed research:</div>
+            
+            <div className="sci-h" style={{ fontSize: '14px', color: 'var(--jade)', margin: '16px 0 12px' }}>✅ Scientifically Proven Restoration</div>
 
             {[
               { h: 'Deep Reading', pct: '+34%', col: 'var(--jade)', deva: 'स्वाध्याय', src: 'Berns et al. (2013) · Cunningham & Stanovich (2001) · Sanskrit Effect (Hartzell 2018)' },
@@ -336,51 +440,8 @@ export default function Science() {
             ].map((x, i) => (
               <div key={i} className="sol"><div style={{ fontFamily: 'var(--deva)', fontSize: '13px', color: 'var(--gold3)', marginBottom: '3px' }}>{x.deva}</div><div className="sol-stat" style={{ color: x.col }}>{x.pct}</div><div style={{ fontSize: '13px', color: 'var(--t1)', fontWeight: 500, marginBottom: '2px' }}>{x.h}</div><div className="cite">{x.src}</div></div>
             ))}
-          </div>
-        )}
-
-        {activeSciTab === 'spectrum' && (
-          <div className="sci-sec on" style={{ padding: '0 20px', paddingBottom: '20px' }}>
-            <div className="sci-h">8.1 Billion Humans: Cognitive Spectrum</div>
-            <div className="sci-sub">Recalibrated using OECD PIAAC (39 countries, 250,000 adults), UNESCO literacy data, WHO activity reports, DataReportal 2024 screen time data. Original estimates were too generous.</div>
-
-            {TIERS.map((t, i) => (
-              <div key={i} className={`tier-c ${t.cls}`}>
-                <div className="tc-h"><div className="tc-n" style={{ color: t.col }}>{t.n} <span style={{ fontFamily: 'var(--deva)', fontSize: '12px' }}>{t.deva}</span></div><div className="tc-p">{t.pct} · {t.pop}</div></div>
-                <div style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: t.col, marginBottom: '5px' }}>{t.proc}</div>
-                <div className="tc-desc">{t.desc}</div>
-              </div>
-            ))}
-
-            <div className="proof"><div className="proof-lbl">Vedic Parallel — Mandukya Upanishad</div><div className="proof-t">The Vedic system describes seven states of consciousness. <strong>Only the disciplined practitioner accesses Turiya</strong> (pure awareness). Only 10% can genuinely co-work with AI. The numbers converge across 3,000 years.</div></div>
-          </div>
-        )}
-
-        {activeSciTab === 'verdict' && (
-          <div className="sci-sec on" style={{ padding: '0 20px', paddingBottom: '20px' }}>
-            <div className="sci-h">The Final Calculation</div>
-            <div className="sci-sub">After 1000 years of evolution data, 7 neural trade-offs, and global cognitive assessment of 8.1 billion humans.</div>
-            <div className="vcard vc10"><div className="vc-n" style={{ color: 'var(--jade)' }}>10%</div><div className="vc-l" style={{ color: 'var(--jade)' }}>~810 Million</div><div className="vc-d">Can genuinely co-work with AI. They use AI. AI does not use them.</div></div>
-            <div className="vcard vc24"><div className="vc-n" style={{ color: 'var(--gold2)' }}>24%</div><div className="vc-l" style={{ color: 'var(--gold2)' }}>~1.94 Billion</div><div className="vc-d">Danger zone. Capacity is eroding. Deliberate intervention can reverse it.</div></div>
-            <div className="vcard vc66"><div className="vc-n" style={{ color: 'var(--sindoor2)' }}>66%</div><div className="vc-l" style={{ color: 'var(--sindoor2)' }}>~5.35 Billion</div><div className="vc-d">Need AI to operate. Cannot meaningfully direct AI, detect hallucinations, or exercise independent analytical judgment.</div></div>
-            <div className="proof"><div className="proof-lbl">The Harder Truth</div><div className="proof-t">The 10% figure is <strong>shrinking</strong> as digital habits erode Tier 2 processors faster than education creates new ones. And the monitoring circuits that would alert people to this degradation are themselves being degraded first.</div><div className="cite">OECD PIAAC 2023 · UNESCO GMR · WHO GHO · DataReportal Digital 2024</div></div>
-          </div>
-        )}
-
-        {activeSciTab === 'solution' && (
-          <div className="sci-sec on" style={{ padding: '0 20px', paddingBottom: '20px' }}>
-            <div className="sci-h">The Ancient Solution, Confirmed Modern</div>
-            <div className="sci-sub">The compounding atrophy runs in both directions. The same recursive logic that degrades the unprotected brain rebuilds the protected one.</div>
-            {[
-              { t: 'Walk every morning', stat: 'dlPFC re-thickens', sub: 'Locus coeruleus relearns slow tonic firing. Norepinephrine regulation restores.', src: 'Erickson et al. (2011) PNAS', deva: 'वायु-सेवन' },
-              { t: 'Read 1hr daily', stat: 'Language network re-blooms', sub: 'Visual-over-language shift begins to reverse. Broca\'s area reactivates. +34%.', src: 'Berns et al. (2013) · Sanskrit Effect (Hartzell 2018)', deva: 'स्वाध्याय' },
-              { t: 'Sit in silence 20min', stat: 'DMN re-ignites', sub: 'Self-reflection, identity formation, creative synthesis return.', src: 'IISc (2026) · SVYASA fNIRS Studies (2024)', deva: 'ध्यानम्' },
-              { t: 'Chant or Jap 10min', stat: 'dlPFC grey matter grows', sub: 'Sanskrit Effect: hippocampal and language cortex density increases measurably.', src: 'Hartzell (2018) Scientific American · SVYASA', deva: 'नाम जप' },
-              { t: 'Sleep before midnight', stat: '+31% cognitive restoration', sub: 'Glymphatic system clears neurotoxic byproducts. Every late night reverses gains.', src: 'Walker (2017) · NIH Glymphatic Research', deva: 'निद्रा' },
-            ].map((x, i) => (
-              <div key={i} className="sol"><div style={{ fontFamily: 'var(--deva)', fontSize: '15px', color: 'var(--gold3)', marginBottom: '5px' }}>{x.deva}</div><div style={{ fontSize: '15px', fontWeight: 500, color: 'var(--t1)', marginBottom: '2px' }}>{x.t}</div><div className="sol-stat">{x.stat}</div><div style={{ fontSize: '13px', color: 'var(--t2)', lineHeight: 1.55, marginBottom: '4px' }}>{x.sub}</div><div className="cite">{x.src}</div></div>
-            ))}
-            <div style={{ textAlign: 'center', padding: '16px 0 8px' }}>
+            
+            <div style={{ textAlign: 'center', padding: '24px 0 8px' }}>
               <div style={{ fontFamily: 'var(--deva)', fontSize: '18px', color: 'var(--gold3)', marginBottom: '8px' }}>लोकाः समस्ताः सुखिनो भवन्तु</div>
               <div style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: 'var(--t3)', marginBottom: '14px' }}>May all beings everywhere be happy and free</div>
               <Link href="/practice" className="btn btn-g" style={{ display: 'inline-block', width: '100%', textDecoration: 'none', textAlign: 'center', paddingTop: '14px' }}>Begin the Protocol →</Link>

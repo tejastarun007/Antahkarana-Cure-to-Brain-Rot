@@ -73,7 +73,7 @@ export default function Dashboard() {
         </div>
         
         {isGuest && (
-          <div style={{ background: 'rgba(232, 184, 75, 0.1)', border: '1px solid rgba(232, 184, 75, 0.3)', borderRadius: '12px', padding: '16px', marginBottom: '24px', position: 'relative' }}>
+          <div style={{ margin: '14px 20px 24px', background: 'rgba(232, 184, 75, 0.1)', border: '1px solid rgba(232, 184, 75, 0.3)', borderRadius: '12px', padding: '16px', position: 'relative' }}>
             <button onClick={dismissGuest} style={{ position: 'absolute', top: '10px', right: '10px', background: 'none', border: 'none', color: 'var(--t2)', fontSize: '20px', cursor: 'pointer', padding: '4px', lineHeight: 1 }}>&times;</button>
             <div style={{ fontFamily: 'var(--serif)', fontSize: '16px', color: 'var(--gold2)', marginBottom: '4px' }}>Temporary Sanctuary</div>
             <div style={{ fontSize: '12px', color: 'var(--t2)', lineHeight: 1.5, marginBottom: '12px', paddingRight: '20px' }}>Your progress is only saved on this device for 24 hours. Create an account to permanently sync your journey.</div>
@@ -99,10 +99,22 @@ export default function Dashboard() {
         </div>
 
         <div className="stats-r">
-          <div className="stat-b"><div className="stat-n">{store.streak}</div><div className="stat-l">Streak</div></div>
+          {/* Ember Mode Streak */}
+          <div className="stat-b" style={{ position: 'relative', overflow: 'hidden', border: '1px solid rgba(232, 100, 30, 0.2)' }}>
+            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 50% 120%, rgba(232, 100, 30, 0.3), transparent 70%)', pointerEvents: 'none' }}></div>
+            <div className="stat-n" style={{ position: 'relative', zIndex: 1, color: '#ffb050', textShadow: '0 0 15px rgba(232, 100, 30, 0.6)' }}>{store.streak}</div>
+            <div className="stat-l" style={{ position: 'relative', zIndex: 1, color: 'rgba(255,255,255,0.7)' }}>Svāsa Fire</div>
+          </div>
+          
           <div className="stat-b"><div className="stat-n">{store.totalTasks}</div><div className="stat-l">Done</div></div>
           <div className="stat-b"><div className="stat-n">{store.totalMins}</div><div className="stat-l">Mins</div></div>
-          <div className="stat-b"><div className="stat-n">{sc}</div><div className="stat-l">Buddhi</div></div>
+          
+          {/* Praana Score */}
+          <div className="stat-b" style={{ position: 'relative', overflow: 'hidden', border: '1px solid rgba(82, 168, 120, 0.2)' }}>
+            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 50% 120%, rgba(82, 168, 120, 0.25), transparent 70%)', pointerEvents: 'none' }}></div>
+            <div className="stat-n" style={{ position: 'relative', zIndex: 1, color: 'var(--jade)', textShadow: '0 0 15px rgba(82, 168, 120, 0.6)' }}>{sc}</div>
+            <div className="stat-l" style={{ position: 'relative', zIndex: 1, color: 'rgba(255,255,255,0.7)' }}>Praana</div>
+          </div>
         </div>
 
         <div className="today-prog">
@@ -134,6 +146,52 @@ export default function Dashboard() {
             );
           })}
         </div>
+
+        {/* Feature Cards — Detox & Journal */}
+        <div style={{display:'flex', gap:'10px', marginTop:'14px', padding: '0 20px'}}>
+          <Link href="/detox" style={{
+            flex:1, textDecoration:'none', position:'relative', overflow:'hidden',
+            background:'linear-gradient(145deg, rgba(192,64,64,.1), rgba(12,10,28,.95))',
+            border:'1px solid rgba(192,64,64,.25)', borderRadius:'18px', padding:'16px',
+            display:'flex', flexDirection:'column', gap:'8px',
+            transition:'all .3s ease'
+          }}>
+            {/* Top gradient line */}
+            <div style={{position:'absolute', top:0, left:0, right:0, height:'2px', background:'linear-gradient(90deg, transparent, var(--sindoor2), transparent)'}} />
+            {/* Glow accent */}
+            <div style={{position:'absolute', top:'-10px', right:'-10px', width:'60px', height:'60px', borderRadius:'50%', background:'radial-gradient(circle, rgba(192,64,64,.15), transparent 70%)', pointerEvents:'none'}} />
+            
+            <div style={{width:'36px', height:'36px', borderRadius:'10px', background:'rgba(192,64,64,.12)', border:'1px solid rgba(192,64,64,.25)', display:'flex', alignItems:'center', justifyContent:'center'}}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffb050" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+              </svg>
+            </div>
+            <div style={{fontFamily:'var(--serif)', fontSize:'16px', color:'#ffd6c9', fontWeight:500, letterSpacing:'.3px'}}>Algo Detox</div>
+            <div style={{fontFamily:'var(--mono)', fontSize:'10px', color:'#ff6b6b', lineHeight:1.5, letterSpacing:'0.5px', textTransform:'uppercase'}}>Brain Rot · ADHD · Algorithm Trap · The Cure</div>
+          </Link>
+
+          <Link href="/journal" style={{
+            flex:1, textDecoration:'none', position:'relative', overflow:'hidden',
+            background:'linear-gradient(145deg, rgba(200,144,42,.08), rgba(12,10,28,.95))',
+            border:'1px solid rgba(200,144,42,.25)', borderRadius:'18px', padding:'16px',
+            display:'flex', flexDirection:'column', gap:'8px',
+            transition:'all .3s ease'
+          }}>
+            {/* Top gradient line */}
+            <div style={{position:'absolute', top:0, left:0, right:0, height:'2px', background:'linear-gradient(90deg, transparent, var(--gold2), transparent)'}} />
+            {/* Glow accent */}
+            <div style={{position:'absolute', top:'-10px', right:'-10px', width:'60px', height:'60px', borderRadius:'50%', background:'radial-gradient(circle, rgba(200,144,42,.12), transparent 70%)', pointerEvents:'none'}} />
+            
+            <div style={{width:'36px', height:'36px', borderRadius:'10px', background:'rgba(200,144,42,.1)', border:'1px solid rgba(200,144,42,.22)', display:'flex', alignItems:'center', justifyContent:'center'}}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold2)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M17 3a3 3 0 0 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" /><path d="M15 5l4 4" />
+              </svg>
+            </div>
+            <div style={{fontFamily:'var(--serif)', fontSize:'15px', color:'var(--gold2)', fontWeight:500, letterSpacing:'.3px'}}>Manas Journal</div>
+            <div style={{fontSize:'11px', color:'var(--t2)', lineHeight:1.5, fontWeight:400}}>Write to process. Transfer to paper for deep encoding.</div>
+          </Link>
+        </div>
+
         <div style={{height: '8px'}}></div>
       </div>
       <div className={`notif ${notifShow ? 'show' : ''}`}>{notifMsg}</div>

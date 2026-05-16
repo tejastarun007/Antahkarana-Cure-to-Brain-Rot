@@ -1,8 +1,8 @@
 'use client';
 import { useStore } from '@/store/useStore';
 import { HABITS, TIMER_SESSIONS, TIMER_PHASES } from '@/data/content';
-import { useMemo, useState, useRef, useEffect } from 'react';
-import Link from 'next/link';
+import { getDeepDive } from '@/data/practice-bible';
+import { useMemo, useState, useRef } from 'react';
 import { TopBar } from '@/components/TopBar';
 import { playBell } from '@/lib/audio';
 
@@ -11,7 +11,6 @@ import { ClickHand } from '@/components/ClickHand';
 export default function Practice() {
   const store = useStore();
   const [activePracTab, setActivePracTab] = useState('all');
-  const [mounted] = useState(() => typeof window !== 'undefined');
 
   const [notifMsg, setNotifMsg] = useState('');
   const [notifShow, setNotifShow] = useState(false);
@@ -53,6 +52,9 @@ export default function Practice() {
     }
     setHabModalOpen(false);
   };
+
+  // Get deep-dive data for current habit
+  const deepDive = curHab ? getDeepDive(curHab.id) : undefined;
 
   const setTimerSession = (idx: number) => {
     resetTimer();
@@ -120,7 +122,7 @@ export default function Practice() {
   return (
     <div className="screen on" id="sp">
       <TopBar />
-      <div style={{padding:'6px 14px 14px', flexShrink:0}}>
+      <div style={{padding:'6px 20px 14px', flexShrink:0}}>
         <div className="lbl">Daily Sadhana Protocol</div>
         <div style={{fontFamily:'var(--serif)', fontSize:'22px', fontWeight:300, color:'var(--gold2)'}}>Practice Stack</div>
         <p style={{fontSize:'12px', color:'var(--t2)', marginTop:'4px', lineHeight:1.5}}>The 18% who retain full cognitive function share one trait — daily practice.</p>
@@ -138,7 +140,7 @@ export default function Practice() {
         <div className="hab-grid-full">
           {HABITS.filter(h => activePracTab === 'all' || h.cat === activePracTab).map((h, i) => {
             const isDone = store.done.includes(h.id);
-            const showHint = mounted && i === 0 && !store.hasSeenHabitHint;
+            const showHint = i === 0 && !store.hasSeenHabitHint;
             
             return (
               <div className={`hc ${isDone ? 'done' : ''}`} key={h.id} onClick={() => handleHabClick(h)} style={{position: 'relative'}}>
@@ -161,7 +163,7 @@ export default function Practice() {
           })}
         </div>
 
-        <div style={{padding:'4px 14px 10px'}}><div className="lbl">Sadhana Timer</div></div>
+        <div style={{padding:'4px 20px 10px'}}><div className="lbl">Sadhana Timer</div></div>
         <div className="chip-row" style={{paddingBottom:0, marginBottom:'10px'}}>
           {TIMER_SESSIONS.map((s, i) => (
             <div key={i} className={`chip ${timerSes === i ? 'on' : ''}`} onClick={() => setTimerSession(i)}>{s.n}</div>
@@ -218,9 +220,64 @@ export default function Practice() {
               </div>
               <div className="mtitle"><span dangerouslySetInnerHTML={{__html: curHab.icon}} style={{display:'inline-flex', alignItems:'center', gap:'8px', verticalAlign:'middle'}}></span> {curHab.n}</div>
               <div className="mdeva">{curHab.deva}</div>
-              <div className="mbody">{curHab.sub}</div>
-              <div className="mneuro">🔬 {curHab.neuro}</div>
-              <div style={{display:'flex', gap:'10px'}}>
+
+              {deepDive ? (
+                <>
+                  {/* Transliteration */}
+                  <div style={{fontFamily:'var(--mono)', fontSize:'10px', color:'var(--t3)', letterSpacing:'1px', marginBottom:'10px'}}>{deepDive.transliteration}</div>
+
+                  {/* Full description */}
+                  <div className="mbody" style={{fontSize:'13px', lineHeight:1.7}}>{deepDive.fullDesc}</div>
+
+                  {/* Evidence Stats Strip */}
+                  <div style={{display:'flex', gap:'6px', marginBottom:'14px'}}>
+                    {deepDive.evidence.map((ev, i) => {
+                      const colors: Record<string, string> = { jade:'var(--jade)', gold:'var(--gold2)', violet:'var(--violet2)', saffron:'var(--saffron2)', red:'var(--sindoor2)' };
+                      return (
+                        <div key={i} style={{flex:1, background:'rgba(255,255,255,.03)', border:'1px solid rgba(255,255,255,.07)', borderRadius:'10px', padding:'8px 6px', textAlign:'center'}}>
+                          <div style={{fontFamily:'var(--mono)', fontSize:'16px', fontWeight:500, color:colors[ev.color] || 'var(--gold2)', marginBottom:'2px'}}>{ev.stat}</div>
+                          <div style={{fontFamily:'var(--mono)', fontSize:'8px', letterSpacing:'1px', textTransform:'uppercase', color:'var(--t4)', lineHeight:1.4}}>{ev.label}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* 3 Pillars */}
+                  {deepDive.pillars.map((p, i) => {
+                    const pillarColors = ['var(--gold2)', 'var(--jade)', 'var(--violet2)'];
+                    const pillarBgs = ['rgba(200,144,42,.06)', 'rgba(82,168,120,.06)', 'rgba(112,96,192,.06)'];
+                    return (
+                      <div key={i} style={{background:pillarBgs[i] || pillarBgs[0], borderRadius:'12px', padding:'12px', marginBottom:'8px', borderLeft:`2px solid ${pillarColors[i] || pillarColors[0]}`}}>
+                        <div style={{fontFamily:'var(--mono)', fontSize:'9px', letterSpacing:'2px', textTransform:'uppercase', color:pillarColors[i], marginBottom:'5px'}}>{p.label}</div>
+                        <div style={{fontSize:'12px', color:'var(--t2)', lineHeight:1.6, marginBottom:'4px'}}>{p.text}</div>
+                        <div style={{fontFamily:'var(--mono)', fontSize:'8px', color:'var(--t4)', letterSpacing:'.5px'}}>📄 {p.source}</div>
+                      </div>
+                    );
+                  })}
+
+                  {/* Sanskrit Quote */}
+                  {deepDive.quote && (
+                    <div style={{background:'rgba(200,144,42,.05)', border:'1px solid var(--bdr)', borderRadius:'12px', padding:'12px', margin:'8px 0', textAlign:'center'}}>
+                      <div style={{fontFamily:'var(--deva)', fontSize:'15px', color:'var(--gold3)', lineHeight:1.5, marginBottom:'5px'}}>{deepDive.quote.sanskrit}</div>
+                      <div style={{fontFamily:'var(--serif)', fontSize:'12px', fontStyle:'italic', color:'var(--t2)', lineHeight:1.5, marginBottom:'4px'}}>&ldquo;{deepDive.quote.translation}&rdquo;</div>
+                      <div style={{fontFamily:'var(--mono)', fontSize:'8px', color:'var(--t4)'}}>{deepDive.quote.source}</div>
+                    </div>
+                  )}
+
+                  {/* Antidote row */}
+                  <div style={{display:'flex', gap:'8px', alignItems:'flex-start', padding:'10px 0', borderTop:'1px solid var(--bdr)', marginTop:'6px'}}>
+                    <div style={{fontFamily:'var(--mono)', fontSize:'9px', letterSpacing:'1.5px', textTransform:'uppercase', color:'var(--sindoor2)', flexShrink:0, paddingTop:'2px'}}>Antidote To</div>
+                    <div style={{fontSize:'11px', color:'var(--t3)', lineHeight:1.5}}>{deepDive.antidote}</div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="mbody">{curHab.sub}</div>
+                  <div className="mneuro">🔬 {curHab.neuro}</div>
+                </>
+              )}
+
+              <div style={{display:'flex', gap:'10px', marginTop:'12px'}}>
                 {store.done.includes(curHab.id) ? (
                   <button className="btn" style={{flex:1, background:'transparent', border:'1px solid var(--bdr2)', color:'var(--t2)'}} onClick={completeHab}>✓ Mark Incomplete</button>
                 ) : (

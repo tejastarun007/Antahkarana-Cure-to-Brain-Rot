@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { TopBar } from '@/components/TopBar';
 import { useStore } from '@/store/useStore';

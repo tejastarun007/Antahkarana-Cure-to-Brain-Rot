@@ -25,6 +25,9 @@ export const HABITS = [
   {id:'sleep',n:'Sleep Before Midnight',icon:`<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="currentColor" opacity=".2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="18" cy="5" r="1" fill="currentColor" opacity=".6"/><circle cx="20.5" cy="3" r=".6" fill="currentColor" opacity=".4"/><circle cx="20" cy="8" r=".7" fill="currentColor" opacity=".35"/></svg>`,dur:'7-9 hrs',sub:'Re-anchor the circadian system shattered by the digital age.',cat:'body',neuro:'+31% cognitive restoration per day. The glymphatic system clears neurotoxic waste 60% more efficiently during deep sleep (Walker 2017, NIH). Chronic deprivation causes prefrontal cortex hypometabolism equivalent to 0.05% BAC.',boost:'+31%',deva:'निद्रा',tradeoff:1,mins:480},
   {id:'silence',n:'Unreachable Hour',icon:`<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" fill="currentColor" opacity=".15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="3" y1="3" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".7"/></svg>`,dur:'1 hr',sub:'Not do-not-disturb. Genuinely unreachable. The DMN requires it.',cat:'brain',neuro:'The Default Mode Network cannot fire while you remain reachable. One full unreachable hour daily is the minimum threshold for meaningful DMN recovery. The DMN governs self-reflection, imagination, and identity formation.',boost:'+24%',deva:'मौनम्',tradeoff:3,mins:60},
   {id:'writing',n:'Handwriting',icon:`<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M17 3a3 3 0 0 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" fill="currentColor" opacity=".15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 5l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M2 22l2-6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity=".5"/></svg>`,dur:'15 min',sub:'Journal or copy text. Force the brain to synthesise, not index.',cat:'brain',neuro:'Activates deep hippocampal encoding — the faculty replaced by transactive memory indexing (82% shifted). The Sanskrit Effect: memorising text increases hippocampal grey matter. Writing forces synthesis vs location.',boost:'+20%',deva:'लेखनम्',tradeoff:1,mins:15},
+  {id:'bhramari',n:'Bhramari',icon:`<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2c-5 0-9 4-9 9s4 9 9 9 9-4 9-9-4-9-9-9z" stroke="var(--violet2)" stroke-width="1.5"/><path d="M8 12h8M12 8v8" stroke="var(--violet2)" stroke-width="1.5" stroke-linecap="round" opacity=".5"/><circle cx="12" cy="12" r="3" fill="var(--violet2)" opacity=".3"/></svg>`,dur:'5 min',sub:'Humming bee breath. The fastest non-pharmaceutical vagal activator.',cat:'yoga',neuro:'Humming generates 15x more nitric oxide in the nasal sinuses. Reduces anxiety scores by 56% and sleep latency by 32%.',boost:'+56%',deva:'भ्रामरी',tradeoff:5,mins:5},
+  {id:'trataka',n:'Trataka',icon:`<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4C7 4 2 12 2 12s5 8 10 8 10-8 10-8-5-8-10-8z" stroke="var(--sindoor2)" stroke-width="1.5"/><circle cx="12" cy="12" r="3" fill="var(--sindoor2)" opacity=".6"/><circle cx="12" cy="12" r="1" fill="#fff"/></svg>`,dur:'10 min',sub:'Candle gazing. Trains the dorsal (non-reactive) attention system.',cat:'yoga',neuro:'Simultaneously trains visual attention network and dorsal attention system. Suppresses default-mode wandering within 6 minutes.',boost:'+40%',deva:'त्राटक',tradeoff:2,mins:10},
+  {id:'yoganidra',n:'Yoga Nidra',icon:`<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 12c3-4 7-6 12-2 1.5 1 2.5 3 2.5 5 0 2-2 4-5 4-4 0-6.5-4-9.5-7z" fill="var(--jade)" opacity=".3"/><path d="M3 12c3-4 7-6 12-2 1.5 1 2.5 3 2.5 5 0 2-2 4-5 4-4 0-6.5-4-9.5-7" stroke="var(--jade)" stroke-width="1.5" stroke-linecap="round"/></svg>`,dur:'30 min',sub:'Yogic sleep. Restores dopamine depleted from chronic stress.',cat:'yoga',neuro:'Produces delta brainwaves (0.5–4 Hz) identical to deep sleep. 45-min session raises dopamine levels by 65% in striatum.',boost:'+65%',deva:'योग निद्रा',tradeoff:3,mins:30},
 ];
 
 export const TRADEOFFS = [
@@ -93,18 +96,8 @@ export const SCI_SECS = [
   {id:'timeline',lbl:'1000yr Timeline'},
   {id:'crisis',lbl:'The Crisis'},
   {id:'tradeoffs',lbl:'7 Trade-offs'},
-  {id:'evidence',lbl:'Evidence'},
-  {id:'spectrum',lbl:'Spectrum'},
-  {id:'verdict',lbl:'Verdict'},
-  {id:'solution',lbl:'Solution'},
+  {id:'diet',lbl:'Diet & Gut-Brain'},
+  {id:'verdict',lbl:'The Verdict'},
+  {id:'solution',lbl:'The Antidote'},
 ];
 
-export const TQUOTES = [
-  "Every moment of stillness is a moment of becoming.",
-  "The mind is the bridge between the finite and the infinite.",
-  "In silence, the universe speaks its deepest truths.",
-  "You are not the storm. You are the vast sky that holds it.",
-  "Breathe. You are already here.",
-  "The boredom is not the enemy. It is the doorway.",
-  "What you seek is seeking you.",
-];
