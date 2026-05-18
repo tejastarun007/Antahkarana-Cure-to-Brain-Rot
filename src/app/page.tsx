@@ -15,8 +15,11 @@ const PRACTICE_ICONS: Record<string, { bg: string; fg: string; path: string }> =
   silence:    { bg: '#1a2a3a', fg: '#38bdf8', path: 'M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0M3 3l18 18' },
   handwork:   { bg: '#1a3a2a', fg: '#4ade80', path: 'M18 11V6l-8.5 8.5-1.5-1.5L13.5 8H8M6 18l3-3' },
   sleep:      { bg: '#1a1a3a', fg: '#818cf8', path: 'M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z' },
+  bhramari:   { bg: '#3a1a4a', fg: '#c084fc', path: 'M12 2c-5 0-9 4-9 9s4 9 9 9 9-4 9-9-4-9-9-9zM8 12h8M12 8v8' },
+  trataka:    { bg: '#4a1a2a', fg: '#f87171', path: 'M12 4C7 4 2 12 2 12s5 8 10 8 10-8 10-8-5-8-10-8z' },
+  yoganidra:  { bg: '#1a3a3a', fg: '#2dd4bf', path: 'M3 12c3-4 7-6 12-2 1.5 1 2.5 3 2.5 5 0 2-2 4-5 4-4 0-6.5-4-9.5-7' },
 };
-const PRACTICE_KEYS = ['meditation','reading','pranayama','walk','namjap','handwriting','silence','handwork','sleep'];
+const PRACTICE_KEYS = ['walk','reading','meditation','pranayama','namjap','handwork','sleep','silence','handwriting','bhramari','trataka','yoganidra'];
 
 function PIcon({ type }: { type: string }) {
   const ic = PRACTICE_ICONS[type];
@@ -279,7 +282,7 @@ export default function LandingPage() {
             {/* ═══ THE FULL PRESCRIPTION ═══ */}
             <div className="lp-sec lp-sec-alt">
               <div className="lp-tag la mono"><span>The Prescription</span></div>
-              <h2 className="lp-h2 la serif">Nine practices — each<br/>mapped to <em>a brain region</em></h2>
+              <h2 className="lp-h2 la serif">Twelve practices — each<br/>mapped to <em>a brain region</em></h2>
               <div className="lp-plist lp-ag">
                 {HABITS.map((h, i) => (
                   <div key={h.id} className="lp-pitem la">
