@@ -132,7 +132,7 @@ export default function Dashboard() {
           </div>
         )}
 
-        <div className="wh" style={{position:'relative', margin: '14px 0 0'}}>
+        <div className="wh" style={{position:'relative', marginTop: '14px'}}>
           <div className="wh-inner">
             <div className="wday">Day {userDay} · Daily Wisdom</div>
             <div className="w-sk deva">{todayW.s}</div>
