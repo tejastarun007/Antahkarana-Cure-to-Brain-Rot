@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Antahkarana — अन्तःकरण | Cognitive Restoration Platform',
   description:
-    'A cognitive restoration platform grounded in Vedic neuroscience and modern behavioural research. Restore your attention span with nine evidence-backed daily practices.',
+    'A cognitive restoration platform grounded in Vedic neuroscience and modern behavioural research. Restore your attention span with twelve evidence-backed daily practices.',
   openGraph: {
     title: 'Antahkarana — A Sanctuary for Cognitive Restoration',
     description:
