@@ -1,0 +1,50 @@
+/* ══════════ DASHBOARD / SANCTUARY ══════════ */
+#ss{display:flex;flex-direction:column;background:var(--deep)}
+.ss-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.ss-bg-b1{position:absolute;top:-120px;right:-80px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(45,40,96,.5),transparent 65%)}
+.ss-bg-b2{position:absolute;bottom:-60px;left:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(140,37,0,.12),transparent 65%)}
+.ss-content{flex:1;display:block;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:90px}
+.ss-content::-webkit-scrollbar{display:none}
+.ss-header{padding:4px 20px 0;position:relative;z-index:2}
+.ss-greet{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--t3);margin-bottom:3px}
+.ss-title{font-family:var(--serif);font-size:26px;font-weight:300;color:var(--t1);line-height:1.25}
+.ss-title em{font-style:italic;color:var(--gold3)}
+
+/* Wisdom hero */
+.wh{margin:20px 20px 0;border-radius:24px;overflow:hidden;position:relative;flex-shrink:0}
+.wh-inner{padding:28px 20px;background:linear-gradient(145deg,rgba(28,22,56,.95),rgba(14,10,30,.98));border:1px solid var(--bdr2);border-radius:inherit}
+.wh-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.wday{font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--saffron2);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.wday::after{content:'';flex:1;height:1px;background:rgba(200,144,42,.2)}
+.w-sk{font-family:var(--deva);font-size:20px;color:var(--gold2);line-height:1.5;margin-bottom:10px}
+.w-q{font-family:var(--serif);font-size:17px;font-weight:300;font-style:italic;color:var(--t1);line-height:1.6;margin-bottom:8px}
+.w-src{font-size:11px;color:var(--t4);letter-spacing:.5px}
+.w-acts{display:flex;gap:10px;margin-top:14px;align-items:center}
+.fav-b{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.05);border:1px solid var(--bdr);border-radius:30px;padding:7px 14px;cursor:pointer;font-family:var(--mono);font-size:11px;color:var(--t2);transition:.2s}
+.fav-b.on{background:rgba(200,144,42,.12);border-color:var(--gold);color:var(--gold2)}
+.fav-b:active{transform:scale(.95)}
+.wm{position:absolute;right:-18px;bottom:-18px;opacity:.05;pointer-events:none}
+
+/* Stats */
+.stats-r{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 20px;margin-top:20px}
+.stat-b{background:rgba(255,255,255,.04);border:1px solid var(--bdr);border-radius:12px;padding:14px 8px;text-align:center}
+.stat-n{font-family:var(--serif);font-size:22px;color:var(--gold2);line-height:1}
+.stat-l{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--t4);margin-top:3px;font-family:var(--mono)}
+
+/* Practice pills */
+.s-row{display:flex;justify-content:space-between;align-items:center;padding:24px 20px 14px}
+.s-row h3{font-family:var(--serif);font-size:19px;font-weight:400;color:var(--t1)}
+.s-row a{font-family:var(--mono);font-size:11px;color:var(--gold3);cursor:pointer}
+.hab-grid{display:flex;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;gap:14px;padding:0 20px;margin-bottom:12px}
+.hab-grid::after{content:'';flex:0 0 2px}
+.hab-grid::-webkit-scrollbar{display:none}
+.hab-grid .hc{flex:0 0 156px;scroll-snap-align:start}
+.hc{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:15px;cursor:pointer;transition:.2s;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-start;align-items:flex-start;min-height:160px;height:auto;}
+.hc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--bdr2),transparent)}
+.hc:active{transform:scale(.96)}
+.hc.done{border-color:rgba(82,168,120,.35);background:rgba(82,168,120,.06)}
+.hc.done::after{content:'✓';position:absolute;top:11px;right:13px;color:var(--jade);font-size:15px}
+.hi{width:28px;height:28px;margin-bottom:9px;color:var(--gold3);opacity:1;display:block}.hi svg{width:28px;height:28px}.hc.done .hi{color:var(--jade)}.hn{font-size:13px;color:var(--t1);font-weight:500;margin-bottom:2px}
+.hd{font-family:var(--mono);font-size:10px;color:var(--saffron2);letter-spacing:.5px;margin-bottom:3px}
+.hdv{font-family:var(--deva);font-size:13px;color:var(--gold3);opacity:.7;margin-top:3px}
+.hb{font-family:var(--mono);font-size:10px;color:var(--jade);margin-top:3px}

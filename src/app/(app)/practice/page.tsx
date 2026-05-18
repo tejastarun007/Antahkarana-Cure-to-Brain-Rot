@@ -28,6 +28,24 @@ export default function Practice() {
   const [timerComplete, setTimerComplete] = useState(false);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const wakeLockRef = useRef<any>(null);
+
+  const requestWakeLock = async () => {
+    try {
+      if ('wakeLock' in navigator) {
+        wakeLockRef.current = await (navigator as any).wakeLock.request('screen');
+      }
+    } catch (err) {
+      console.warn('Wake Lock error:', err);
+    }
+  };
+
+  const releaseWakeLock = () => {
+    if (wakeLockRef.current) {
+      wakeLockRef.current.release();
+      wakeLockRef.current = null;
+    }
+  };
 
   const notify = (msg: string) => {
     setNotifMsg(msg);
@@ -69,12 +87,14 @@ export default function Practice() {
     if (timerRunning) {
       if (timerRef.current) clearInterval(timerRef.current);
       setTimerRunning(false);
+      releaseWakeLock();
     } else {
       setSessStart(new Date());
       setSessEnd(null);
       setTimerComplete(false);
       setTimerRunning(true);
       playBell('start');
+      requestWakeLock();
       timerRef.current = setInterval(() => {
         setTimerLeft((prev) => {
           if (prev <= 1) {
@@ -82,6 +102,7 @@ export default function Practice() {
             setTimerRunning(false);
             if (navigator.vibrate) navigator.vibrate([50, 100, 50]);
             playBell('end');
+            releaseWakeLock();
             setSessEnd(new Date());
             setTimerComplete(true);
             const mins = Math.round(timerTotal / 60);
@@ -99,6 +120,7 @@ export default function Practice() {
     if (navigator.vibrate) navigator.vibrate(20);
     if (timerRef.current) clearInterval(timerRef.current);
     setTimerRunning(false);
+    releaseWakeLock();
     setTimerLeft(timerTotal);
     setSessStart(null);
     setSessEnd(null);

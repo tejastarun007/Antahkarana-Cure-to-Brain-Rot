@@ -2,8 +2,10 @@
 import { useStore } from '@/store/useStore';
 import { HABITS, WISDOMS, TRADEOFFS } from '@/data/content';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { TopBar } from '@/components/TopBar';
+import './dashboard.css';
 
 export default function Dashboard() {
   const store = useStore();
@@ -11,31 +13,20 @@ export default function Dashboard() {
   const [notifShow, setNotifShow] = useState(false);
   const [isGuest, setIsGuest] = useState(false);
   
-  const [intention, setIntention] = useState({ main: 'Your mind is a', italic: 'sacred space.' });
+  const router = useRouter();
   
   useEffect(() => {
+    // First-run: redirect to onboarding if not completed yet
+    if (typeof window !== 'undefined' && localStorage.getItem('ank_onboarded') !== 'true') {
+      router.replace('/onboarding');
+      return;
+    }
     if (typeof document !== 'undefined' && document.cookie.includes('guest_mode=true')) {
       if (localStorage.getItem('ank_guest_warn_dismissed') !== 'true') {
         setTimeout(() => setIsGuest(true), 0);
       }
     }
-
-    // Set Dynamic Intention based on time of day
-    const updateIntention = () => {
-      const h = new Date().getHours();
-      if (h >= 5 && h < 11) {
-        setIntention({ main: 'Set your intention for', italic: 'clarity and focus.' });
-      } else if (h >= 11 && h < 17) {
-        setIntention({ main: 'Maintain your center', italic: 'amidst the movement.' });
-      } else if (h >= 17 && h < 21) {
-        setIntention({ main: 'Let go of the day;', italic: 'return to stillness.' });
-      } else {
-        setIntention({ main: 'Rest in the space of', italic: 'pure awareness.' });
-      }
-    };
-    
-    setTimeout(updateIntention, 0);
-  }, []);
+  }, [router]);
   
   const dismissGuest = () => {
     localStorage.setItem('ank_guest_warn_dismissed', 'true');
@@ -68,20 +59,80 @@ export default function Dashboard() {
       <div className="ss-bg"><div className="ss-bg-b1"></div><div className="ss-bg-b2"></div></div>
       <TopBar />
       <div className="ss-content">
-        <div className="ss-header" style={{ paddingTop: '2px' }}>
-          <div className="ss-title">{intention.main}<br/><em>{intention.italic}</em></div>
+
+        {/* ══ CORE DAILY LOOP HERO ══ */}
+        <div style={{
+          margin: '6px 20px 0', padding: '18px',
+          background: 'linear-gradient(145deg, rgba(20,16,44,.96), rgba(10,8,24,.98))',
+          border: '1px solid rgba(200,144,42,.22)', borderRadius: '20px',
+          position: 'relative', overflow: 'hidden'
+        }}>
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: 'linear-gradient(90deg, transparent, var(--gold2), transparent)' }}/>
+          <div style={{ position: 'absolute', bottom: '-20px', right: '-20px', width: '120px', height: '120px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(200,144,42,.07), transparent 70%)', pointerEvents: 'none' }}/>
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '14px' }}>
+            <div>
+              <div style={{ fontFamily: 'var(--mono)', fontSize: '9px', color: 'var(--gold3)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '2px' }}>आज का साधन</div>
+              <div style={{ fontFamily: 'var(--serif)', fontSize: '18px', fontWeight: 300, color: 'var(--t1)', lineHeight: 1.1 }}>Today&apos;s Sadhana</div>
+            </div>
+            <div style={{ fontFamily: 'var(--serif)', fontSize: '22px', fontWeight: 300, color: store.done.length === HABITS.length ? 'var(--jade)' : 'var(--gold2)', lineHeight: 1 }}>
+              {store.done.length}<span style={{ fontSize: '13px', color: 'var(--t4)', marginLeft: '2px' }}>/{HABITS.length}</span>
+            </div>
+          </div>
+
+          <div style={{ height: '4px', background: 'rgba(255,255,255,.06)', borderRadius: '2px', overflow: 'hidden', marginBottom: '14px' }}>
+            <div style={{
+              height: '100%', borderRadius: '2px',
+              width: `${Math.round((store.done.length / HABITS.length) * 100)}%`,
+              background: store.done.length === HABITS.length ? 'linear-gradient(90deg, var(--jade), #6ee7b7)' : 'linear-gradient(90deg, #b87428, var(--gold2))',
+              transition: 'width .6s cubic-bezier(.4,0,.2,1)',
+            }}/>
+          </div>
+
+          {HABITS.slice(0, 3).map((h, i) => {
+            const isDone = store.done.includes(h.id);
+            const ICONS = ['🧘', '📖', '🌬️'];
+            const COLS  = ['#a78bfa', '#34d399', '#60a5fa'];
+            return (
+              <div key={h.id} style={{
+                display: 'flex', alignItems: 'center', gap: '12px',
+                padding: '10px 12px', borderRadius: '12px', marginBottom: i < 2 ? '6px' : '0',
+                background: isDone ? 'rgba(52,211,153,.06)' : 'rgba(255,255,255,.03)',
+                border: `1px solid ${isDone ? 'rgba(52,211,153,.2)' : 'rgba(255,255,255,.06)'}`,
+                transition: 'all .3s',
+              }}>
+                <div style={{
+                  width: '32px', height: '32px', borderRadius: '10px', flexShrink: 0,
+                  background: isDone ? 'rgba(52,211,153,.1)' : `${COLS[i]}18`,
+                  border: `1px solid ${isDone ? 'rgba(52,211,153,.3)' : `${COLS[i]}40`}`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px'
+                }}>{isDone ? '✓' : ICONS[i]}</div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: '13px', color: isDone ? 'var(--jade)' : 'var(--t1)', fontWeight: 500, marginBottom: '1px' }}>{h.n}</div>
+                  <div style={{ fontFamily: 'var(--mono)', fontSize: '9px', color: 'var(--t4)', letterSpacing: '.5px' }}>{h.dur} · {isDone ? 'Complete' : `${h.boost} restore`}</div>
+                </div>
+                {isDone && <div style={{ color: 'var(--jade)', fontSize: '13px' }}>✓</div>}
+              </div>
+            );
+          })}
+
+          <div style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: 'var(--t4)', marginTop: '12px', textAlign: 'center', letterSpacing: '.5px' }}>
+            {store.done.length === 0 && 'Begin your first practice. That\'s the only goal today.'}
+            {store.done.length > 0 && store.done.length < HABITS.length && `${HABITS.length - store.done.length} remaining · Keep going.`}
+            {store.done.length === HABITS.length && '🪔 Full Sadhana complete. Return tomorrow.'}
+          </div>
         </div>
-        
+
         {isGuest && (
-          <div style={{ margin: '14px 20px 24px', background: 'rgba(232, 184, 75, 0.1)', border: '1px solid rgba(232, 184, 75, 0.3)', borderRadius: '12px', padding: '16px', position: 'relative' }}>
+          <div style={{ margin: '14px 20px 0', background: 'rgba(232, 184, 75, 0.1)', border: '1px solid rgba(232, 184, 75, 0.3)', borderRadius: '12px', padding: '16px', position: 'relative' }}>
             <button onClick={dismissGuest} style={{ position: 'absolute', top: '10px', right: '10px', background: 'none', border: 'none', color: 'var(--t2)', fontSize: '20px', cursor: 'pointer', padding: '4px', lineHeight: 1 }}>&times;</button>
             <div style={{ fontFamily: 'var(--serif)', fontSize: '16px', color: 'var(--gold2)', marginBottom: '4px' }}>Temporary Sanctuary</div>
-            <div style={{ fontSize: '12px', color: 'var(--t2)', lineHeight: 1.5, marginBottom: '12px', paddingRight: '20px' }}>Your progress is only saved on this device for 24 hours. Create an account to permanently sync your journey.</div>
+            <div style={{ fontSize: '12px', color: 'var(--t2)', lineHeight: 1.5, marginBottom: '12px', paddingRight: '20px' }}>Your progress is only saved on this device. Create an account to permanently sync your journey.</div>
             <Link href="/" className="btn btn-sm btn-o" style={{ display: 'inline-block', textDecoration: 'none', background: 'rgba(232, 184, 75, 0.15)', color: 'var(--gold1)', border: 'none' }}>Save Progress →</Link>
           </div>
         )}
-        
-        <div className="wh" style={{position:'relative'}}>
+
+        <div className="wh" style={{position:'relative', margin: '14px 0 0'}}>
           <div className="wh-inner">
             <div className="wday">Day {userDay} · Daily Wisdom</div>
             <div className="w-sk deva">{todayW.s}</div>
@@ -117,21 +168,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="today-prog">
-          <div className="tp-card">
-            <div style={{display:'flex', justifyContent:'space-between', alignItems:'baseline', marginBottom:'7px'}}>
-              <div style={{fontSize:'12px', color:'var(--t2)'}}>Today&apos;s Progress</div>
-              <div className="mono" style={{fontSize:'12px', color:'var(--gold2)'}}>{store.done.length} / {HABITS.length}</div>
-            </div>
-            <div className="pbar"><div className="pfill pfill-g" style={{width: `${Math.round((store.done.length / HABITS.length) * 100)}%`}}></div></div>
-            <div style={{fontSize:'11px', color:'var(--t4)', marginTop:'5px', fontFamily:'var(--mono)'}}>
-              {store.done.length === 0 ? 'Begin your first practice today.' : 
-               store.done.length === HABITS.length ? 'Full Sadhana achieved. 🪔' : 'Building momentum.'}
-            </div>
-          </div>
-        </div>
-
-        <div className="s-row"><h3>Today&apos;s Sadhana</h3><Link href="/practice">See all →</Link></div>
+        <div className="s-row"><h3>All Practices</h3><Link href="/practice">See all →</Link></div>
         <div className="hab-grid">
           {HABITS.slice(0, 4).map(h => {
             const isDone = store.done.includes(h.id);

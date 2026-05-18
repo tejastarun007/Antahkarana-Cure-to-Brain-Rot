@@ -1,5 +1,21 @@
+/**
+ * useStore — Antahkarana unified store (backward-compatible, slice-ready)
+ *
+ * ARCHITECTURE NOTE:
+ * The state is split into domain slices for clarity and future independent
+ * extraction (useHabitStore, useJournalStore, useSyncStore).
+ * All selectors remain at the top-level for zero breaking changes.
+ *
+ * Slices:
+ *   habit     — done[], streak, hist, totalTasks, totalMins, restored, readMins, medMins, pranaMins
+ *   journal   — journal entries
+ *   ui        — hints, userName
+ *   sync      — syncStatus, lastSyncAt
+ */
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 export interface JournalEntry {
   id: string;
@@ -9,7 +25,10 @@ export interface JournalEntry {
   words: number;
 }
 
-export interface UserState {
+export type SyncStatus = 'idle' | 'syncing' | 'synced' | 'error';
+
+// ─── Slice: Habit ─────────────────────────────────────────────────────────────
+export interface HabitSlice {
   done: string[];
   streak: number;
   totalTasks: number;
@@ -21,29 +40,55 @@ export interface UserState {
   medMins: number;
   pranaMins: number;
   lastDay: string | null;
-  userName: string;
-  hasSeenHabitHint: boolean;
-  hasSeenScienceHint: boolean;
+}
+
+// ─── Slice: Journal ───────────────────────────────────────────────────────────
+export interface JournalSlice {
   journal: JournalEntry[];
 }
 
+// ─── Slice: UI / Hints ────────────────────────────────────────────────────────
+export interface UiSlice {
+  userName: string;
+  hasSeenHabitHint: boolean;
+  hasSeenScienceHint: boolean;
+}
+
+// ─── Slice: Sync ──────────────────────────────────────────────────────────────
+export interface SyncSlice {
+  syncStatus: SyncStatus;
+  lastSyncAt: string | null;
+  syncError: string | null;
+}
+
+// ─── Full state (union of slices for backward compat) ─────────────────────────
+export type UserState = HabitSlice & JournalSlice & UiSlice & SyncSlice;
+
 interface AppState extends UserState {
+  // Habit actions
   addHabitDone: (id: string, mins: number, tradeoff: number) => void;
   removeHabitDone: (id: string, mins: number, tradeoff: number) => void;
   toggleFav: (id: string) => void;
   logTimerSession: (mins: number) => void;
   checkAndUpdateStreak: () => void;
   resetDailyIfNeeded: () => void;
+  // UI actions
   updateUserName: (name: string) => void;
   markHabitHintSeen: () => void;
   markScienceHintSeen: () => void;
+  // Journal actions
   addJournalEntry: (entry: JournalEntry) => void;
+  // Sync actions
   syncFromServer: (state: Partial<UserState>) => void;
+  setSyncStatus: (status: SyncStatus, error?: string) => void;
 }
+
+// ─── Store ────────────────────────────────────────────────────────────────────
 
 export const useStore = create<AppState>()(
   persist(
     (set, get) => ({
+      // ── Habit slice defaults ──
       done: [],
       streak: 0,
       totalTasks: 0,
@@ -55,10 +100,21 @@ export const useStore = create<AppState>()(
       medMins: 0,
       pranaMins: 0,
       lastDay: null,
+
+      // ── Journal slice defaults ──
+      journal: [],
+
+      // ── UI slice defaults ──
       userName: 'Seeker',
       hasSeenHabitHint: false,
       hasSeenScienceHint: false,
-      journal: [],
+
+      // ── Sync slice defaults ──
+      syncStatus: 'idle' as SyncStatus,
+      lastSyncAt: null,
+      syncError: null,
+
+      // ── Habit actions ──────────────────────────────────────────────────────
 
       addHabitDone: (id, mins, tradeoff) =>
         set((state) => {
@@ -67,30 +123,22 @@ export const useStore = create<AppState>()(
 
           const today = new Date().toDateString();
           const existingIdx = state.hist.findIndex((x) => x.date === today);
-          let newHist;
-          if (existingIdx === -1) {
-            newHist = [...state.hist, { date: today, count: 1 }];
-          } else {
-            newHist = state.hist.map((x, i) =>
-              i === existingIdx ? { ...x, count: x.count + 1 } : x
-            );
-          }
+          const newHist = existingIdx === -1
+            ? [...state.hist, { date: today, count: 1 }]
+            : state.hist.map((x, i) => i === existingIdx ? { ...x, count: x.count + 1 } : x);
 
-          // Streak logic: if this is the first completion today, update streak
+          // Streak logic: only update on first completion of the day
           let newStreak = state.streak;
           if (state.lastDay !== today) {
             const yesterday = new Date();
             yesterday.setDate(yesterday.getDate() - 1);
             const yesterdayStr = yesterday.toDateString();
-
             if (state.lastDay === yesterdayStr) {
-              // Consecutive day — increment streak
               newStreak = state.streak + 1;
             } else if (state.lastDay === null) {
-              // First ever practice
               newStreak = 1;
             } else {
-              // Streak broken — start fresh
+              // Streak broken — restart
               newStreak = 1;
             }
           }
@@ -103,9 +151,9 @@ export const useStore = create<AppState>()(
             hist: newHist,
             streak: newStreak,
             lastDay: today,
-            readMins: id === 'read' ? state.readMins + mins : state.readMins,
-            medMins: id === 'meditation' ? state.medMins + mins : state.medMins,
-            pranaMins: id === 'pranayama' ? state.pranaMins + mins : state.pranaMins,
+            readMins:  id === 'read'       ? state.readMins  + mins : state.readMins,
+            medMins:   id === 'meditation' ? state.medMins   + mins : state.medMins,
+            pranaMins: id === 'pranayama'  ? state.pranaMins + mins : state.pranaMins,
           };
         }),
 
@@ -116,58 +164,40 @@ export const useStore = create<AppState>()(
           return {
             done: state.done.filter((x) => x !== id),
             totalTasks: Math.max(0, state.totalTasks - 1),
-            totalMins: Math.max(0, state.totalMins - mins),
+            totalMins:  Math.max(0, state.totalMins  - mins),
             restored: newRestored,
-            readMins: id === 'read' ? Math.max(0, state.readMins - mins) : state.readMins,
-            medMins: id === 'meditation' ? Math.max(0, state.medMins - mins) : state.medMins,
-            pranaMins: id === 'pranayama' ? Math.max(0, state.pranaMins - mins) : state.pranaMins,
+            readMins:  id === 'read'       ? Math.max(0, state.readMins  - mins) : state.readMins,
+            medMins:   id === 'meditation' ? Math.max(0, state.medMins   - mins) : state.medMins,
+            pranaMins: id === 'pranayama'  ? Math.max(0, state.pranaMins - mins) : state.pranaMins,
           };
         }),
 
       toggleFav: (id) =>
-        set((state) => {
-          const isFav = state.favs.includes(id);
-          return {
-            favs: isFav ? state.favs.filter((x) => x !== id) : [...state.favs, id],
-          };
-        }),
+        set((state) => ({
+          favs: state.favs.includes(id)
+            ? state.favs.filter((x) => x !== id)
+            : [...state.favs, id],
+        })),
 
       logTimerSession: (mins) =>
         set((state) => {
           const today = new Date().toDateString();
           const existingIdx = state.hist.findIndex((x) => x.date === today);
-          let newHist;
-          if (existingIdx === -1) {
-            newHist = [...state.hist, { date: today, count: 1 }];
-          } else {
-            newHist = state.hist.map((x, i) =>
-              i === existingIdx ? { ...x, count: x.count + 1 } : x
-            );
-          }
+          const newHist = existingIdx === -1
+            ? [...state.hist, { date: today, count: 1 }]
+            : state.hist.map((x, i) => i === existingIdx ? { ...x, count: x.count + 1 } : x);
 
-          // Streak logic for timer sessions too
           let newStreak = state.streak;
           if (state.lastDay !== today) {
             const yesterday = new Date();
             yesterday.setDate(yesterday.getDate() - 1);
             const yesterdayStr = yesterday.toDateString();
-
-            if (state.lastDay === yesterdayStr) {
-              newStreak = state.streak + 1;
-            } else if (state.lastDay === null) {
-              newStreak = 1;
-            } else {
-              newStreak = 1;
-            }
+            if (state.lastDay === yesterdayStr)    newStreak = state.streak + 1;
+            else if (state.lastDay === null)        newStreak = 1;
+            else                                    newStreak = 1;
           }
 
-          return {
-            totalMins: state.totalMins + mins,
-            medMins: state.medMins + mins,
-            streak: newStreak,
-            lastDay: today,
-            hist: newHist,
-          };
+          return { totalMins: state.totalMins + mins, medMins: state.medMins + mins, streak: newStreak, lastDay: today, hist: newHist };
         }),
 
       checkAndUpdateStreak: () => {
@@ -177,43 +207,75 @@ export const useStore = create<AppState>()(
           const yesterday = new Date();
           yesterday.setDate(yesterday.getDate() - 1);
           if (state.lastDay !== yesterday.toDateString()) {
-            // Streak broken
             set({ streak: 0 });
           }
         }
       },
 
-      updateUserName: (name: string) => set({ userName: name }),
-
-      markHabitHintSeen: () => set({ hasSeenHabitHint: true }),
-      markScienceHintSeen: () => set({ hasSeenScienceHint: true }),
-
-      addJournalEntry: (entry) =>
-        set((state) => ({
-          journal: [...state.journal, entry],
-        })),
-
       resetDailyIfNeeded: () => {
         const state = get();
         const today = new Date().toDateString();
         if (state.lastDay && state.lastDay !== today) {
-          // New day — reset today's completions
           set({ done: [] });
         }
       },
-        
-      syncFromServer: (serverState) => set((state) => ({ ...state, ...serverState })),
+
+      // ── UI actions ────────────────────────────────────────────────────────
+
+      updateUserName: (name: string) => set({ userName: name }),
+      markHabitHintSeen:   () => set({ hasSeenHabitHint: true }),
+      markScienceHintSeen: () => set({ hasSeenScienceHint: true }),
+
+      // ── Journal actions ───────────────────────────────────────────────────
+
+      addJournalEntry: (entry) =>
+        set((state) => ({ journal: [...state.journal, entry] })),
+
+      // ── Sync actions ──────────────────────────────────────────────────────
+
+      /**
+       * Merge server state over local state.
+       * Resets sync status to 'synced' with a timestamp.
+       */
+      syncFromServer: (serverState) =>
+        set((state) => ({
+          ...state,
+          ...serverState,
+          syncStatus: 'synced' as SyncStatus,
+          lastSyncAt: new Date().toISOString(),
+          syncError: null,
+        })),
+
+      /**
+       * Explicitly set sync status — call this from the Supabase sync hook.
+       * setSyncStatus('syncing')   → before fetch
+       * setSyncStatus('synced')    → on success
+       * setSyncStatus('error', msg) → on failure
+       */
+      setSyncStatus: (status: SyncStatus, error?: string) =>
+        set({
+          syncStatus: status,
+          syncError: error ?? null,
+          lastSyncAt: status === 'synced' ? new Date().toISOString() : get().lastSyncAt,
+        }),
     }),
     {
       name: 'ank_f',
-      onRehydrateStorage: () => {
-        return (state) => {
-          // After hydrating from localStorage, check if it's a new day
-          if (state) {
-            state.resetDailyIfNeeded();
-            state.checkAndUpdateStreak();
-          }
-        };
+      // Only persist the domain slices — not transient sync state
+      partialize: (state) => ({
+        done: state.done, streak: state.streak, totalTasks: state.totalTasks,
+        totalMins: state.totalMins, restored: state.restored, hist: state.hist,
+        favs: state.favs, readMins: state.readMins, medMins: state.medMins,
+        pranaMins: state.pranaMins, lastDay: state.lastDay,
+        journal: state.journal, userName: state.userName,
+        hasSeenHabitHint: state.hasSeenHabitHint,
+        hasSeenScienceHint: state.hasSeenScienceHint,
+      }),
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          state.resetDailyIfNeeded();
+          state.checkAndUpdateStreak();
+        }
       },
     }
   )

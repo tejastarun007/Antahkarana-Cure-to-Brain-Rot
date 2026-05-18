@@ -2,6 +2,12 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
+  // Public marketing routes — no auth processing needed
+  const publicPaths = ['/landing', '/explore', '/onboarding'];
+  if (publicPaths.some(p => request.nextUrl.pathname.startsWith(p))) {
+    return NextResponse.next();
+  }
+
   let supabaseResponse = NextResponse.next({ request })
 
   const supabase = createServerClient(

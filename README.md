@@ -55,6 +55,9 @@ Antahkarana operationalises these findings into a **mobile-first daily practice 
 
 ## What Antahkarana Does
 
+### 🪔 Core Daily Loop & Onboarding
+A problem-first, 3-screen onboarding journey guides new users into the application's central nervous system: the **"Today's Sadhana" Core Loop**. This dashboard hero pinned section cuts through feature fatigue, offering a clear, 3-practice, 5-minute daily ritual that serves as the entry point for all users.
+
 ### 🧘 Structured Daily Practices
 Nine evidence-backed habits — each mapped to a specific neural trade-off with cited neuroscience research:
 
@@ -114,7 +117,7 @@ Mood-tagged, timestamped journal entries stored locally in Zustand (and synced t
 | **State** | Zustand 5 + persist middleware | Client-side state with localStorage hydration + cloud sync |
 | **Styling** | Vanilla CSS + custom design tokens | Vedic-inspired design system — zero external UI libraries |
 | **Typography** | Google Fonts (Cormorant Garamond, DM Sans, DM Mono, Noto Serif Devanagari) | Multi-script rendering for English and Sanskrit |
-| **PWA** | `@ducanh2912/next-pwa` + Web App Manifest | Offline capability, home screen install, native-like UX |
+| **PWA & Device** | `@ducanh2912/next-pwa` + WakeLock API | Offline capability, home screen install, native-like UX, and iOS screen-sleep prevention during meditation |
 | **Audio** | Web Audio API + HTML5 Audio | Meditation timer with synthesised bell fallback |
 | **Analytics** | Vercel Analytics + Speed Insights | Privacy-respecting performance analytics and Core Web Vitals |
 | **Hosting** | Vercel | Edge deployment with automatic SSL, global CDN |
@@ -137,7 +140,9 @@ src/
 │       ├── layout.tsx              # App shell — persistent bottom navigation
 │       ├── loading.tsx             # Route-level loading skeleton
 │       ├── error.tsx               # Route-level error boundary
-│       ├── dashboard/page.tsx      # Home — daily progress, habit cards, streak
+│       ├── dashboard/
+│       │   ├── page.tsx            # Home — core daily loop, habit cards, streak
+│       │   └── dashboard.css       # Modularized styles for the sanctuary dashboard
 │       ├── practice/page.tsx       # Timer sessions, habit completion logging
 │       ├── wisdom/page.tsx         # Anti-scroll feed — Sanskrit with translations
 │       ├── science/page.tsx        # Research — brain map, timeline, tabbed sections
@@ -185,25 +190,26 @@ Returning User → Middleware detects session → auto-redirect to Dashboard
 ### State Management
 
 ```
-Zustand Store (persisted to localStorage as 'ank_f')
-  ├── done[]              — completed habit IDs for today
-  ├── streak              — consecutive practice days
-  ├── totalTasks          — lifetime completed habits
-  ├── totalMins           — lifetime practice minutes
-  ├── restored[7]         — neural trade-off restoration scores (0–100%)
-  ├── hist[]              — daily practice calendar heatmap data
-  ├── favs[]              — bookmarked wisdom cards
-  ├── readMins            — deep reading minutes (milestone tracking)
-  ├── medMins             — meditation minutes (milestone tracking)
-  ├── pranaMins           — pranayama minutes (milestone tracking)
-  ├── lastDay             — streak continuity check
-  ├── userName            — display name (default: "Seeker")
-  ├── hasSeenHabitHint    — first-use onboarding hint state
-  ├── hasSeenScienceHint  — first-use onboarding hint state
-  └── journal[]           — JournalEntry[] { id, text, mood, date, words }
+Zustand Store (persisted to localStorage as 'ank_f', modularized into domain slices)
+  ├── HabitSlice
+  │   ├── done[]              — completed habit IDs for today
+  │   ├── streak              — consecutive practice days
+  │   ├── totalTasks          — lifetime completed habits
+  │   ├── totalMins           — lifetime practice minutes
+  │   ├── restored[7]         — neural trade-off restoration scores (0–100%)
+  │   ├── hist[]              — daily practice calendar heatmap data
+  │   └── readMins, medMins, pranaMins — milestone tracking
+  ├── JournalSlice
+  │   └── journal[]           — JournalEntry[] { id, text, mood, date, words }
+  ├── UiSlice
+  │   ├── userName            — display name (default: "Seeker")
+  │   └── hasSeenHabitHint    — first-use onboarding hint state
+  └── SyncSlice
+      └── syncStatus, lastSyncAt, syncError — topbar sync status indicator state
 
-Cloud Sync (lib/sync.ts):
-  ├── pushStateToCloud()  — debounced (2 s) upsert to Supabase user_progress
+Cloud Sync & Database Migrations:
+  ├── Supabase Schema         — `supabase/migrations/001_content_schema.sql` (Public RLS)
+  ├── pushStateToCloud()      — debounced upsert to Supabase `user_progress`
   └── pullStateFromCloud() — on login, merges server state into Zustand
 ```
 
