@@ -53,11 +53,9 @@ const SYNC_LABELS: Record<SyncStatus, string> = {
 };
 
 function SyncDot() {
-  const { syncStatus, lastSyncAt, syncError } = useStore(s => ({
-    syncStatus: s.syncStatus,
-    lastSyncAt: s.lastSyncAt,
-    syncError: s.syncError,
-  }));
+  const syncStatus = useStore(s => s.syncStatus);
+  const lastSyncAt = useStore(s => s.lastSyncAt);
+  const syncError = useStore(s => s.syncError);
   const [showTip, setShowTip] = useState(false);
   const tipRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
