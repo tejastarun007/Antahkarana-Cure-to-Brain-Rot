@@ -12,7 +12,7 @@
 
 /* Wisdom hero */
 .wh{margin:20px 20px 0;border-radius:24px;overflow:hidden;position:relative;flex-shrink:0}
-.wh-inner{padding:28px 20px;background:linear-gradient(145deg,rgba(28,22,56,.95),rgba(14,10,30,.98));border:1px solid var(--bdr2);border-radius:inherit}
+.wh-inner{padding:20px;background:linear-gradient(145deg,rgba(28,22,56,.95),rgba(14,10,30,.98));border:1px solid var(--bdr2);border-radius:inherit}
 .wh-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
 .wday{font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--saffron2);margin-bottom:14px;display:flex;align-items:center;gap:8px}
 .wday::after{content:'';flex:1;height:1px;background:rgba(200,144,42,.2)}

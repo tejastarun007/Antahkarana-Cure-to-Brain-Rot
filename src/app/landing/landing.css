@@ -40,7 +40,7 @@
 .lp-hero {
   min-height: 640px; display: flex; flex-direction: column;
   align-items: center; justify-content: center; text-align: center;
-  position: relative; padding: 64px 24px 36px; overflow: hidden;
+  position: relative; padding: 48px 20px 24px; overflow: hidden;
   perspective: 800px;
   transform-style: preserve-3d;
 }
@@ -330,7 +330,7 @@
 
 /* ═══════ QUOTE CARD — 3D ═══════ */
 .lp-qcard {
-  margin-bottom: 20px; padding: 22px 18px; border-radius: 20px;
+  margin-bottom: 20px; padding: 18px 16px; border-radius: 20px;
   background: linear-gradient(145deg, rgba(28,22,56,.92), rgba(14,10,30,.98));
   border: 1px solid rgba(200,144,42,.22); text-align: center; position: relative; overflow: hidden;
   transform-style: preserve-3d;
