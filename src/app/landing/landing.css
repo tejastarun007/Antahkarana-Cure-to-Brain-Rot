@@ -467,8 +467,20 @@
 .lp-track-l { color: var(--gold2); font-weight: 500; }
 .lp-track-d { color: var(--t3); }
 
-/* ═══════ PRACTICES (updated) ═══════ */
-.lp-pitem-boost { font-size: 13px; font-weight: 500; }
+/* ═══════ PRACTICES ═══════ */
+.lp-plist { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.lp-pitem {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 14px; border-radius: 14px;
+  background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.05);
+  transition: transform .25s cubic-bezier(.4,0,.2,1), background .2s;
+}
+.lp-pitem:active { transform: scale(.98); background: rgba(255,255,255,.05); }
+.lp-pitem-mid { flex: 1; min-width: 0; }
+.lp-pitem-n { font-size: 15px; font-weight: 500; color: var(--t1); margin-bottom: 4px; }
+.lp-pitem-d { font-size: 10.5px; color: var(--t3); letter-spacing: .5px; }
+.lp-pitem-right { text-align: right; flex-shrink: 0; }
+.lp-pitem-boost { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--jade); }
 
 /* ═══════ SCIENCE PARALLELS ═══════ */
 .lp-parallels { display: flex; flex-direction: column; gap: 8px; }
