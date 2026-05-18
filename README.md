@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="https://antahkarana-cure-to-brain-rot.vercel.app"><img src="https://img.shields.io/badge/Live-antahkarana.vercel.app-0a0818?style=for-the-badge&logo=vercel&logoColor=white" alt="Live App" /></a>
-  <img src="https://img.shields.io/badge/Next.js-16.2-black?style=for-the-badge&logo=nextdotjs" alt="Next.js 16" />
+  <img src="https://img.shields.io/badge/Next.js-16.2.4-black?style=for-the-badge&logo=nextdotjs" alt="Next.js 16" />
   <img src="https://img.shields.io/badge/React-19.2-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19" />
   <img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Supabase-Auth+DB-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
@@ -94,24 +94,29 @@ OECD PIAAC-calibrated assessment of 8.1 billion humans across five cognitive pro
 ### 🎶 Vedic Chants Player
 A built-in, cross-platform audio engine featuring 18 curated mantras grouped by duration (5, 10, and 15 minutes). Designed with a spinning vinyl UI, progress tracking, and ambient fallback integration.
 
+### 🧹 Digital Detox Planner
+Guided screen-time reduction protocols with intention-setting prompts, incremental digital fasting schedules, and awareness exercises drawn from Pratyahara (withdrawal of senses). Tracks daily phone-free windows and escalates across a structured programme.
+
+### 📓 Reflective Journal
+Mood-tagged, timestamped journal entries stored locally in Zustand (and synced to Supabase for authenticated users). Supports free-form reflection after each practice session, with word-count statistics and a searchable entry history.
+
 ---
 
 ## Technology Stack
 
 | Layer | Technology | Purpose |
 |---|---|---|
-| **Framework** | Next.js 16.2 (App Router) | Server-side rendering, file-based routing, middleware |
+| **Framework** | Next.js 16.2.4 (App Router) | Server-side rendering, file-based routing, middleware |
 | **Language** | TypeScript 5.x | Full-stack type safety |
 | **UI Library** | React 19.2 | Component architecture with Server Components |
-| **Authentication** | Supabase Auth | Email/password + Google OAuth with SSR cookie sessions |
-| **Database** | Supabase (PostgreSQL) | User profiles, habit logs, streak persistence |
-| **State** | Zustand 5 + persist middleware | Client-side state with localStorage hydration |
+| **Authentication** | Supabase Auth (`@supabase/ssr`) | Email/password + Google OAuth with SSR cookie sessions |
+| **Database** | Supabase (PostgreSQL) | User profiles, habit logs, streak persistence (`user_progress` table) |
+| **State** | Zustand 5 + persist middleware | Client-side state with localStorage hydration + cloud sync |
 | **Styling** | Vanilla CSS + custom design tokens | Vedic-inspired design system — zero external UI libraries |
 | **Typography** | Google Fonts (Cormorant Garamond, DM Sans, DM Mono, Noto Serif Devanagari) | Multi-script rendering for English and Sanskrit |
-| **PWA** | next-pwa + Web App Manifest | Offline capability, home screen install, native-like UX |
+| **PWA** | `@ducanh2912/next-pwa` + Web App Manifest | Offline capability, home screen install, native-like UX |
 | **Audio** | Web Audio API + HTML5 Audio | Meditation timer with synthesised bell fallback |
-| **Analytics** | Vercel Analytics | Privacy-respecting, zero-config performance analytics |
-| **Error Tracking** | Sentry | Real-time error monitoring and performance tracing |
+| **Analytics** | Vercel Analytics + Speed Insights | Privacy-respecting performance analytics and Core Web Vitals |
 | **Hosting** | Vercel | Edge deployment with automatic SSL, global CDN |
 
 ---
@@ -123,29 +128,38 @@ src/
 ├── app/
 │   ├── page.tsx                    # Gateway — progressive disclosure onboarding
 │   ├── layout.tsx                  # Root layout — font loading, metadata, analytics
-│   ├── globals.css                 # Design system — tokens, components, 2000+ lines
+│   ├── globals.css                 # Design system — tokens, components, 3000+ lines
+│   ├── icon.tsx                    # Programmatic app icon (Next.js ImageResponse)
+│   ├── apple-icon.tsx              # Apple touch icon (Next.js ImageResponse)
+│   ├── global-error.tsx            # Root-level error boundary
 │   ├── auth/callback/              # OAuth callback handler (Google)
 │   └── (app)/                      # Protected route group
 │       ├── layout.tsx              # App shell — persistent bottom navigation
+│       ├── loading.tsx             # Route-level loading skeleton
+│       ├── error.tsx               # Route-level error boundary
 │       ├── dashboard/page.tsx      # Home — daily progress, habit cards, streak
 │       ├── practice/page.tsx       # Timer sessions, habit completion logging
 │       ├── wisdom/page.tsx         # Anti-scroll feed — Sanskrit with translations
-│       ├── science/page.tsx        # Research — brain map, timeline, 8 tabbed sections
+│       ├── science/page.tsx        # Research — brain map, timeline, tabbed sections
 │       ├── chants/page.tsx         # Audio player — 18 curated Vedic mantras & soundscapes
-│       └── profile/page.tsx        # Progress visualisation, milestones (accessed via TopBar)
+│       ├── profile/page.tsx        # Progress visualisation, milestones (via TopBar)
+│       ├── detox/page.tsx          # Digital detox planner — screen-time reduction protocols
+│       └── journal/page.tsx        # Reflective journal — mood-tagged, timestamped entries
 ├── components/
 │   ├── BottomNav.tsx               # Navigation with "Time of Void" transition overlay
-│   └── TopBar.tsx                  # Status bar component
+│   ├── TopBar.tsx                  # Status bar — user greeting, profile access
+│   └── ClickHand.tsx               # Animated tap-indicator for first-use onboarding hints
 ├── data/
 │   └── content.ts                  # Modular content repository — all habits, wisdoms,
 │                                   #   trade-offs, eras, tiers, timer sessions, milestones
 ├── lib/
 │   ├── audio.ts                    # Hybrid audio engine (file + WebAudio synthesis)
+│   ├── sync.ts                     # Debounced cloud sync (push/pull Zustand ↔ Supabase)
 │   └── supabase/
 │       ├── client.ts               # Browser-side Supabase client
 │       └── server.ts               # Server-side Supabase client (cookie-based sessions)
 ├── store/
-│   └── useStore.ts                 # Zustand store — streaks, habits, timer, sync
+│   └── useStore.ts                 # Zustand store — streaks, habits, timer, journal, sync
 └── middleware.ts                   # Route protection — auth + guest mode bypass
 ```
 
@@ -160,7 +174,10 @@ New User → Gateway (page.tsx)
 Guest Mode:
   ├── Full app access with localStorage persistence
   ├── Profile page shows "Create Account" prompt to sync progress
-  └── Middleware allows protected routes when guest_mode cookie exists
+  └── Middleware allows all protected routes when guest_mode cookie exists
+
+Protected routes: /dashboard  /practice  /wisdom  /science
+                  /profile    /chants    /detox   /journal
 
 Returning User → Middleware detects session → auto-redirect to Dashboard
 ```
@@ -169,17 +186,25 @@ Returning User → Middleware detects session → auto-redirect to Dashboard
 
 ```
 Zustand Store (persisted to localStorage as 'ank_f')
-  ├── done[]         — completed habit IDs for today
-  ├── streak         — consecutive practice days
-  ├── totalTasks     — lifetime completed habits
-  ├── totalMins      — lifetime practice minutes
-  ├── restored[7]    — neural trade-off restoration scores (0–100%)
-  ├── hist[]         — daily practice calendar heatmap data
-  ├── favs[]         — bookmarked wisdom cards
-  ├── readMins       — deep reading minutes (milestone tracking)
-  ├── medMins        — meditation minutes (milestone tracking)
-  ├── pranaMins      — pranayama minutes (milestone tracking)
-  └── lastDay        — streak continuity check
+  ├── done[]              — completed habit IDs for today
+  ├── streak              — consecutive practice days
+  ├── totalTasks          — lifetime completed habits
+  ├── totalMins           — lifetime practice minutes
+  ├── restored[7]         — neural trade-off restoration scores (0–100%)
+  ├── hist[]              — daily practice calendar heatmap data
+  ├── favs[]              — bookmarked wisdom cards
+  ├── readMins            — deep reading minutes (milestone tracking)
+  ├── medMins             — meditation minutes (milestone tracking)
+  ├── pranaMins           — pranayama minutes (milestone tracking)
+  ├── lastDay             — streak continuity check
+  ├── userName            — display name (default: "Seeker")
+  ├── hasSeenHabitHint    — first-use onboarding hint state
+  ├── hasSeenScienceHint  — first-use onboarding hint state
+  └── journal[]           — JournalEntry[] { id, text, mood, date, words }
+
+Cloud Sync (lib/sync.ts):
+  ├── pushStateToCloud()  — debounced (2 s) upsert to Supabase user_progress
+  └── pullStateFromCloud() — on login, merges server state into Zustand
 ```
 
 ---
