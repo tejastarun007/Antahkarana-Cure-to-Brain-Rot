@@ -1,281 +1,393 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { TIERS, TRADEOFFS, HABITS } from '@/data/content';
+import './landing/landing.css';
 
-export default function Gateway() {
+// ─── Colorful SVG Icons ───────────────────────────────────────────
+const PRACTICE_ICONS: Record<string, { bg: string; fg: string; path: string }> = {
+  meditation: { bg: '#3d2a7a', fg: '#a78bfa', path: 'M12 3a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM7 14c0-2.76 2.24-5 5-5s5 2.24 5 5v1H7v-1zM4 20h16M12 2v1' },
+  reading:    { bg: '#1a3a2a', fg: '#34d399', path: 'M12 21V7M12 7C10 4 6 3 2 4.5V19c4-1.5 8-.5 10 2M12 7c2-3 6-4 10-2.5V19c-4-1.5-8-.5-10 2' },
+  pranayama:  { bg: '#1e2a4a', fg: '#60a5fa', path: 'M2 12c2-4 5-5 8-2s6 2 8-2M2 17c2-4 5-5 8-2s6 2 8-2M2 7c2-4 5-5 8-2s6 2 8-2' },
+  walk:       { bg: '#2a1a10', fg: '#fb923c', path: 'M13 4a1 1 0 1 0-2 0 1 1 0 0 0 2 0zM9 8l-2 5 2 1-1.5 6h2l2-4.5 2 4.5h2L14 14l2.5-1L14 8H9z' },
+  namjap:     { bg: '#3a1a3a', fg: '#e879f9', path: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c3.86 0 7 3.14 7 7M12 7v5l3 3' },
+  handwriting:{ bg: '#2a1a10', fg: '#fbbf24', path: 'M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3zM15 5l4 4' },
+  silence:    { bg: '#1a2a3a', fg: '#38bdf8', path: 'M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0M3 3l18 18' },
+  handwork:   { bg: '#1a3a2a', fg: '#4ade80', path: 'M18 11V6l-8.5 8.5-1.5-1.5L13.5 8H8M6 18l3-3' },
+  sleep:      { bg: '#1a1a3a', fg: '#818cf8', path: 'M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z' },
+};
+const PRACTICE_KEYS = ['meditation','reading','pranayama','walk','namjap','handwriting','silence','handwork','sleep'];
+
+function PIcon({ type }: { type: string }) {
+  const ic = PRACTICE_ICONS[type];
+  return (
+    <div className="lp-picon" style={{ background: ic.bg, boxShadow: `0 0 12px ${ic.fg}28` }}>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={ic.fg} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+        <path d={ic.path}/>
+      </svg>
+    </div>
+  );
+}
+
+export default function LandingPage() {
   const router = useRouter();
-
-  const [tovVisible, setTovVisible] = useState(false);
-  const [tovQuote, setTovQuote] = useState('"तमसो मा ज्योतिर्गमय — Lead me from darkness to light"');
   const [mounted, setMounted] = useState(false);
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [mode, setMode] = useState<'guest' | 'login' | 'signup'>('guest');
-  const [signupSuccess, setSignupSuccess] = useState(false);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const [attentionSecs, setAttentionSecs] = useState(65);
 
   useEffect(() => {
-    // Trigger entrance animations after mount
-    const t = setTimeout(() => setMounted(true), 50);
-    return () => clearTimeout(t);
+    const t = setTimeout(() => setMounted(true), 60);
+
+    // Attention counter animation
+    let frame: number;
+    let start = 0;
+    const animate = (ts: number) => {
+      if (!start) start = ts;
+      const progress = Math.min((ts - start) / 1800, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setAttentionSecs(Math.round(150 - eased * 85));
+      if (progress < 1) frame = requestAnimationFrame(animate);
+    };
+    const delayFrame = setTimeout(() => { frame = requestAnimationFrame(animate); }, 1200);
+
+    // IntersectionObserver
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const parent = entry.target.closest('.lp-ag');
+            if (parent) {
+              parent.querySelectorAll('.la, .la-flip').forEach((el, idx) => {
+                setTimeout(() => el.classList.add('lv'), idx * 75);
+              });
+            } else {
+              entry.target.classList.add('lv');
+            }
+            observerRef.current?.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    document.querySelectorAll('.la, .la-flip').forEach(el => observerRef.current?.observe(el));
+
+    // Gyroscope
+    const wrap = document.getElementById('lp-mwrap');
+    const handleOrientation = (e: DeviceOrientationEvent) => {
+      if (!wrap) return;
+      const x = Math.max(-15, Math.min(15, e.beta ?? 0)) * 0.35;
+      const y = Math.max(-15, Math.min(15, e.gamma ?? 0)) * 0.35;
+      wrap.style.transform = `perspective(600px) rotateX(${x}deg) rotateY(${y}deg)`;
+    };
+    const tryGyro = () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const DOE = DeviceOrientationEvent as any;
+      if (typeof DOE.requestPermission === 'function') {
+        DOE.requestPermission().then((s: string) => {
+          if (s === 'granted') window.addEventListener('deviceorientation', handleOrientation, true);
+        }).catch(() => {});
+      } else {
+        window.addEventListener('deviceorientation', handleOrientation, true);
+      }
+    };
+    wrap?.addEventListener('touchstart', tryGyro, { once: true });
+
+    return () => {
+      clearTimeout(t); clearTimeout(delayFrame);
+      cancelAnimationFrame(frame);
+      observerRef.current?.disconnect();
+      window.removeEventListener('deviceorientation', handleOrientation, true);
+    };
   }, []);
 
-  const showTransition = () => {
-    setTovQuote('"तमसो मा ज्योतिर्गमय — Lead me from darkness to light"');
-    setTovVisible(true);
-    setTimeout(() => {
-      router.push('/dashboard');
-      router.refresh();
-    }, 2500);
-  };
-
-  const handleAuth = async () => {
-    setError('');
-    if (!email || !password) {
-      setError('Please enter both email and password.');
-      return;
-    }
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters.');
-      return;
-    }
-
-    setLoading(true);
-    const supabase = createClient();
-
-    if (mode === 'signup') {
-      const { data, error: signUpError } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/dashboard`,
-        },
-      });
-      if (signUpError) {
-        setError(signUpError.message);
-        setLoading(false);
-        return;
-      }
-      // If email confirmation is required, show message
-      // If user is auto-confirmed (Supabase setting), redirect
-      if (data.session) {
-        showTransition();
-      } else {
-        setSignupSuccess(true);
-        setLoading(false);
-      }
-    } else {
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (signInError) {
-        setError(signInError.message);
-        setLoading(false);
-        return;
-      }
-      showTransition();
-    }
-  };
-
-  const handleOAuth = async (provider: 'google' | 'apple') => {
-    setError('');
-    const supabase = createClient();
-    const { error: oauthError } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-    if (oauthError) {
-      setError(oauthError.message);
-    }
-  };
+  // Core daily loop: first 3 habits
+  const dailyLoop = HABITS.slice(0, 3);
 
   return (
     <div className="phone">
       <div className="screens">
-        <div className="screen on" id="sg">
+        <div className="screen on" id="slp">
+          <div className="lp-scroll">
 
-          {/* ═══ HERO SECTION — Lotus + Brand ═══ */}
-          <div className="gw-hero">
-            <div className="gw-depth-1"></div>
-            <div className="gw-depth-2"></div>
-            <div className="gw-depth-3"></div>
+            {/* ═══ HERO: THE PROBLEM ═══ */}
+            <div className="lp-hero">
+              <div className="lp-hbg1"/><div className="lp-hbg2"/><div className="lp-hbg3"/>
 
-            <div className="gw-particles">
-              <div className="gw-p gw-p1"></div>
-              <div className="gw-p gw-p2"></div>
-              <div className="gw-p gw-p3"></div>
-              <div className="gw-p gw-p4"></div>
-              <div className="gw-p gw-p5"></div>
-              <div className="gw-p gw-p6"></div>
-              <div className="gw-p gw-p7"></div>
-              <div className="gw-p gw-p8"></div>
-            </div>
+              <div id="lp-mwrap" className="lp-mandala-wrap">
+                <svg className={`lp-mandala ${mounted ? 'in' : ''}`} viewBox="0 0 200 200" fill="none">
+                  <g opacity=".45">{[0,45,90,135,180,225,270,315].map(r=><ellipse key={r} cx="100" cy="22" rx="7" ry="20" fill="#c8902a" opacity=".42" transform={r?`rotate(${r} 100 100)`:undefined}/>)}</g>
+                  <g opacity=".55">{[0,60,120,180,240,300].map(r=><ellipse key={r} cx="100" cy="42" rx="5" ry="14" fill="#e8b84b" opacity=".5" transform={r?`rotate(${r} 100 100)`:undefined}/>)}</g>
+                  <circle cx="100" cy="100" r="75" stroke="#c8902a" strokeWidth=".7" opacity=".25"/>
+                  <circle cx="100" cy="100" r="48" stroke="#e8b84b" strokeWidth=".8" opacity=".28"/>
+                  <path d="M100 62 L132 116 L68 116 Z" stroke="#c8902a" strokeWidth=".7" fill="rgba(200,144,42,.04)" opacity=".4"/>
+                  <path d="M100 138 L68 84 L132 84 Z" stroke="#c8902a" strokeWidth=".7" fill="rgba(200,144,42,.04)" opacity=".4"/>
+                  <circle cx="100" cy="100" r="4" fill="#e8b84b" opacity=".7"/>
+                </svg>
+              </div>
 
-            <div className={`gw-lotus-wrap ${mounted ? 'in' : ''}`}>
-              <div className="gw-aura"></div>
-              <svg className="gw-mandala" viewBox="0 0 200 200" fill="none">
-                <g opacity=".48">
-                  <ellipse cx="100" cy="22" rx="7" ry="20" fill="#c8902a" opacity=".42"/>
-                  <ellipse cx="100" cy="22" rx="7" ry="20" fill="#c8902a" opacity=".42" transform="rotate(45 100 100)"/>
-                  <ellipse cx="100" cy="22" rx="7" ry="20" fill="#c8902a" opacity=".42" transform="rotate(90 100 100)"/>
-                  <ellipse cx="100" cy="22" rx="7" ry="20" fill="#c8902a" opacity=".42" transform="rotate(135 100 100)"/>
-                  <ellipse cx="100" cy="22" rx="7" ry="20" fill="#c8902a" opacity=".42" transform="rotate(180 100 100)"/>
-                  <ellipse cx="100" cy="22" rx="7" ry="20" fill="#c8902a" opacity=".42" transform="rotate(225 100 100)"/>
-                  <ellipse cx="100" cy="22" rx="7" ry="20" fill="#c8902a" opacity=".42" transform="rotate(270 100 100)"/>
-                  <ellipse cx="100" cy="22" rx="7" ry="20" fill="#c8902a" opacity=".42" transform="rotate(315 100 100)"/>
-                </g>
-                <g opacity=".58">
-                  <ellipse cx="100" cy="42" rx="5" ry="14" fill="#e8b84b" opacity=".5"/>
-                  <ellipse cx="100" cy="42" rx="5" ry="14" fill="#e8b84b" opacity=".5" transform="rotate(60 100 100)"/>
-                  <ellipse cx="100" cy="42" rx="5" ry="14" fill="#e8b84b" opacity=".5" transform="rotate(120 100 100)"/>
-                  <ellipse cx="100" cy="42" rx="5" ry="14" fill="#e8b84b" opacity=".5" transform="rotate(180 100 100)"/>
-                  <ellipse cx="100" cy="42" rx="5" ry="14" fill="#e8b84b" opacity=".5" transform="rotate(240 100 100)"/>
-                  <ellipse cx="100" cy="42" rx="5" ry="14" fill="#e8b84b" opacity=".5" transform="rotate(300 100 100)"/>
-                </g>
-                <circle cx="100" cy="100" r="75" stroke="#c8902a" strokeWidth=".7" opacity=".28"/>
-                <circle cx="100" cy="100" r="62" stroke="#c8902a" strokeWidth=".6" opacity=".22"/>
-                <circle cx="100" cy="100" r="48" stroke="#e8b84b" strokeWidth=".8" opacity=".3"/>
-                <circle cx="100" cy="100" r="34" stroke="#e8b84b" strokeWidth=".8" opacity=".36"/>
-                <path d="M100 62 L132 116 L68 116 Z" stroke="#c8902a" strokeWidth=".7" fill="rgba(200,144,42,.04)" opacity=".4"/>
-                <path d="M100 138 L68 84 L132 84 Z" stroke="#c8902a" strokeWidth=".7" fill="rgba(200,144,42,.04)" opacity=".4"/>
-                <circle cx="100" cy="100" r="9" fill="rgba(232,184,75,.28)"/>
-                <circle cx="100" cy="100" r="4" fill="#e8b84b" opacity=".65"/>
-              </svg>
-            </div>
+              <div className={`lp-hcontent ${mounted ? 'in' : ''}`}>
+                <div className="lp-hpre deva">अन्तःकरण</div>
+                <h1 className="lp-htitle serif">Antahkarana</h1>
+                <div className="lp-hline"/>
+                <div className="lp-hsub mono">The Inner Instrument</div>
+              </div>
 
-            <div className={`gw-brand ${mounted ? 'in' : ''}`}>
-              <div className="gw-brand-pre">अन्तःकरण</div>
-              <h1 className="gw-brand-name">Antahkarana</h1>
-              <div className="gw-brand-line"></div>
-              <div className="gw-brand-tag">The Inner Instrument</div>
-            </div>
-          </div>
-
-          {/* ═══ FORM SECTION ═══ */}
-          <div className={`gw-form ${mounted ? 'in' : ''}`}>
-            <div className="gw-h">{mode === 'guest' ? 'Enter Your Sanctuary' : mode === 'signup' ? 'Begin Your Sanctuary' : 'Restore Progress'}</div>
-            <div className="gw-sub">
-              <div className="gw-deva">तमसो मा ज्योतिर्गमय</div>
-              <div className="gw-tr">Lead me from darkness to light</div>
-            </div>
-
-            {error && (
-              <div style={{
-                background:'rgba(192,64,64,.12)',border:'1px solid rgba(192,64,64,.3)',
-                borderRadius:'10px',padding:'10px 14px',marginBottom:'14px',
-                fontSize:'12px',color:'#e08080',fontFamily:'var(--mono)',textAlign:'center'
-              }}>{error}</div>
-            )}
-
-            {signupSuccess && (
-              <div style={{
-                background:'rgba(82,168,120,.1)',border:'1px solid rgba(82,168,120,.3)',
-                borderRadius:'14px',padding:'20px 18px',marginBottom:'14px',textAlign:'center'
-              }}>
-                <div style={{fontSize:'28px',marginBottom:'8px'}}>✉️</div>
-                <div style={{fontFamily:'var(--serif)',fontSize:'18px',color:'var(--gold2)',marginBottom:'6px'}}>Check Your Email</div>
-                <div style={{fontSize:'13px',color:'var(--t2)',lineHeight:1.6,marginBottom:'12px'}}>
-                  We sent a confirmation link to <strong style={{color:'var(--t1)'}}>{email}</strong>. Click it to activate your account, then return here to sign in.
+              {/* The hook — the problem statement */}
+              <div className={`lp-hstat ${mounted ? 'in' : ''}`}>
+                <div className="lp-attention-counter">
+                  <div className="lp-ac-label mono">Average focus span in 2024</div>
+                  <div className="lp-ac-num serif">
+                    <span className="lp-ac-val" style={{ color: attentionSecs < 80 ? '#f87171' : '#fb923c' }}>{attentionSecs}</span>
+                    <span className="lp-ac-unit">sec</span>
+                  </div>
+                  <div className="lp-ac-context mono">Down from 2.5 min in 2004 · Mark et al., 2016</div>
                 </div>
-                <button className="btn btn-o btn-sm" onClick={() => { setSignupSuccess(false); setMode('login'); }}>
-                  ← Back to Sign In
+              </div>
+
+              <div className={`lp-hactions ${mounted ? 'in' : ''}`}>
+                <button className="lp-cta-btn" onClick={() => router.push('/gateway')}>
+                  See the fix
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+                <button className="lp-explore-link" onClick={() => router.push('/explore')}>
+                  Explore the science — no login
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </button>
               </div>
-            )}
 
-            {mode === 'guest' ? (
-              <>
-                <button
-                  className="btn btn-g gw-cta"
-                  onClick={() => { 
-                    localStorage.removeItem('ank_f'); // Wipe previous 24h guest progress
-                    document.cookie = "guest_mode=true; path=/; max-age=86400; SameSite=Lax"; // 24 hours
-                    showTransition(); 
-                  }}
-                >
-                  <span>Begin the Journey</span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </button>
-                <div className="gw-divider">
-                  <div className="gw-div-line"></div>
-                  <span>or restore progress</span>
-                  <div className="gw-div-line"></div>
-                </div>
-                <div className="social-r">
-                  <button className="btn-soc" onClick={() => handleOAuth('google')}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-                    Google
-                  </button>
-                  <button className="btn-soc" onClick={() => { setMode('login'); setError(''); }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                    Email
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="field">
-                  <div className="field-lbl">Email</div>
-                  <input
-                    type="email"
-                    placeholder="soul@sanctuary.in"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleAuth()}
-                  />
-                </div>
-                <div className="field">
-                  <div className="field-lbl">Mantra (Password)</div>
-                  <input
-                    type="password"
-                    placeholder="••••••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleAuth()}
-                  />
-                </div>
+              <div className={`lp-hint ${mounted ? 'in' : ''}`}>
+                <div className="lp-hint-dot"/>
+                <span className="mono">The science below</span>
+              </div>
+            </div>
 
-                <button
-                  className="btn btn-g gw-cta"
-                  onClick={handleAuth}
-                  disabled={loading}
-                  style={loading ? {opacity:.6, pointerEvents:'none'} : {}}
-                >
-                  <span>{loading ? 'Entering...' : mode === 'signup' ? 'Create Account' : 'Sign In'}</span>
-                  {!loading && <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>}
-                </button>
+            {/* ═══ WHAT IS HAPPENING TO YOUR BRAIN ═══ */}
+            <div className="lp-sec lp-sec-problem">
+              <div className="lp-tag la mono"><span>The Crisis</span></div>
+              <h2 className="lp-h2 la serif">This is not distraction.<br/>This is <em>structural damage.</em></h2>
+              <p className="lp-body la">Diffusion Tensor MRI confirms measurable grey matter changes in heavy digital users. The prefrontal cortex — seat of deep reasoning — is physically thinning.</p>
 
-                <div className="gw-foot" style={{marginTop: '14px'}}>
-                  {mode === 'login' ? (
-                    <>New to this path? <a onClick={() => { setMode('signup'); setError(''); }}>Create account ›</a><br/><br/><a onClick={() => { setMode('guest'); setError(''); }} style={{opacity:0.6}}>← Back</a></>
-                  ) : (
-                    <>Already on the path? <a onClick={() => { setMode('login'); setError(''); }}>Sign in ›</a><br/><br/><a onClick={() => { setMode('guest'); setError(''); }} style={{opacity:0.6}}>← Back</a></>
-                  )}
-                </div>
-              </>
-            )}
+              {/* 3-column hard numbers */}
+              <div className="lp-crisis-stats lp-ag">
+                {[
+                  { n: '35%', l: 'impulse-control lost', c: '#f87171', cite: 'Loh & Kanai, 2014' },
+                  { n: '80%', l: 'DMN suppressed', c: '#a78bfa', cite: 'Raichle et al.' },
+                  { n: '82%', l: 'memory outsourced', c: '#fb923c', cite: 'Hartzell 2018' },
+                ].map((s, i) => (
+                  <div key={i} className="lp-cstat la" style={{ '--sc': s.c } as React.CSSProperties}>
+                    <div className="lp-cstat-n serif" style={{ color: s.c }}>{s.n}</div>
+                    <div className="lp-cstat-l">{s.l}</div>
+                    <div className="lp-cstat-cite mono">{s.cite}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* The 7 trade-offs — the viral table */}
+              <div className="lp-to-header la">
+                <span className="mono" style={{ fontSize: '10px', color: 'var(--gold3)', letterSpacing: '2px', textTransform: 'uppercase' }}>The 7 neural trade-offs happening now</span>
+              </div>
+              <div className="lp-tradeoffs lp-ag">
+                {TRADEOFFS.map((t, i) => (
+                  <div key={i} className="lp-to la" style={{ '--bw': `${t.pct}%`, '--bc': i < 4 ? '#f87171' : '#fb923c' } as React.CSSProperties}>
+                    <div className="lp-to-row">
+                      <span className="lp-to-n">{t.n}</span>
+                      <span className="lp-to-p" style={{ color: i < 4 ? '#f87171' : '#fb923c' }}>{t.pct}%</span>
+                    </div>
+                    <div className="lp-to-v mono">{t.vedic}</div>
+                    <div className="lp-to-bar"><div className="lp-to-fill"/></div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="lp-pull la">
+                <p className="serif">The same neuroplasticity that caused this degradation can drive restoration — <em>in 8–12 weeks.</em></p>
+              </div>
+            </div>
+
+            {/* ═══ THE COGNITIVE SPECTRUM — shareable, no auth ═══ */}
+            <div className="lp-sec lp-sec-alt">
+              <div className="lp-tag la mono"><span>Where do you fall?</span></div>
+              <h2 className="lp-h2 la serif">The Global Cognitive<br/><em>Spectrum — 2024</em></h2>
+              <p className="lp-body la">Recalibrated using OECD PIAAC (250,000 adults across 39 countries), UNESCO literacy data, and DataReportal 2024 screen time analysis.</p>
+
+              <div className="lp-tiers lp-ag">
+                {TIERS.map((t, i) => (
+                  <div key={i} className="lp-tier la" style={{ '--tc': t.col } as React.CSSProperties}>
+                    <div className="lp-tier-bar" style={{ width: t.pct, background: t.col, opacity: 0.18 }}/>
+                    <div className="lp-tier-left">
+                      <div className="lp-tier-n" style={{ color: t.col }}>{t.n} <span className="deva" style={{ fontSize: '11px', opacity: .7 }}>{t.deva}</span></div>
+                      <div className="lp-tier-proc mono">{t.proc} processing</div>
+                    </div>
+                    <div className="lp-tier-right">
+                      <div className="lp-tier-pct" style={{ color: t.col }}>{t.pct}</div>
+                      <div className="lp-tier-pop mono">{t.pop}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="lp-tier-note la">
+                <div className="lp-tier-note-line"/>
+                <p className="mono" style={{ fontSize: '10px', color: 'var(--t3)', lineHeight: 1.7 }}>
+                  The 10% figure is shrinking. The monitoring circuits that would alert people to this degradation are themselves being degraded first.
+                </p>
+              </div>
+            </div>
+
+            {/* ═══ THE CORE DAILY LOOP ═══ */}
+            <div className="lp-sec">
+              <div className="lp-tag la mono"><span>The Daily Loop</span></div>
+              <h2 className="lp-h2 la serif">Three practices.<br/><em>Five minutes each.</em><br/>Every day.</h2>
+              <p className="lp-body la">That is the core loop. Everything else in the app is secondary. Start here, every morning, before you touch your phone.</p>
+
+              <div className="lp-loop lp-ag">
+                {dailyLoop.map((h, i) => {
+                  const key = PRACTICE_KEYS[i] || 'meditation';
+                  return (
+                    <div key={h.id} className="lp-loop-item la">
+                      <div className="lp-loop-num serif">{String(i+1).padStart(2,'0')}</div>
+                      <PIcon type={key} />
+                      <div className="lp-loop-body">
+                        <div className="lp-loop-n">{h.n}</div>
+                        <div className="lp-loop-meta mono">
+                          <span style={{ color: 'var(--saffron2)' }}>{h.dur}</span>
+                          <span style={{ color: 'var(--t4)', margin: '0 6px' }}>·</span>
+                          <span style={{ color: 'var(--jade)' }}>{h.boost} restore</span>
+                        </div>
+                        <div className="lp-loop-deva deva">{h.deva}</div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="lp-loop-note la">
+                <div className="mono" style={{ fontSize: '9px', color: 'var(--t4)', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '12px' }}>What the app tracks for you</div>
+                {[
+                  { icon: '🔥', l: 'Svāsa Fire', d: 'Your consecutive practice streak' },
+                  { icon: '📊', l: 'Praana Score', d: 'Neural restoration across all 7 trade-offs' },
+                  { icon: '🏆', l: '8 Milestones', d: 'From First Step to The Quiet Inheritor' },
+                ].map((x, i) => (
+                  <div key={i} className="lp-track-item">
+                    <span>{x.icon}</span>
+                    <div><span className="lp-track-l">{x.l}</span><span className="lp-track-d"> — {x.d}</span></div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* ═══ THE FULL PRESCRIPTION ═══ */}
+            <div className="lp-sec lp-sec-alt">
+              <div className="lp-tag la mono"><span>The Prescription</span></div>
+              <h2 className="lp-h2 la serif">Nine practices — each<br/>mapped to <em>a brain region</em></h2>
+              <div className="lp-plist lp-ag">
+                {HABITS.map((h, i) => (
+                  <div key={h.id} className="lp-pitem la">
+                    <PIcon type={PRACTICE_KEYS[i] || 'meditation'} />
+                    <div className="lp-pitem-mid">
+                      <div className="lp-pitem-n">{h.n}</div>
+                      <div className="lp-pitem-d mono">{h.dur} · <span className="deva" style={{ fontSize: '11px' }}>{h.deva}</span></div>
+                    </div>
+                    <div className="lp-pitem-right">
+                      <div className="lp-pitem-boost mono" style={{ color: '#34d399' }}>{h.boost}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* ═══ THE ANCIENT FOUNDATION ═══ */}
+            <div className="lp-sec">
+              <div className="lp-tag la mono"><span>Why it works</span></div>
+              <h2 className="lp-h2 la serif">Modern neuroscience.<br/><em>Ancient diagnosis.</em></h2>
+              <div className="lp-qcard la">
+                <div className="lp-qcard-top"/>
+                <div className="lp-qdeva deva">तमसो मा ज्योतिर्गमय।<br/>मृत्योर्मा अमृतं गमय।</div>
+                <div className="lp-qen serif">Lead me from darkness to light.<br/>Lead me from death to immortality.</div>
+                <div className="lp-qsrc mono">Bṛhadāraṇyaka Upaniṣad · 1.3.28</div>
+              </div>
+              <div className="lp-parallels lp-ag">
+                {[
+                  { modern: '65-second focus window', ancient: 'Pratyahāra — withdrawal of the senses', cite: 'Yoga Sutras 2.54' },
+                  { modern: 'Hippocampal atrophy (transactive memory)', ancient: 'Sanskrit Effect — mantra memorisation grows grey matter', cite: 'Hartzell, Sci Am 2018' },
+                  { modern: 'DMN suppression by constant stimulation', ancient: 'Dhyāna — 20-min daily silence restores DMN', cite: 'IISc Bangalore 2026' },
+                  { modern: 'Amygdala hyper-reactivity (88%)', ancient: 'Prāṇāyāma reduces cortisol 22%', cite: 'Stanford 2023' },
+                ].map((p, i) => (
+                  <div key={i} className={`lp-parallel la${i%2===1?' la-flip':''}`}>
+                    <div className="lp-par-modern mono">{p.modern}</div>
+                    <div className="lp-par-arrow">→</div>
+                    <div className="lp-par-ancient serif">{p.ancient}</div>
+                    <div className="lp-par-cite mono">{p.cite}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* ═══ DESIGN PRINCIPLES ═══ */}
+            <div className="lp-sec lp-sec-alt">
+              <div className="lp-tag la mono"><span>Design Philosophy</span></div>
+              <h2 className="lp-h2 la serif">The opposite of<br/><em>every other app</em></h2>
+              <div className="lp-phils lp-ag">
+                {[
+                  { icon: '🚫', t: 'No Infinite Scroll', d: 'Every section ends. You reach the bottom.' },
+                  { icon: '🔕', t: 'No Notifications', d: 'The app waits for you to return with intention.' },
+                  { icon: '⏳', t: 'Deliberate Friction', d: 'Mandala transitions counteract compulsive tapping.' },
+                  { icon: '🔓', t: 'Guest-First', d: 'Explore everything before creating an account.' },
+                  { icon: '🕉️', t: 'Sanskrit as Interface', d: 'Cognitive re-patterning, not decoration.' },
+                ].map((p, i) => (
+                  <div key={i} className="lp-phil la">
+                    <div className="lp-phil-icon">{p.icon}</div>
+                    <div className="lp-phil-body">
+                      <div className="lp-phil-t">{p.t}</div>
+                      <div className="lp-phil-d">{p.d}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* ═══ CTA ═══ */}
+            <div className="lp-cta">
+              <div className="lp-cta-glow"/>
+              <div className="lp-cta-deva deva la">लोकाः समस्ताः सुखिनो भवन्तु</div>
+              <h2 className="lp-cta-h la serif">Your attention span is<br/><em>not permanently lost.</em></h2>
+              <p className="lp-cta-p la">Grey matter recovery is measurable within 8–12 weeks of structured practice. IISc, SVYASA, and Harvard confirm it.</p>
+              <button className="lp-cta-btn la" onClick={() => router.push('/')}>
+                Begin — It&apos;s Free
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+              <p className="lp-cta-note la mono">No account required · PWA · Works offline · Open source</p>
+            </div>
+
+            {/* ═══ RESEARCH TICKER ═══ */}
+            <div className="lp-ticker">
+              <div className="lp-ticker-inner">
+                {['Mark et al. 2016','Loh & Kanai 2014','Uncapher 2018','IISc Bangalore 2026','Hartzell 2018','Walker 2017','Erickson 2011','SVYASA 2024','Berns 2013','OECD PIAAC 2023',
+                  'Mark et al. 2016','Loh & Kanai 2014','Uncapher 2018','IISc Bangalore 2026'].map((r, i) => (
+                  <span key={i} className="lp-tick">{r}</span>
+                ))}
+              </div>
+            </div>
+
+            {/* ═══ FOOTER ═══ */}
+            <div className="lp-footer">
+              <div className="lp-footer-brand deva">अन्तःकरण</div>
+              <div className="lp-footer-mantra">
+                <div className="deva" style={{ color: 'var(--gold3)', fontSize: '13px' }}>लोकाः समस्ताः सुखिनो भवन्तु</div>
+                <div className="serif" style={{ fontSize: '11px', color: 'var(--t4)', fontStyle: 'italic' }}>May all beings be happy and free.</div>
+              </div>
+              <div className="lp-footer-links mono">
+                <a href="https://github.com/tejastarun007/Antahkarana-Cure-to-Brain-Rot" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <span>·</span>
+                <a href="/explore">Explore</a>
+                <span>·</span>
+                <a href="/">Enter App</a>
+                <span>·</span>
+                <a href="#">MIT</a>
+              </div>
+            </div>
+
           </div>
-        </div>
-
-        {/* ═══ TRANSITION OVERLAY ═══ */}
-        <div className={`tov ${tovVisible ? 'show' : ''}`}>
-          <div className="tov-aura"></div>
-          <div className="tov-ring-outer"></div>
-          <svg width="110" height="110" viewBox="0 0 110 110" fill="none" style={{position:'relative', zIndex:1}}>
-            <g className="shat-a"><polygon points="55,14 91,73 19,73" stroke="rgba(200,144,42,.6)" strokeWidth="1.2" fill="rgba(200,144,42,.05)"/></g>
-            <g className="shat-b"><polygon points="55,96 19,37 91,37" stroke="rgba(232,184,75,.55)" strokeWidth="1.2" fill="rgba(232,184,75,.05)"/></g>
-            <circle cx="55" cy="55" r="20" stroke="rgba(232,184,75,.25)" strokeWidth=".8" className="bindu-ring"/>
-            <circle cx="55" cy="55" r="11" fill="rgba(200,144,42,.35)" className="bindu-dot"/>
-            <circle cx="55" cy="55" r="4.5" fill="rgba(245,208,128,.9)"/>
-          </svg>
-          <div className="tov-quote">{tovQuote}</div>
-          <div className="tdots"><div className="td"></div><div className="td"></div><div className="td"></div></div>
         </div>
       </div>
     </div>

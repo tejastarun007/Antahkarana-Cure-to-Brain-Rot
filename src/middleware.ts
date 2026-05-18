@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
   // Public marketing routes — no auth processing needed
-  const publicPaths = ['/landing', '/explore', '/onboarding'];
+  const publicPaths = ['/explore', '/onboarding', '/gateway'];
   if (publicPaths.some(p => request.nextUrl.pathname.startsWith(p))) {
     return NextResponse.next();
   }
