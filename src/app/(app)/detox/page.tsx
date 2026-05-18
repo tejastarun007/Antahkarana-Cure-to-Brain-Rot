@@ -6,13 +6,14 @@ import Link from 'next/link';
 export default function Detox() {
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'diagnosis' | 'mechanisms' | 'protocol'>('diagnosis');
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const toggleCard = (id: string) => {
     setExpandedCard(expandedCard === id ? null : id);
   };
 
-  // Master card collapses when any detail card is open
-  const masterCollapsed = expandedCard !== null;
+  // Master card collapses when any detail card is open or user scrolls down
+  const masterCollapsed = expandedCard !== null || isScrolled;
 
   return (
     <div className="screen on" id="detox" style={{ animation: 'sIn 0.5s cubic-bezier(0.4,0,0.2,1) both' }}>
@@ -135,7 +136,11 @@ export default function Detox() {
       </div>
 
       {/* Content */}
-      <div className="scroll" style={{ flex: 1, paddingBottom: '90px' }}>
+      <div 
+        className="scroll" 
+        style={{ flex: 1, paddingBottom: '90px' }}
+        onScroll={(e) => setIsScrolled(e.currentTarget.scrollTop > 20)}
+      >
 
         {activeTab === 'diagnosis' && (
           <div style={{ padding: '0 20px' }}>
