@@ -240,7 +240,7 @@ export default function LandingPage() {
             {/* ═══ THE CORE DAILY LOOP ═══ */}
             <div className="lp-sec">
               <div className="lp-tag la mono"><span>The Daily Loop</span></div>
-              <h2 className="lp-h2 la serif">Three practices.<br/><em>Five minutes each.</em><br/>Every day.</h2>
+              <h2 className="lp-h2 la serif">Three practices.<br/><em>Measurable recovery.</em><br/>Every day.</h2>
               <p className="lp-body la">That is the core loop. Everything else in the app is secondary. Start here, every morning, before you touch your phone.</p>
 
               <div className="lp-loop lp-ag">

@@ -23,7 +23,7 @@ const SCREENS = [
     step: 2,
     tag: 'The Prescription',
     deva: 'अभ्यास — Deliberate Practice',
-    headline: 'Three practices. Five minutes each.',
+    headline: 'Three practices. Measurable recovery.',
     highlight: 'Every single morning.',
     body: 'Before you open any app. Before you check anything. These three actions physically begin restoring the grey matter you lost. Peer-reviewed, measurable, ancient.',
     practices: [
