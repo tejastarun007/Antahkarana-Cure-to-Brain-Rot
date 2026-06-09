@@ -107,7 +107,8 @@ export default function Practice() {
             setTimerComplete(true);
             const mins = Math.round(timerTotal / 60);
             store.logTimerSession(mins);
-            notify(`🔥 Complete · ${mins} min · Streak: ${store.streak + 1} days`);
+            const newStreak = useStore.getState().streak;
+            notify(`🔥 Complete · ${mins} min · Streak: ${newStreak} days`);
             return 0;
           }
           return prev - 1;

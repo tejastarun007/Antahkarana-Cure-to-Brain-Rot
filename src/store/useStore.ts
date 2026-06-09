@@ -161,11 +161,40 @@ export const useStore = create<AppState>()(
         set((state) => {
           const newRestored = [...state.restored];
           newRestored[tradeoff] = Math.max(0, (newRestored[tradeoff] || 0) - 6);
+
+          const newDone = state.done.filter((x) => x !== id);
+
+          // If the user unchecks the last habit of the day, remove today's
+          // entry from hist and clear lastDay so the streak is not inflated
+          // if the user never completes a practice that day.
+          const today = new Date().toDateString();
+          const todayHistIdx = state.hist.findIndex((x) => x.date === today);
+          let newHist = state.hist;
+          let newLastDay = state.lastDay;
+          if (todayHistIdx !== -1) {
+            const todayCount = state.hist[todayHistIdx].count;
+            if (todayCount <= 1) {
+              // No more practices recorded today — remove the entry entirely
+              newHist = state.hist.filter((_, i) => i !== todayHistIdx);
+            } else {
+              newHist = state.hist.map((x, i) =>
+                i === todayHistIdx ? { ...x, count: x.count - 1 } : x
+              );
+            }
+            // If no habits remain done for today, revert lastDay so the
+            // streak check tomorrow doesn't count today as a practice day.
+            if (newDone.length === 0) {
+              newLastDay = null;
+            }
+          }
+
           return {
-            done: state.done.filter((x) => x !== id),
+            done: newDone,
             totalTasks: Math.max(0, state.totalTasks - 1),
             totalMins:  Math.max(0, state.totalMins  - mins),
             restored: newRestored,
+            hist: newHist,
+            lastDay: newLastDay,
             readMins:  id === 'read'       ? Math.max(0, state.readMins  - mins) : state.readMins,
             medMins:   id === 'meditation' ? Math.max(0, state.medMins   - mins) : state.medMins,
             pranaMins: id === 'pranayama'  ? Math.max(0, state.pranaMins - mins) : state.pranaMins,
@@ -192,9 +221,9 @@ export const useStore = create<AppState>()(
             const yesterday = new Date();
             yesterday.setDate(yesterday.getDate() - 1);
             const yesterdayStr = yesterday.toDateString();
-            if (state.lastDay === yesterdayStr)    newStreak = state.streak + 1;
-            else if (state.lastDay === null)        newStreak = 1;
-            else                                    newStreak = 1;
+            // Extend streak if yesterday was the last practice day,
+            // otherwise start fresh at 1 (covers both null and broken-streak cases).
+            newStreak = state.lastDay === yesterdayStr ? state.streak + 1 : 1;
           }
 
           return { totalMins: state.totalMins + mins, medMins: state.medMins + mins, streak: newStreak, lastDay: today, hist: newHist };

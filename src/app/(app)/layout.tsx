@@ -9,7 +9,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     // Pull latest state on mount
     pullStateFromCloud();
 
-    // Subscribe to local state changes and push to cloud
+    // Subscribe to local state changes and push to cloud.
+    // pushStateToCloud internally compares only the persisted domain fields,
+    // so transient sync metadata changes (syncStatus, lastSyncAt, syncError)
+    // are silently ignored — preventing an infinite sync loop.
     const unsubscribe = useStore.subscribe((state) => {
       pushStateToCloud(state);
     });

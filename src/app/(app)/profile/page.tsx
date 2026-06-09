@@ -222,7 +222,7 @@ export default function Profile() {
         <div className="prog-items">
           {[
             {n:'Meditation', val:store.medMins||0, max:300, unit:'mins', cls:'pfill-v'},
-            {n:'Deep Reading', val:Math.floor((store.readMins||0) / 60), max:50, unit:'sessions', cls:'pfill-s'},
+            {n:'Deep Reading', val:Math.floor((store.readMins||0) / 60), max:50, unit:'hours', cls:'pfill-s'},
             {n:'Pranayama', val:store.pranaMins||0, max:200, unit:'mins', cls:'pfill-g'},
             {n:'Total Sadhana', val:store.totalTasks||0, max:100, unit:'sessions', cls:'pfill-g'},
             {n:'Day Streak', val:store.streak||0, max:30, unit:'days', cls:'pfill-g'},
