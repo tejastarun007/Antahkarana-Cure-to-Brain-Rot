@@ -84,7 +84,7 @@ export default function Detox() {
         <div style={{
           overflow: 'hidden',
           transition: 'max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, margin 0.5s ease, transform 0.5s ease',
-          maxHeight: (activeTab !== 'diagnosis' || masterCollapsed) ? '0px' : '320px',
+          maxHeight: (activeTab !== 'diagnosis' || masterCollapsed) ? '0px' : '720px',
           opacity: (activeTab !== 'diagnosis' || masterCollapsed) ? 0 : 1,
           marginTop: activeTab === 'diagnosis' ? '8px' : '0px',
           marginBottom: masterCollapsed ? '0px' : '0px',
