@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { TopBar } from '@/components/TopBar';
 import { useStore } from '@/store/useStore';
-import { GITA_TEACHINGS } from '@/data/gita-daily';
+import { getTodaysTeachingMeta } from '@/data/gita-daily';
 
 /* ═══ FULL WISDOM CARD POOL — rotates 7 per day ═══ */
 const ALL_WISDOM_CARDS = [
@@ -48,9 +48,10 @@ export default function Wisdom() {
   // User's practice day — starts at 1 when they first practice
   const userDay = store.hist.length || 1;
 
-  // Today's Gita teaching based on user's practice day
-  const gitaIdx = (userDay - 1) % GITA_TEACHINGS.length;
-  const todayGita = GITA_TEACHINGS[gitaIdx];
+  // Today's Gita teaching — calendar-based: everyone is on the same lesson
+  // each day. With the generated 365-pool it becomes a year-long journey
+  // through all 18 chapters (Jan 1 → Dec 31), no repeats.
+  const { teaching: todayGita, dayOfYear, poolSize } = getTodaysTeachingMeta();
 
 
 
@@ -95,7 +96,7 @@ export default function Wisdom() {
           <div className="gita-daily-inner">
             <div className="gita-daily-badge">
               <span className="gita-daily-badge-icon">🙏</span>
-              <span>Day {userDay} · Today&apos;s Gita Teaching</span>
+              <span>Day {poolSize === 365 ? `${dayOfYear} of 365` : ((dayOfYear - 1) % poolSize) + 1} · Today&apos;s Gita Teaching</span>
             </div>
             <div className="gita-daily-chapter">Chapter {todayGita.chapter} · Verse {todayGita.verse}</div>
             <div className="gita-daily-sanskrit deva">{todayGita.sanskrit}</div>

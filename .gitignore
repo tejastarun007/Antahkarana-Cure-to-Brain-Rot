@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# gita dataset cache (regenerate via scripts/download-gita-data.mjs)
+scripts/cache/
