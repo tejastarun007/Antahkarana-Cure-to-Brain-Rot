@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Antahkarana — Algo Detox Redesign</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@400;500&family=Noto+Serif+Devanagari:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#0a0712;--deep:#100c22;--mid:#16132e;--dusk:#201a48;
+  --ember:#9c6418;--amber:#d28834;--gold:#e8b050;--gold2:#f6cc60;--gold3:#fae098;
+  --sindoor:#ab2f00;--sindoor2:#e84c22;--saffron2:#fa9438;--flame:#ffb050;
+  --sage:#428a66;--sage2:#5cb684;--jade:#8ed2a8;
+  --violet2:#7c6cd8;--violet3:#a092ee;
+  --t1:#fff;--t2:#e6d8bc;--t3:#b4a484;--t4:#847a6a;
+  --bdr:rgba(232,176,80,.25);--bdr2:rgba(232,176,80,.45);
+  --serif:'Cormorant Garamond',Georgia,serif;--sans:'DM Sans',sans-serif;--mono:'DM Mono',monospace;
+  --deva:'Noto Serif Devanagari',serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#050308;font-family:var(--sans);color:var(--t2);line-height:1.6;min-height:100vh;display:flex;flex-direction:column;align-items:center;gap:14px;padding:28px 14px}
+h1.page{font-family:var(--serif);font-size:25px;color:var(--t1);font-weight:600}
+p.pagesub{font-family:var(--mono);font-size:10.5px;color:var(--t4);text-align:center;max-width:430px;line-height:1.7}
+
+.phone{width:min(395px,96vw);height:830px;background:var(--void);border:1px solid rgba(255,255,255,.1);border-radius:30px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(0,0,0,.7);position:relative}
+.content{flex:1;overflow-y:auto;scrollbar-width:none;padding-bottom:40px}
+.content::-webkit-scrollbar{display:none}
+
+/* ═══ HERO ═══ */
+.hero{padding:22px 18px 16px;position:relative;overflow:hidden;flex-shrink:0;
+ background:radial-gradient(ellipse at 80% -30%,rgba(232,76,34,.22),transparent 55%),radial-gradient(ellipse at 0% 110%,rgba(124,108,216,.12),transparent 55%)}
+.hero .back{font-family:var(--mono);font-size:10px;color:var(--t4);letter-spacing:1px}
+.hero h1{font-family:var(--serif);font-size:33px;font-weight:600;line-height:1.05;margin:10px 0 4px;
+ background:linear-gradient(120deg,var(--sindoor2),var(--flame));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:12.5px;color:var(--t3);max-width:280px;line-height:1.55}
+.venom{position:absolute;top:-30px;right:-30px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(232,76,34,.25),transparent 65%);filter:blur(8px);animation:vpulse 4s infinite alternate}
+@keyframes vpulse{to{transform:scale(1.25);opacity:.6}}
+
+/* ═══ SEGMENTED TABS w/ sliding pill ═══ */
+.tabs{position:sticky;top:0;z-index:20;margin:8px 14px 0;padding:5px;border-radius:22px;display:flex;position:relative;
+ background:rgba(16,12,34,.92);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);flex-shrink:0}
+.tab-pill{position:absolute;top:5px;bottom:5px;border-radius:18px;transition:left .35s cubic-bezier(.4,0,.2,1),background .35s,border .35s;border:1px solid}
+.tab{flex:1;position:relative;z-index:2;text-align:center;padding:10px 2px;cursor:pointer;font-family:var(--mono);font-size:9.5px;letter-spacing:.6px;text-transform:uppercase;color:var(--t4);transition:color .3s;font-weight:600}
+.tab .ic{display:block;font-size:13px;margin-bottom:3px;filter:grayscale(1);opacity:.5;transition:all .3s}
+.tab.on .ic{filter:none;opacity:1}
+.tab-prog{display:flex;gap:4px;justify-content:center;margin:10px 0 2px}
+.tab-prog i{width:22px;height:3px;border-radius:2px;background:rgba(255,255,255,.08);transition:background .4s}
+
+.pane{display:none;padding:16px 16px 30px;animation:pin .4s ease}
+.pane.on{display:block}
+@keyframes pin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+.seclbl{font-family:var(--mono);font-size:9px;letter-spacing:2.5px;text-transform:uppercase;margin:20px 0 10px;display:flex;align-items:center;gap:8px}
+.seclbl::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,currentColor,transparent);opacity:.3}
+
+/* ═══ POISON ═══ */
+.qcard{border-radius:20px;padding:20px;margin-bottom:14px;position:relative;overflow:hidden;
+ background:linear-gradient(150deg,rgba(232,76,34,.10),var(--deep));border:1px solid rgba(232,76,34,.3)}
+.qcard::before{content:'';position:absolute;top:0;left:18%;right:18%;height:2px;background:linear-gradient(90deg,transparent,var(--sindoor2),transparent)}
+.qcard .b1{display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:20px;background:rgba(232,76,34,.12);border:1px solid rgba(232,76,34,.35);font-family:var(--mono);font-size:8px;color:var(--sindoor2);letter-spacing:1.8px;text-transform:uppercase;font-weight:600;margin-bottom:12px}
+.qcard .q{font-family:var(--serif);font-size:19.5px;font-style:italic;color:var(--t1);line-height:1.35;margin-bottom:10px}
+.qcard .q em{color:var(--sindoor2);font-style:italic}
+.qcard .d{font-size:12.5px;color:var(--t2);line-height:1.65}
+.qcard .d strong{color:var(--violet3)}
+
+/* mirror */
+.mirror{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:stretch;margin-bottom:10px}
+.mcell{background:linear-gradient(180deg,rgba(30,25,40,.8),rgba(20,15,30,.9));border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 10px;text-align:center}
+.mcell .em{font-size:24px}
+.mcell .amt{font-family:var(--mono);font-size:11px;color:var(--gold3);font-weight:600;margin:6px 0 4px}
+.mcell .dd{font-size:10px;color:var(--t3);line-height:1.5}
+.vs{display:flex;align-items:center;font-family:var(--serif);font-style:italic;color:var(--sindoor2);font-size:13px}
+.samebar{text-align:center;border:1px solid rgba(255,107,107,.25);background:rgba(255,107,107,.08);border-radius:12px;padding:10px;font-family:var(--mono);font-size:9.5px;color:#ff8a8a;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;margin-bottom:10px}
+.mirror-pull{font-family:var(--serif);font-size:14px;font-style:italic;text-align:center;color:var(--t2);line-height:1.6}
+.mirror-pull b{color:var(--gold2)}
+
+/* hard truths */
+.truth{border:1px solid rgba(255,255,255,.07);border-left:3px solid rgba(232,76,34,.5);border-radius:16px;margin-bottom:9px;overflow:hidden;cursor:pointer;background:rgba(255,255,255,.02);transition:all .3s}
+.truth.open{border-color:rgba(232,76,34,.4);background:linear-gradient(150deg,rgba(232,76,34,.08),rgba(16,12,34,.9))}
+.truth .hd{display:flex;gap:12px;align-items:center;padding:14px 14px}
+.truth .em2{font-size:21px;flex-shrink:0}
+.truth .qq{font-family:var(--serif);font-size:14px;color:var(--t1);line-height:1.45;flex:1}
+.truth .chev{color:var(--t4);font-size:10px;transition:transform .35s;flex-shrink:0}
+.truth.open .chev{transform:rotate(180deg);color:var(--sindoor2)}
+.truth .bd{max-height:0;overflow:hidden;transition:max-height .45s ease;padding:0 14px}
+.truth.open .bd{max-height:240px;padding:0 14px 14px}
+.truth .strow{display:flex;gap:14px;align-items:flex-start;border-top:1px solid rgba(232,76,34,.2);padding-top:12px}
+.truth .stat{font-family:var(--serif);font-size:32px;color:var(--sindoor2);line-height:1;flex-shrink:0;font-weight:400}
+.truth .dd2{font-size:12px;color:var(--t2);line-height:1.6}
+.truth .src{font-family:var(--mono);font-size:8.5px;color:var(--t4);margin-top:8px}
+
+/* ADHD symptom checker — interactive */
+.adhd-q{border-radius:18px;padding:18px;margin-bottom:12px;background:linear-gradient(150deg,rgba(232,76,34,.08),var(--mid));border:1px solid rgba(232,76,34,.3)}
+.adhd-q .t{font-size:15px;font-weight:600;color:var(--t1);margin-bottom:6px}
+.adhd-q .d{font-size:12px;color:var(--t2);line-height:1.65}
+.adhd-q .d b{color:var(--sindoor2)}
+.symp{display:flex;gap:12px;align-items:flex-start;border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:13px;margin-bottom:8px;cursor:pointer;transition:all .25s;background:rgba(255,255,255,.02)}
+.symp.on{border-color:rgba(232,76,34,.5);background:rgba(232,76,34,.07)}
+.symp .chk{width:20px;height:20px;border-radius:7px;border:1.5px solid var(--t4);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;transition:all .25s;margin-top:1px}
+.symp.on .chk{background:var(--sindoor2);border-color:var(--sindoor2);color:#fff}
+.symp .sd{font-size:12.5px;color:var(--t1);line-height:1.5;font-weight:500}
+.symp .sn{font-family:var(--mono);font-size:9px;color:var(--t4);margin-top:5px;line-height:1.5;border-left:2px solid rgba(232,76,34,.35);padding-left:8px}
+.verdict{border-radius:14px;padding:14px;text-align:center;font-size:12.5px;border:1px dashed var(--bdr2);color:var(--t3);transition:all .3s;margin-bottom:14px}
+.vedic-box{text-align:center;border-radius:20px;padding:24px 18px;background:linear-gradient(150deg,rgba(200,144,42,.13),rgba(20,15,10,.9));border:1px solid rgba(200,144,42,.3);position:relative;overflow:hidden}
+.vedic-box::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.vedic-box .l{font-family:var(--mono);font-size:9px;color:var(--gold2);letter-spacing:2.5px;text-transform:uppercase;font-weight:600;margin-bottom:8px}
+.vedic-box .dv{font-family:var(--deva);font-size:23px;color:var(--gold3);margin-bottom:10px;text-shadow:0 0 18px rgba(200,144,42,.45)}
+.vedic-box .tx{font-size:12.5px;color:rgba(255,255,255,.85);line-height:1.65}
+.vedic-box .tx em{color:#fff}
+
+/* ═══ MECHANISMS — flip cards ═══ */
+.mech-intro{font-size:12.5px;color:var(--t3);line-height:1.65;margin-bottom:14px}
+.mech-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.flip{perspective:900px;height:215px;cursor:pointer}
+.flip-in{position:relative;width:100%;height:100%;transition:transform .6s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d}
+.flip.flipped .flip-in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;padding:14px;display:flex;flex-direction:column;border:1px solid}
+.face.front{background:linear-gradient(160deg,var(--deep),var(--mid))}
+.face.back{transform:rotateY(180deg);background:linear-gradient(160deg,rgba(82,168,120,.12),var(--deep));border-color:rgba(82,168,120,.4)}
+.face .fic{width:34px;height:34px;border-radius:11px;display:flex;align-items:center;justify-content:center;margin-bottom:9px;border:1px solid}
+.face .ft{font-size:12.5px;font-weight:600;color:var(--t1);line-height:1.3;margin-bottom:6px}
+.face .fm{font-size:9.8px;color:var(--t3);line-height:1.5;flex:1;overflow:hidden}
+.face .hint{font-family:var(--mono);font-size:7.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--t4);margin-top:7px}
+.face.back .ft{color:var(--jade)}
+.face.back .dv2{font-family:var(--deva);font-size:12px;color:var(--gold3);margin-top:auto;padding-top:6px}
+.face.back .hint{color:rgba(142,210,168,.7)}
+.mech-count{text-align:center;font-family:var(--mono);font-size:9.5px;color:var(--t4);letter-spacing:1.5px;margin-top:12px;text-transform:uppercase}
+
+/* ═══ 21-DAY ═══ */
+.proto-hero{border-radius:20px;padding:18px;margin-bottom:16px;display:flex;gap:16px;align-items:center;
+ background:linear-gradient(150deg,rgba(82,168,120,.1),var(--deep));border:1px solid rgba(82,168,120,.3)}
+.pr-ring{position:relative;width:74px;height:74px;flex-shrink:0}
+.pr-ring svg{transform:rotate(-90deg)}
+.pr-ring b{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--serif);font-size:20px;color:var(--jade);font-weight:400;line-height:1}
+.pr-ring span{font-family:var(--mono);font-size:6.5px;letter-spacing:1px;color:var(--t4);text-transform:uppercase}
+.proto-hero .ht{font-family:var(--serif);font-size:17px;color:var(--t1);font-weight:500;line-height:1.25;margin-bottom:4px}
+.proto-hero .hd2{font-size:11px;color:var(--t3);line-height:1.55}
+/* danger signals */
+.danger{border-radius:16px;border:1px solid rgba(255,70,70,.3);background:linear-gradient(150deg,rgba(255,70,70,.08),var(--deep));padding:16px;margin-bottom:16px}
+.danger .dt{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;color:#ff6b6b;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;margin-bottom:10px}
+.danger .dh{font-family:var(--serif);font-size:17px;color:var(--t1);margin-bottom:4px}
+.danger .dd3{font-size:11.5px;color:var(--t3);line-height:1.55;margin-bottom:12px}
+.sig{background:rgba(0,0,0,.35);border-radius:11px;border-left:3px solid;padding:11px 13px;margin-bottom:7px}
+.sig b{font-size:12.5px;color:#fff;display:block;margin-bottom:2px}
+.sig span{font-size:10.5px;color:var(--t3);line-height:1.5}
+/* journey timeline */
+.phase{position:relative;padding-left:42px;margin-bottom:14px;cursor:pointer}
+.phase .node{position:absolute;left:0;top:4px;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;font-weight:700;border:1.5px solid rgba(82,168,120,.5);background:var(--void);color:var(--jade);transition:all .3s;z-index:2}
+.phase .rail2{position:absolute;left:14.5px;top:36px;bottom:-16px;width:1.5px;background:linear-gradient(180deg,rgba(82,168,120,.5),rgba(82,168,120,.08))}
+.phase:last-child .rail2{display:none}
+.phase .pc2{border-radius:16px;border:1px solid rgba(82,168,120,.18);background:linear-gradient(150deg,rgba(82,168,120,.06),rgba(15,25,20,.6));padding:14px 16px;transition:all .3s}
+.phase:hover .pc2{border-color:rgba(82,168,120,.45);transform:translateX(3px)}
+.phase .ph-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px}
+.phase .ph-day{font-family:var(--mono);font-size:12px;color:var(--jade);font-weight:700}
+.phase .ph-t{font-family:var(--mono);font-size:8.5px;letter-spacing:1px;text-transform:uppercase;color:#fff;background:rgba(255,255,255,.1);padding:3px 8px;border-radius:5px}
+.phase .ph-d{font-size:12px;color:rgba(255,255,255,.85);line-height:1.6;margin-bottom:9px}
+.chips2{display:flex;flex-wrap:wrap;gap:5px}
+.chips2 span{font-family:var(--mono);font-size:8.5px;color:var(--gold2);background:rgba(200,144,42,.1);border:1px solid rgba(200,144,42,.25);border-radius:8px;padding:3px 8px}
+.completion{text-align:center;border-radius:20px;padding:26px 18px;margin-top:6px;
+ background:linear-gradient(150deg,rgba(82,168,120,.12),rgba(15,25,20,.9));border:1px solid rgba(82,168,120,.35);position:relative;overflow:hidden}
+.completion::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;background:linear-gradient(90deg,transparent,var(--jade),transparent)}
+.completion .om{font-family:var(--deva);font-size:23px;color:var(--gold3);margin-bottom:8px;text-shadow:0 0 18px rgba(200,144,42,.4)}
+.completion .ct{font-family:var(--serif);font-size:15px;font-style:italic;color:#fff;margin-bottom:16px}
+.btn-j{font-weight:700;font-size:11.5px;font-family:var(--mono);letter-spacing:1px;text-transform:uppercase;padding:13px 26px;border-radius:26px;border:none;cursor:pointer;background:linear-gradient(90deg,var(--sage),var(--jade));color:#04130b;box-shadow:0 8px 22px rgba(82,168,120,.3)}
+.toast{position:absolute;left:50%;bottom:20px;transform:translateX(-50%) translateY(16px);background:rgba(20,16,40,.95);border:1px solid var(--bdr2);color:var(--gold2);font-size:11.5px;padding:8px 16px;border-radius:18px;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;z-index:60}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<h1 class="page">Algo Detox — Premium Redesign</h1>
+<p class="pagesub">Sliding segmented tabs · expandable hard truths · interactive ADHD self-check · flip-card mechanisms (tap = antidote) · journey timeline. All content preserved.</p>
+
+<div class="phone">
+  <div class="hero">
+    <div class="venom"></div>
+    <div class="back">← BACK</div>
+    <h1 id="heroTitle">The Diagnosis</h1>
+    <p id="heroSub">Your geography is not where you live. It is what your algorithm shows you.</p>
+  </div>
+
+  <!-- segmented control -->
+  <div class="tabs" id="tabs">
+    <div class="tab-pill" id="pill"></div>
+    <div class="tab on" data-t="poison"><span class="ic">☠️</span>The Poison</div>
+    <div class="tab" data-t="mech"><span class="ic">⚙️</span>8 Mechanisms</div>
+    <div class="tab" data-t="proto"><span class="ic">🛡️</span>21-Day Antidote</div>
+  </div>
+
+  <div class="content">
+
+    <!-- ═════════ PANE 1 · THE POISON ═════════ -->
+    <div class="pane on" id="pane-poison">
+
+      <div class="qcard">
+        <div class="b1">♦ The Unasked Question</div>
+        <div class="q">&ldquo;Is the algorithm <em>leading your life</em> — or are you leading it?&rdquo;</div>
+        <div class="d">A beggar with a mobile sees the exact same content you see from your penthouse. Your geography, your income, your reality — irrelevant to the feed. <strong>The algorithm has no geography. But you do.</strong></div>
+      </div>
+
+      <div class="seclbl" style="color:var(--sindoor2)">The Mirror</div>
+      <div class="mirror">
+        <div class="mcell"><div class="em">🏚️</div><div class="amt">₹200/day</div><div class="dd">Dharavi. No savings. Phone is his window to the world.</div></div>
+        <div class="vs">vs</div>
+        <div class="mcell"><div class="em">🏊</div><div class="amt">₹2L/day</div><div class="dd">Worli penthouse. Pool view. Phone is his window to the world.</div></div>
+      </div>
+      <div class="samebar">Same algo · Same rage · Same anxiety</div>
+      <div class="mirror-pull">The algorithm makes <b>everyone</b> feel poor, behind, and angry.<br>That is not a bug. <b>That is the product.</b></div>
+
+      <div class="seclbl" style="color:var(--sindoor2)">The Hard Truths · tap to expand</div>
+      <div id="truths"></div>
+
+      <div class="seclbl" style="color:var(--sindoor2)">ADHD &amp; The Algorithm</div>
+      <div class="adhd-q">
+        <div style="font-family:var(--mono);font-size:9px;color:var(--sindoor2);letter-spacing:1.5px;text-transform:uppercase;font-weight:600;margin-bottom:8px">◈ The Uncomfortable Question</div>
+        <div class="t">Is your ADHD real — or was it manufactured?</div>
+        <div class="d">ADHD diagnoses have risen <b>400%</b> since smartphones became universal. The algorithm produces ADHD-like symptoms in neurotypical brains through the exact same mechanism: variable-ratio reinforcement, dopamine spike/crash cycles, and destruction of sustained attention networks.</div>
+      </div>
+
+      <div style="font-family:var(--mono);font-size:9.5px;color:var(--t3);letter-spacing:1px;margin-bottom:10px;text-transform:uppercase">Tap every symptom that describes you:</div>
+      <div id="symps"></div>
+      <div class="verdict" id="verdict">0 of 5 selected — tap the ones you recognise</div>
+
+      <div class="vedic-box">
+        <div class="l">The Vedic Insight</div>
+        <div class="dv">मनश्चञ्चलमस्थिरम्</div>
+        <div class="tx">The Gita named this condition 3,000 years ago: <em>chanchala manas</em> — the restless, unsteady mind. It described both the problem and the cure. The algorithm did not invent this. It merely industrialised it.</div>
+      </div>
+
+      <div style="text-align:center;padding:20px 0 4px">
+        <button class="btn-j" onclick="switchTab('proto')">Begin the 21-Day Protocol →</button>
+      </div>
+    </div>
+
+    <!-- ═════════ PANE 2 · 8 MECHANISMS ═════════ -->
+    <div class="pane" id="pane-mech">
+      <p class="mech-intro">Eight engineered hooks keep you scrolling. Each card is one mechanism of control — <b style="color:var(--jade)">tap any card to flip it</b> and reveal the antidote with its Vedic name.</p>
+      <div class="mech-grid" id="mechGrid"></div>
+      <div class="mech-count" id="mechCount">0 / 8 antidotes discovered</div>
+    </div>
+
+    <!-- ═════════ PANE 3 · 21-DAY ANTIDOTE ═════════ -->
+    <div class="pane" id="pane-proto">
+
+      <div class="proto-hero">
+        <div class="pr-ring">
+          <svg width="74" height="74"><circle cx="37" cy="37" r="30" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="6"/><circle id="protoRing" cx="37" cy="37" r="30" fill="none" stroke="url(#jg)" stroke-width="6" stroke-linecap="round" stroke-dasharray="188" stroke-dashoffset="188" style="transition:stroke-dashoffset 1.4s ease"/><defs><linearGradient id="jg"><stop offset="0%" stop-color="#428a66"/><stop offset="100%" stop-color="#8ed2a8"/></linearGradient></defs></svg>
+          <b>21<span>days</span></b>
+        </div>
+        <div>
+          <div class="ht">A progressive protocol that reverses algorithmic conditioning.</div>
+          <div class="hd2">Each phase builds on the previous, creating compound neural restoration. The rishis called 21 the number of purification.</div>
+        </div>
+      </div>
+
+      <div class="danger">
+        <div class="dt"><span style="font-size:15px">⚠️</span> The Danger Signals</div>
+        <div class="dh">What to expect in Week 1</div>
+        <div class="dd3">These are the signs of algorithm withdrawal and neural rewiring. They feel uncomfortable. They are actually evidence of recovery.</div>
+        <div class="sig" style="border-color:var(--gold2)"><b>Boredom is unbearable</b><span>Dopamine receptors are recalibrating upward. Baseline rising.</span></div>
+        <div class="sig" style="border-color:var(--violet2)"><b>Urge to check phone every 3 min</b><span>Variable-ratio reward withdrawal. Identical to substance withdrawal.</span></div>
+        <div class="sig" style="border-color:var(--jade)"><b>Mind feels "slower"</b><span>ACC rapid-fire mode deactivating. dlPFC deep-focus mode coming online.</span></div>
+      </div>
+
+      <div class="seclbl" style="color:var(--jade)">The Six Phases · 21 days</div>
+      <div id="phases"></div>
+
+      <div class="completion">
+        <div class="om">ॐ शान्तिः शान्तिः शान्तिः</div>
+        <div class="ct">The loop has reversed. The mind is yours again.</div>
+        <button class="btn-j">Continue the Practice →</button>
+      </div>
+    </div>
+
+  </div>
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._x);t._x=setTimeout(()=>t.classList.remove('show'),2200)}
+
+/* ═══ tabs w/ sliding pill ═══ */
+const HEROES={
+ poison:['The Diagnosis','Your geography is not where you live. It is what your algorithm shows you.','rgba(232,76,34,'],
+ mech:['8 Mechanisms of Control','Each hook is engineered. Each has an antidote the rishis named first.','rgba(232,176,80,'],
+ proto:['The 21-Day Antidote','Algorithm withdrawal, phase by phase — until the loop reverses.','rgba(82,168,120,'],
+};
+const PILLCOL={poison:['rgba(232,76,34,.16)','rgba(232,76,34,.55)','var(--sindoor2)'],mech:['rgba(232,176,80,.14)','rgba(232,176,80,.5)','var(--gold2)'],proto:['rgba(82,168,120,.14)','rgba(82,168,120,.55)','var(--jade)']};
+const tabs=[...document.querySelectorAll('.tab')];
+function switchTab(id){
+  tabs.forEach(t=>{t.classList.toggle('on',t.dataset.t===id);t.style.color=t.dataset.t===id?PILLCOL[id][2]:'';});
+  document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.id==='pane-'+id));
+  const t=tabs.find(x=>x.dataset.t===id),pill=$('#pill');
+  pill.style.left=t.offsetLeft+'px';pill.style.width=t.offsetWidth+'px';
+  pill.style.background=PILLCOL[id][0];pill.style.borderColor=PILLCOL[id][1];
+  const h=HEROES[id];
+  $('#heroTitle').textContent=h[0];$('#heroSub').textContent=h[1];
+  $('.venom').style.background=`radial-gradient(circle,${h[2]}.25),transparent 65%)`;
+  $('.content').scrollTop=0;
+  if(id==='proto')setTimeout(()=>$('#protoRing').style.strokeDashoffset=0,300);
+}
+tabs.forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.t)));
+
+/* ═══ hard truths ═══ */
+const TRUTHS=[
+ ['📱','"You think you chose what to watch. You did not. The algo chose you."','96×','Average phone checks per day. Each one is a variable-ratio reward trigger — the exact same mechanism as a slot machine. Designed by the same behavioural psychologists.','Udemy Research (2018) · Tristan Harris, Center for Humane Tech'],
+ ['🧠','"Knowing more does not make you wise. Digesting what you know does."','74 GB','Information consumed per person per day in 2024. Yet comprehension, retention, and wisdom scores are falling. Information obesity is real. You are full. You are starving.','UC San Diego (2009) · OECD PIAAC (2023)'],
+ ['😤','"Your mood today depends on the news. That means strangers own your nervous system."','-27%','Reduction in self-reported emotional stability among daily news consumers vs weekly. Cortisol spikes from negative news persist for hours — damaging sleep, digestion, and decision-making.','American Psychological Association (2022) · Cortisol research, UCL'],
+ ['⏳','"Moments frozen by a scroll dictate your emotional life for hours."','23 min','Time needed to fully return to deep focus after a single interruption. One notification. One scroll. One reel. 23 minutes, gone. You checked your phone 96 times today. Do the math.','Gloria Mark, UC Irvine · Journal of Experimental Psychology (2016)'],
+];
+TRUTHS.forEach(([em,q,stat,d,src])=>{
+  const el=document.createElement('div');el.className='truth';
+  el.innerHTML=`<div class="hd"><div class="em2">${em}</div><div class="qq">${q}</div><div class="chev">▼</div></div>
+  <div class="bd"><div class="strow"><div class="stat">${stat}</div><div><div class="dd2">${d}</div><div class="src">📄 ${src}</div></div></div></div>`;
+  el.addEventListener('click',()=>el.classList.toggle('open'));
+  $('#truths').appendChild(el);
+});
+
+/* ═══ ADHD symptom checker ═══ */
+const SYMPS=[
+ ['Cannot read for more than 5 minutes without reaching for your phone','dlPFC suppression — same mechanism as clinical ADHD · IISc Bangalore (2026)'],
+ ['Task-switching constantly; 15 tabs, 0 completions','ACC dominance over dlPFC (78% shifted) · impulsivity without hyperactivity'],
+ ['Time blindness — hours pass while scrolling; seconds feel long in silence','Dopaminergic time distortion — identical to ADHD time perception deficit'],
+ ['Emotional dysregulation — mood crashes after consuming bad news or mean comments','Amygdala hyperreactivity (88% in modern population) · APA (2022)'],
+ ['In AI era: feels like you need to know everything to stay relevant','Information anxiety · FOMO-driven cortisol loops · epistemic overwhelm'],
+];
+let checked=0;
+SYMPS.forEach(([d,n])=>{
+  const el=document.createElement('div');el.className='symp';
+  el.innerHTML=`<div class="chk">✓</div><div><div class="sd">${d}</div><div class="sn">${n}</div></div>`;
+  el.addEventListener('click',()=>{
+    el.classList.toggle('on');
+    checked=document.querySelectorAll('.symp.on').length;
+    const v=$('#verdict');
+    const msgs=['0 of 5 selected — tap the ones you recognise',
+      '1 of 5 — early conditioning. Reversible quickly.',
+      '2 of 5 — the loop has a grip. 21 days will break it.',
+      '3 of 5 — significant algorithmic conditioning. Start tonight.',
+      '4 of 5 — the feed is steering. The protocol below is for you.',
+      '5 of 5 — full chitta vikṣepa. Not a flaw — an injury. And injuries heal.'];
+    v.textContent=msgs[checked];
+    v.style.borderColor=checked>=3?'rgba(232,76,34,.5)':'var(--bdr2)';
+    v.style.color=checked>=3?'var(--sindoor2)':'var(--t3)';
+  });
+  $('#symps').appendChild(el);
+});
+
+/* ═══ mechanisms flip cards ═══ */
+const MECHS=[
+ ['⏱','var(--sindoor2)','Variable-Ratio Rewards','The algorithm operates on a Skinner box schedule. It delivers dopamine unpredictably—identical to a casino slot machine—to fracture your capacity for sustained attention.','Fixed-Schedule Architecture','Remove the variability. Restrict device checking to predetermined, fixed intervals only.','नियम (Niyama)'],
+ ['😡','var(--saffron2)','Outrage Optimization','Platforms ruthlessly prioritize content that triggers moral outrage. This hijacks your amygdala to guarantee maximum time-on-site.','Intentional Ignorance','Curate your reality. Starve the outrage engine by aggressively muting inflammatory feeds.','उपेक्षा (Upeksha)'],
+ ['🧩','var(--gold2)','Attention Fragmentation','Endless short-form scrolling splinters the prefrontal cortex, rewiring your brain to reduce focus span to mere seconds.','Deep Neural Focus','Rebuild the pathways. Read long-form text or sit in absolute silence for 20 minutes daily.','एकाग्रता (Ekagrata)'],
+ ['👥','var(--jade)','Social Comparison','Vanity metrics—views, likes, followers—weaponize our evolutionary need for tribal validation, inducing chronic low-level FOMO.','Internal Validation','Deactivate all like counts and vanity notifications. Measure yourself by your own standards.','सन्तोष (Santosha)'],
+ ['🌀','rgba(255,255,255,.75)','Infinite Scroll','The removal of natural stopping cues induces flow-like hypnosis, causing hours to vanish in dopaminergic time distortion.','Physical Friction','Break the trance. Leave the device in another room and force friction before usage.','प्रत्याहार (Pratyahara)'],
+ ['🫧','var(--violet2)','Echo Chambers','Algorithmic filtering isolates you in a bubble of confirming opinions, shrinking your reality and destroying nuance.','Active Inquiry','Seek out long-form opposing views. Digest them slowly to rebuild intellectual resilience.','विवेक (Viveka)'],
+ ['📳','var(--flame)','Phantom Vibration','Incessant notifications condition your nervous system into a constant, draining state of hyper-vigilance, preventing deep rest.','Digital Mauna','Silence all non-human notifications. Keep the device face down. Reclaim your peace.','मौन (Mauna)'],
+ ['🍔','var(--gold3)','Information Obesity','Consuming gigabytes of disjointed data daily without digestion leads to severe cognitive overload and epistemic anxiety.','Information Fasting','Stop consuming. Start synthesizing. Journal your thoughts manually to encode them.','स्वाध्याय (Swadhyaya)'],
+];
+const seen=new Set();
+MECHS.forEach(([em,col,t,m,at,ad,vd],i)=>{
+  const el=document.createElement('div');el.className='flip';
+  el.innerHTML=`<div class="flip-in">
+    <div class="face front" style="border-color:color-mix(in srgb, ${col} 35%, transparent);border-left:3px solid ${col}">
+      <div class="fic" style="background:color-mix(in srgb, ${col} 12%, transparent);border-color:color-mix(in srgb, ${col} 40%, transparent)">${em}</div>
+      <div class="ft">${t}</div><div class="fm">${m}</div>
+      <div class="hint">tap for antidote ⟳</div>
+    </div>
+    <div class="face back">
+      <div class="fic" style="background:rgba(82,168,120,.12);border-color:rgba(82,168,120,.4)">🪔</div>
+      <div class="ft">${at}</div><div class="fm" style="color:var(--t2)">${ad}</div>
+      <div class="dv2">${vd}</div>
+      <div class="hint">tap to flip back ⟲</div>
+    </div></div>`;
+  el.addEventListener('click',()=>{
+    el.classList.toggle('flipped');
+    if(el.classList.contains('flipped')&&!seen.has(i)){seen.add(i);
+      $('#mechCount').textContent=seen.size+' / 8 antidotes discovered'+(seen.size===8?' · सर्वं ज्ञातम् ✓':'');
+      if(seen.size===8)toast('🪔 All 8 antidotes discovered');
+    }
+  });
+  $('#mechGrid').appendChild(el);
+});
+
+/* ═══ 21-day phases ═══ */
+const PHASES=[
+ ['1–3','Awareness Phase','Track your phone pickups. No changes yet — just observe. Notice the automatic reach. Count it.',['Self-observation only']],
+ ['4–7','First Withdrawal','Remove social media from home screen. Add 15-min morning silence before any screen. Journal by hand.',['Handwriting','Morning Silence']],
+ ['8–10','Attention Training','Begin 10-min focused meditation. Read 30 min daily (physical book). No phone during meals.',['Meditation','Deep Reading']],
+ ['11–14','Breath Regulation','Add Nadi Shodhana pranayama. Walk without phone. Practice one Unreachable Hour daily.',['Pranayama','Phoneless Walk','Mauna']],
+ ['15–17','Deep Practice','Extend meditation to 20 min. Begin Naam Jap (108 repetitions). Cook one meal mindfully.',['Naam Jap','Hand Work','Meditation']],
+ ['18–21','Integration','Full Sadhana stack daily. Sleep before 10:30 PM. One hour of deep reading. The loop has reversed.',['Full Protocol','Sleep Protocol']],
+];
+PHASES.forEach(([day,t,d,pr],i)=>{
+  const el=document.createElement('div');el.className='phase';
+  el.innerHTML=`<div class="node">${i+1}</div><div class="rail2"></div>
+  <div class="pc2"><div class="ph-top"><span class="ph-day">Day ${day}</span><span class="ph-t">${t}</span></div>
+  <div class="ph-d">${d}</div>
+  <div class="chips2">${pr.map(p=>`<span>🪔 ${p}</span>`).join('')}</div></div>`;
+  $('#phases').appendChild(el);
+});
+
+/* init pill position */
+requestAnimationFrame(()=>switchTab('poison'));
+</script>
+</body>
+</html>
