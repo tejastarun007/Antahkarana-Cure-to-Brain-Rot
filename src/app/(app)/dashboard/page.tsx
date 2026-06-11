@@ -1,6 +1,7 @@
 'use client';
 import { useStore } from '@/store/useStore';
 import { HABITS, WISDOMS, TRADEOFFS } from '@/data/content';
+import { SMALL_CHANGES, DIET_TAGS, DAILY_SWAPS, weekIndex, dayIndex } from '@/data/lifestyle';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -54,6 +55,18 @@ export default function Dashboard() {
   };
   const sc = calcScore();
 
+  // ── Ahara: today's diet check-in ──
+  const todayKey = new Date().toDateString();
+  const todayDiet = store.dietLog.find(d => d.date === todayKey)?.tag ?? null;
+  const dietInfo = todayDiet ? DIET_TAGS.find(d => d.tag === todayDiet) : null;
+  const todaySwap = DAILY_SWAPS[dayIndex(DAILY_SWAPS.length)];
+
+  // ── One Small Change: this week's card ──
+  const weekChange = SMALL_CHANGES[weekIndex(SMALL_CHANGES.length)];
+  const changeAdopted = store.adoptedChanges.includes(weekChange.id);
+
+  const isScience = store.appMode === 'science';
+
   return (
     <div className="screen on" id="ss">
       <div className="ss-bg"><div className="ss-bg-b1"></div><div className="ss-bg-b2"></div></div>
@@ -72,8 +85,8 @@ export default function Dashboard() {
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '14px' }}>
             <div>
-              <div style={{ fontFamily: 'var(--mono)', fontSize: '9px', color: 'var(--gold3)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '2px' }}>आज का साधन</div>
-              <div style={{ fontFamily: 'var(--serif)', fontSize: '18px', fontWeight: 300, color: 'var(--t1)', lineHeight: 1.1 }}>Today&apos;s Sadhana</div>
+              <div style={{ fontFamily: 'var(--mono)', fontSize: '9px', color: 'var(--gold3)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '2px' }}>{isScience ? 'Daily Protocol' : 'आज का साधन'}</div>
+              <div style={{ fontFamily: 'var(--serif)', fontSize: '18px', fontWeight: 300, color: 'var(--t1)', lineHeight: 1.1 }}>{isScience ? 'Today’s Training' : 'Today’s Sadhana'}</div>
             </div>
             <div style={{ fontFamily: 'var(--serif)', fontSize: '22px', fontWeight: 300, color: store.done.length === HABITS.length ? 'var(--jade)' : 'var(--gold2)', lineHeight: 1 }}>
               {store.done.length}<span style={{ fontSize: '13px', color: 'var(--t4)', marginLeft: '2px' }}>/{HABITS.length}</span>
@@ -168,7 +181,67 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="s-row"><h3>All Practices</h3><Link href="/practice">See all →</Link></div>
+        {/* ══ ONE SMALL CHANGE — weekly environment card ══ */}
+        <div style={{
+          margin: '14px 20px 0', padding: '16px',
+          background: 'linear-gradient(145deg, rgba(200,144,42,.07), rgba(12,10,28,.95))',
+          border: '1px solid var(--bdr)', borderRadius: '16px', position: 'relative', overflow: 'hidden'
+        }}>
+          <div style={{ position: 'absolute', right: '-6px', top: '-16px', fontFamily: 'var(--deva)', fontSize: '64px', color: 'rgba(232,176,80,.05)', pointerEvents: 'none' }}>सूक्ष्म</div>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: '9px', letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '6px' }}>
+            One Small Change · This Week
+          </div>
+          <div style={{ fontFamily: 'var(--serif)', fontSize: '16px', color: 'var(--t1)', fontWeight: 500, lineHeight: 1.35, marginBottom: '4px' }}>{weekChange.t}</div>
+          <div style={{ fontSize: '11px', color: 'var(--t3)', fontStyle: 'italic', lineHeight: 1.5, marginBottom: '10px' }}>
+            {weekChange.why} <span style={{ fontFamily: 'var(--mono)', fontStyle: 'normal', fontSize: '9px', color: 'var(--t4)' }}>— {weekChange.src}</span>
+          </div>
+          {changeAdopted ? (
+            <div style={{ fontSize: '12px', color: 'var(--jade)' }}>✓ Adopted — {store.adoptedChanges.length} change{store.adoptedChanges.length > 1 ? 's' : ''} in your environment</div>
+          ) : (
+            <button className="btn btn-o btn-sm" onClick={() => { store.adoptChange(weekChange.id); notify('✓ Adopted — environment beats willpower'); }}>
+              Mark as adopted
+            </button>
+          )}
+        </div>
+
+        {/* ══ AHARA — 3-tap diet check-in ══ */}
+        <div style={{
+          margin: '12px 20px 0', padding: '16px',
+          background: 'linear-gradient(145deg, rgba(82,168,120,.06), rgba(12,10,28,.95))',
+          border: '1px solid rgba(82,168,120,.2)', borderRadius: '16px'
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '10px' }}>
+            <div>
+              <div style={{ fontFamily: 'var(--mono)', fontSize: '9px', letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--jade)', marginBottom: '2px' }}>आहार · Ahara</div>
+              <div style={{ fontFamily: 'var(--serif)', fontSize: '15px', color: 'var(--t1)', fontWeight: 400 }}>How did you eat today?</div>
+            </div>
+            {todayDiet && <div style={{ fontSize: '11px', color: 'var(--jade)', fontFamily: 'var(--mono)' }}>logged ✓</div>}
+          </div>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            {DIET_TAGS.map(d => {
+              const on = todayDiet === d.tag;
+              return (
+                <div key={d.tag} onClick={() => { store.logDiet(d.tag); notify(`${d.em} ${d.n} logged`); }} style={{
+                  flex: 1, textAlign: 'center', padding: '10px 4px', borderRadius: '12px', cursor: 'pointer', transition: 'all .2s',
+                  background: on ? 'rgba(232,176,80,.1)' : 'rgba(255,255,255,.03)',
+                  border: `1px solid ${on ? 'var(--bdr2)' : 'rgba(255,255,255,.07)'}`,
+                }}>
+                  <div style={{ fontSize: '18px', marginBottom: '2px' }}>{d.em}</div>
+                  <div style={{ fontSize: '11px', color: on ? 'var(--gold2)' : 'var(--t1)', fontWeight: 500 }}>{d.n}</div>
+                  <div style={{ fontFamily: 'var(--mono)', fontSize: '7.5px', color: 'var(--t4)', letterSpacing: '.3px', marginTop: '1px' }}>{d.d}</div>
+                </div>
+              );
+            })}
+          </div>
+          {dietInfo && (
+            <div style={{ fontSize: '11px', color: 'var(--t2)', fontStyle: 'italic', lineHeight: 1.55, marginTop: '10px', paddingLeft: '10px', borderLeft: '2px solid rgba(82,168,120,.4)' }}>{dietInfo.msg}</div>
+          )}
+          <div style={{ marginTop: '10px', padding: '9px 12px', borderRadius: '10px', border: '1px dashed var(--bdr)', fontSize: '11px', color: 'var(--t2)', lineHeight: 1.5 }}>
+            🔁 <span style={{ color: 'var(--gold2)', fontWeight: 500 }}>Swap of the day:</span> {todaySwap.swap} <span style={{ color: 'var(--t4)' }}>{todaySwap.why}</span>
+          </div>
+        </div>
+
+        <div className="s-row"><h3>{isScience ? 'All Protocols' : 'All Practices'}</h3><Link href="/practice">See all →</Link></div>
         <div className="hab-grid">
           {HABITS.slice(0, 4).map(h => {
             const isDone = store.done.includes(h.id);

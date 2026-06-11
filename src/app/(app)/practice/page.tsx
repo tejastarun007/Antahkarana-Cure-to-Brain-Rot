@@ -71,6 +71,15 @@ export default function Practice() {
     setHabModalOpen(false);
   };
 
+  // 5-minute floor: a minimal version of any practice still counts.
+  // Mainstream users start at 5 minutes and grow into the full duration.
+  const completeHabQuick = () => {
+    if (!curHab) return;
+    store.addHabitDone(curHab.id, 5, curHab.tradeoff);
+    notify(`🌱 ${curHab.n} · 5-min version done — small is still forward`);
+    setHabModalOpen(false);
+  };
+
   // Get deep-dive data for current habit
   const deepDive = curHab ? getDeepDive(curHab.id) : undefined;
 
@@ -300,13 +309,24 @@ export default function Practice() {
                 </>
               )}
 
-              <div style={{display:'flex', gap:'10px', marginTop:'12px'}}>
-                {store.done.includes(curHab.id) ? (
-                  <button className="btn" style={{flex:1, background:'transparent', border:'1px solid var(--bdr2)', color:'var(--t2)'}} onClick={completeHab}>✓ Mark Incomplete</button>
-                ) : (
-                  <button className="btn btn-g" style={{flex:1}} onClick={completeHab}>Mark Complete ✓</button>
+              <div style={{display:'flex', flexDirection:'column', gap:'8px', marginTop:'12px'}}>
+                <div style={{display:'flex', gap:'10px'}}>
+                  {store.done.includes(curHab.id) ? (
+                    <button className="btn" style={{flex:1, background:'transparent', border:'1px solid var(--bdr2)', color:'var(--t2)'}} onClick={completeHab}>✓ Mark Incomplete</button>
+                  ) : (
+                    <button className="btn btn-g" style={{flex:1}} onClick={completeHab}>Mark Complete ✓</button>
+                  )}
+                  <button className="btn btn-o btn-sm" onClick={() => setHabModalOpen(false)}>Close</button>
+                </div>
+                {!store.done.includes(curHab.id) && curHab.mins > 5 && (
+                  <button onClick={completeHabQuick} style={{
+                    width:'100%', padding:'10px', borderRadius:'14px', cursor:'pointer',
+                    background:'rgba(82,168,120,.07)', border:'1px dashed rgba(82,168,120,.35)',
+                    color:'var(--jade)', fontSize:'12px', fontFamily:'var(--sans)'
+                  }}>
+                    🌱 Too much today? Do the 5-minute version — it still counts
+                  </button>
                 )}
-                <button className="btn btn-o btn-sm" onClick={() => setHabModalOpen(false)}>Close</button>
               </div>
             </>
           )}

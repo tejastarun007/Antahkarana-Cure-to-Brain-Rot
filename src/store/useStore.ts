@@ -27,6 +27,15 @@ export interface JournalEntry {
 
 export type SyncStatus = 'idle' | 'syncing' | 'synced' | 'error';
 
+export type DietTag = 'sattvic' | 'rajasic' | 'tamasic';
+export type AppMode = 'sadhana' | 'science';
+
+export interface AttentionTest {
+  date: string;       // ISO date
+  attention: number;  // 0-100
+  memory: number;     // 0-100
+}
+
 // ─── Slice: Habit ─────────────────────────────────────────────────────────────
 export interface HabitSlice {
   done: string[];
@@ -47,6 +56,15 @@ export interface JournalSlice {
   journal: JournalEntry[];
 }
 
+// ─── Slice: Lifestyle (Ahara diet · One Small Change · attention tests) ──────
+export interface LifestyleSlice {
+  dietLog: { date: string; tag: DietTag }[];
+  adoptedChanges: string[];
+  attentionTests: AttentionTest[];
+  lastRepairMonth: string | null; // 'YYYY-M' when streak insurance was last used
+  appMode: AppMode;
+}
+
 // ─── Slice: UI / Hints ────────────────────────────────────────────────────────
 export interface UiSlice {
   userName: string;
@@ -62,7 +80,7 @@ export interface SyncSlice {
 }
 
 // ─── Full state (union of slices for backward compat) ─────────────────────────
-export type UserState = HabitSlice & JournalSlice & UiSlice & SyncSlice;
+export type UserState = HabitSlice & JournalSlice & UiSlice & SyncSlice & LifestyleSlice;
 
 interface AppState extends UserState {
   // Habit actions
@@ -78,6 +96,12 @@ interface AppState extends UserState {
   markScienceHintSeen: () => void;
   // Journal actions
   addJournalEntry: (entry: JournalEntry) => void;
+  // Lifestyle actions
+  logDiet: (tag: DietTag) => void;
+  adoptChange: (id: string) => void;
+  addAttentionTest: (attention: number, memory: number) => void;
+  repairStreak: () => boolean;
+  setAppMode: (mode: AppMode) => void;
   // Sync actions
   syncFromServer: (state: Partial<UserState>) => void;
   setSyncStatus: (status: SyncStatus, error?: string) => void;
@@ -103,6 +127,13 @@ export const useStore = create<AppState>()(
 
       // ── Journal slice defaults ──
       journal: [],
+
+      // ── Lifestyle slice defaults ──
+      dietLog: [],
+      adoptedChanges: [],
+      attentionTests: [],
+      lastRepairMonth: null,
+      appMode: 'sadhana' as AppMode,
 
       // ── UI slice defaults ──
       userName: 'Seeker',
@@ -260,6 +291,53 @@ export const useStore = create<AppState>()(
       addJournalEntry: (entry) =>
         set((state) => ({ journal: [...state.journal, entry] })),
 
+      // ── Lifestyle actions ─────────────────────────────────────────────────
+
+      /** One diet check-in per day — re-logging replaces today's entry. */
+      logDiet: (tag) =>
+        set((state) => {
+          const today = new Date().toDateString();
+          const rest = state.dietLog.filter((d) => d.date !== today);
+          return { dietLog: [...rest, { date: today, tag }] };
+        }),
+
+      adoptChange: (id) =>
+        set((state) => ({
+          adoptedChanges: state.adoptedChanges.includes(id)
+            ? state.adoptedChanges
+            : [...state.adoptedChanges, id],
+        })),
+
+      addAttentionTest: (attention, memory) =>
+        set((state) => ({
+          attentionTests: [
+            ...state.attentionTests,
+            { date: new Date().toISOString(), attention, memory },
+          ],
+        })),
+
+      /**
+       * Streak insurance — one repair per calendar month.
+       * Marks yesterday as a practice day so today's practice continues the
+       * streak instead of resetting it. Returns false if already used.
+       */
+      repairStreak: () => {
+        const state = get();
+        const now = new Date();
+        const monthKey = `${now.getFullYear()}-${now.getMonth()}`;
+        if (state.lastRepairMonth === monthKey) return false;
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        set({
+          lastDay: yesterday.toDateString(),
+          streak: Math.max(1, state.streak),
+          lastRepairMonth: monthKey,
+        });
+        return true;
+      },
+
+      setAppMode: (mode) => set({ appMode: mode }),
+
       // ── Sync actions ──────────────────────────────────────────────────────
 
       /**
@@ -299,6 +377,9 @@ export const useStore = create<AppState>()(
         journal: state.journal, userName: state.userName,
         hasSeenHabitHint: state.hasSeenHabitHint,
         hasSeenScienceHint: state.hasSeenScienceHint,
+        dietLog: state.dietLog, adoptedChanges: state.adoptedChanges,
+        attentionTests: state.attentionTests, lastRepairMonth: state.lastRepairMonth,
+        appMode: state.appMode,
       }),
       onRehydrateStorage: () => (state) => {
         if (state) {

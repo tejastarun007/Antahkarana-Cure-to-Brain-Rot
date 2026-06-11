@@ -57,8 +57,9 @@ export default function OnboardingPage() {
   const [animating, setAnimating] = useState(false);
 
   useEffect(() => {
-    // If already onboarded, skip
-    if (localStorage.getItem('ank_onboarded') === 'true') {
+    // If already onboarded, skip — unless this is a replay from Profile ("How this works")
+    const isReplay = new URLSearchParams(window.location.search).has('replay');
+    if (!isReplay && localStorage.getItem('ank_onboarded') === 'true') {
       router.replace('/');
     }
   }, [router]);
